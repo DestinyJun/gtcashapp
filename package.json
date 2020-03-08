@@ -5,13 +5,14 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "react-native start --port 8081 --host 0.0.0.0",
     "test": "jest",
     "lint": "eslint ."
   },
   "dependencies": {
     "react": "16.9.0",
-    "react-native": "0.61.2"
+    "react-native": "0.61.2",
+    "react-navigation": "^4.0.10"
   },
   "devDependencies": {
     "@babel/core": "^7.6.3",
