@@ -1,19 +1,26 @@
 import React, {Component} from 'react';
 import {Text, View,StyleSheet,Image} from 'react-native';
-import Icon from "react-native-vector-icons/Ionicons"
+import {Card} from 'react-native-shadow-cards';
 export default class Login extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <View style={styles.login}>
         <View style={styles.logo}>
-          <Image source={require('../../assets/images/01.jpg')}/>
+          <Card cornerRadius={20} opacity={10} elevation={20} style={[styles.logo_img]}>
+            <Image source={require('../../assets/images/收银台.png')} style={{width: 80, height: 80}}/>
+          </Card>
+         {/* <View style={[styles.logo_img]}>
+            <Image source={require('../../assets/images/收银台.png')} style={{width: 80, height: 80}}/>
+          </View>*/}
+          <View style={{marginTop: '5%'}}>
+            <Text style={{color: '#5B9B8E', fontSize: 20}}>服务区收银系统</Text>
+          </View>
         </View>
-        <Text>我爱你</Text>
-        <View style={styles.container}>
-          <Icon name="ios-settings" size={15} color="red" />
-          <Icon name="ios-settings" size={25} color="yellow" />
-          <Icon name="ios-settings" size={35} color="black" />
-        </View>
+        <View style={styles.input}></View>
+        <View style={styles.button}></View>
       </View>
     );
   }
@@ -21,10 +28,26 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
   login:{
     flex:1,
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   logo: {
-
+    flex:3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white'
+  },
+  logo_img:{
+    height: 150,
+    width: 150,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  input: {
+    flex: 3,
+    backgroundColor: 'blue',
+  },
+  button: {
+    flex:3,
+    backgroundColor: 'red',
   }
 });
