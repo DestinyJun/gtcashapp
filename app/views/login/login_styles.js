@@ -5,7 +5,7 @@ const login_styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   logo: {
-    flex:1,
+    flex:3,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -22,13 +22,25 @@ const login_styles = StyleSheet.create({
     height: 80
   },
   input: {
-    flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    backgroundColor: 'blue',
+    flex: 3,
+    justifyContent: 'flex-start'
+  },
+  input_user: {
+    height: 120
+  },
+  input_user_username: {
+    backgroundColor: '#EFFAF0',
+  },
+  input_user_password:{
+    borderTopColor: '#D4D4D4',
+    borderTopWidth: 1,
+    backgroundColor: '#EFFAF0',
+  },
+  input_user_text: {
+    color: 'red',
   },
   input_select: {
-    height:50,
+    flex: 1,
     position: 'relative'
   },
   input_select_dropdown: {
@@ -41,7 +53,7 @@ const login_styles = StyleSheet.create({
     textAlign: 'center'
   },
   input_select_dropdown_list: {
-    width: '94%',
+    width: '91.5%',
     borderColor: 'rgba(201,201,201,0.8)',
     borderWidth: 1,
     borderRadius: 3,
@@ -56,18 +68,29 @@ const login_styles = StyleSheet.create({
     top: '50%',
     marginTop: -10,
   },
-  input_username: {
-    height:50,
-    backgroundColor: 'yellow',
+  input_switch: {
+    flex: 1,
+    flexDirection: 'row'
   },
-  input_password:{
-    height:50,
-    backgroundColor: 'yellow',
+  input_switch_text: {
+    textDecorationLine: 'underline',
+    textDecorationColor: 'red',
+    textDecorationStyle:'dashed',
+    marginLeft: 'auto',
+    textAlign: 'right',
   },
   button: {
-    flex:1,
-    backgroundColor: 'red',
-  }
+    flex:2,
+  },
+  button_touch: {
+    height: 60,
+    backgroundColor: '#468F80',
+    borderRadius: 50
+  },
+  button_touch_view: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 });
 export default login_styles;
 
