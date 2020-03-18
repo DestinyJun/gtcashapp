@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Text, View, Image, TouchableHighlight,TextInput} from 'react-native';
 import {Card} from 'react-native-shadow-cards';
 // 样式文件
-import login_styles from './login_styles';
+import login_styles from './LoginStyles';
 // 第三方库
 import ModalDropdown from 'react-native-modal-dropdown';
 import SwitchSelector from "react-native-switch-selector";
@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // 自定义工具
 import {post} from '../../service/Interceptor';
 import api from '../../service/Api'
+import {localStorage} from '../../util'
 
 // 自定义常量
 // const debounce = require('lodash.debounce');
@@ -17,8 +18,9 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     this.login ={
-      username: String,
+      user: String,
       password: String,
+      merchatCode: '',
     };
     this.state = {
       input_select_data: null,
@@ -30,7 +32,7 @@ export default class Login extends Component {
   }
   render() {
     return (
-      <View style={[login_styles.login]}>
+      <View style={[login_styles.login,c_styles.w_100,c_styles.dim_height]}>
         <View style={login_styles.logo}>
           <Card cornerRadius={5} opacity={1} elevation={20} style={[login_styles.logo_img]}>
             <Image source={require('../../assets/images/收银台.png')} style={[login_styles.logo_img_Image]}/>
@@ -40,13 +42,13 @@ export default class Login extends Component {
           </View>
         </View>
         <View style={[login_styles.input,c_styles.pl_3,c_styles.pr_3]}>
-          <Card cornerRadius={8} opacity={1} elevation={5} style={[login_styles.input_user]}>
-            <View style={[c_styles.cell,c_styles.w_100,login_styles.input_user_username]}>
+          <View elevation={10} style={[login_styles.input_user]}>
+            <View style={[c_styles.cell,c_styles.w_100,login_styles.input_user_user]}>
               <TextInput
                 style={[c_styles.pl_5,login_styles.input_user_text,c_styles.cell,c_styles.h5]}
                 placeholder={'请输入用户名...'}
                 placeholderTextColor={'#90DACB'}
-                onChangeText={(text)=>{this.login.username = text}}
+                onChangeText={(text)=>{this.login.user = text}}
               />
             </View>
             <View style={[c_styles.cell,c_styles.w_100,login_styles.input_user_password]}>
@@ -54,12 +56,14 @@ export default class Login extends Component {
                 style={[c_styles.pl_5,login_styles.input_user_text,c_styles.cell,c_styles.h5]}
                 placeholder={'请输入密码...'}
                 placeholderTextColor={'#90DACB'}
+                password={true}
+                onChangeText={(text)=>{this.login.password = text}}
               />
             </View>
-          </Card>
+          </View>
           <View style={[login_styles.input_select,c_styles.pt_5]}>
-            <Card cornerRadius={8} opacity={1} elevation={5}>
-              <ModalDropdown
+            <View>
+             {/* <ModalDropdown
                 style={[login_styles.input_select_dropdown,c_styles.mt_2]}
                 textStyle={[login_styles.input_select_text,c_styles.pt_3,c_styles.pb_3,c_styles.h6,c_styles.text_darkinfo]}
                 dropdownStyle={[login_styles.input_select_dropdown_list]}
@@ -74,16 +78,16 @@ export default class Login extends Component {
               <Icon name={'angle-down'} style={[
                 login_styles.input_select_icon,c_styles.text_darkinfo,
                 this.state.select_icon_transform && c_styles.transform_90
-              ]}/>
-            </Card>
+              ]}/>*/}
+            </View>
           </View>
-          <View style={[login_styles.input_switch]}>
+          <View style={[login_styles.input_switch,c_styles.pt_5]}>
             <SwitchSelector
-              style={[{width: 50}]}
+              style={[{width: 60}]}
               initial={0}
               onPress={value => console.log(value)}
-              textColor={'#FFFFFF'}
-              selectedColor={'#FFFFFF'}
+              textColor={'#FE8A99'}
+              selectedColor={'red'}
               buttonMargin={3}
               borderColor={'#FE8A99'}
               borderRadius={50}
@@ -92,8 +96,8 @@ export default class Login extends Component {
               textContainerStyle={[{width:50}]}
               selectedTextContainerStyle={[{width:50}]}
               options={[
-                { label: '是', value: 1,activeColor: '#FFFFFF'},
                 { label: '否', value: 0,activeColor: '#FFFFFF'},
+                { label: '是', value: 1,activeColor: '#FFFFFF'},
               ]}
             />
             <Text style={[c_styles.h5,c_styles.text_darkinfo,c_styles.ml_3]}>记住我</Text>
@@ -118,7 +122,7 @@ export default class Login extends Component {
     );
   }
   _input_select_willShow() {
-    post(api.SHOP_LIST_URL,{user: this.login.username})
+    post(api.SHOP_LIST_URL,{user: this.login.user})
       .then((res) => {
         this.setState({
           select_input_data: res.data,
@@ -135,12 +139,10 @@ export default class Login extends Component {
     });
   }
   _input_select_onSelect(idx, value) {
-    // BUG: alert in a modal will auto dismiss and causes crash after reload and touch. @sohobloo 2016-12-1
-    //alert(`idx=${idx}, value='${value}'`);
     this.setState({
       input_select_value: value
     });
-    console.debug(`idx=${idx}, value='${value}'`);
+    this.login.merchatCode = value.merchatCode;
   }
   _input_select_renderButtonText(rowData) {
     const {merchatName, merchatCode} = rowData;
@@ -161,7 +163,19 @@ export default class Login extends Component {
     );
   }
   _buttonLogin() {
-    console.debug(this.login.username);
+    post(api.LOGIN_URL,this.login)
+      .then((res) => {
+        console.log(res);
+        localStorage.set('merchatCode', res.data.merchatCode);
+        localStorage.set('userId', res.data.userId);
+        localStorage.set('serverId', res.data.serverId);
+        localStorage.set('APPKEY', res.data.APPKEY);
+      })
+      .catch(e=>console.log(e))
+  }
+  _test() {
+    localStorage.get('APPKEY')
+      .then(res => console.log(res))
   }
 };
 

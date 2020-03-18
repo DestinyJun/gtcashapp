@@ -88,11 +88,17 @@ global.c_styles = StyleSheet.create({
   mt_3: {
     marginTop: '3%'
   },
+  mt_5: {
+    marginTop: '5%'
+  },
   h5:{
     fontSize: 18
   },
   h6:{
     fontSize: 16
+  },
+  h_50: {
+    height: '50%'
   },
   w_50:{
     width: '50%'

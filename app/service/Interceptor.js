@@ -93,6 +93,7 @@ export function post(url, params) {
         // 抛出异常以后，拦截器哪里已经做了提醒处理，所以无需再处理
         // console.log(err.data);
         // reject(EMPTY)
+        reject(err)
       })
   });
 }

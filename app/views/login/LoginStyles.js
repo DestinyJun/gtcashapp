@@ -1,8 +1,9 @@
 import {StyleSheet} from 'react-native';
-const login_styles = StyleSheet.create({
+export default StyleSheet.create({
   login:{
     flex:1,
     backgroundColor: 'white',
+    position: 'absolute',
   },
   logo: {
     flex:3,
@@ -23,18 +24,19 @@ const login_styles = StyleSheet.create({
   },
   input: {
     flex: 3,
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   input_user: {
-    height: 120
+    height: 120,
+    backgroundColor: '#EFFAF0',
+    borderRadius: 5
   },
   input_user_username: {
-    backgroundColor: '#EFFAF0',
+
   },
   input_user_password:{
-    borderTopColor: '#D4D4D4',
+    borderTopColor: 'rgba(212,212,212,0.3)',
     borderTopWidth: 1,
-    backgroundColor: '#EFFAF0',
   },
   input_user_text: {
     color: 'red',
@@ -92,5 +94,4 @@ const login_styles = StyleSheet.create({
     alignItems: 'center'
   },
 });
-export default login_styles;
 
