@@ -1,14 +1,13 @@
 /**
- * Drawer navigation导航的使用
+ * Drawer navigation导航的基础使用（1）
  * author：DestinyJun
  * date：  2020/3/18 11:34
  */
 import React, {Component} from 'react';
 import {View,Text, Button} from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {createStackNavigator} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -18,17 +17,25 @@ class HomeScreen extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>这是主页</Text>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>我是home</Text>
         <Button
-          title="去详情页"
-          onPress={() => this.props.navigation.navigate('Details')}
+          onPress={() => this.props.navigation.navigate('Notifications')}
+          title="去notifications页"
+        />
+        <Button
+          onPress={() => this.props.navigation.openDrawer()}
+          title="打开抽屉"
+        />
+        <Button
+          onPress={() => this.props.navigation.closeDrawer()}
+          title="关闭抽屉"
         />
       </View>
     );
   }
 }
-class DetailsScreen extends Component {
+class NotificationsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -36,114 +43,22 @@ class DetailsScreen extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Details!</Text>
-      </View>
-    );
-  }
-}
-class SettingsScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>这是设置页</Text>
-        <Button title="Go to Home" onPress={() => this.props.navigation.navigate('Home')} />
-      </View>
-    );
-  }
-}
-class Ionicons extends Component {
-  static defaultProps = {
-    name: 'XiaoHong'
-  };
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',width: 15, height: 15}}>
-        {/*<Image source={require('../app/assets/images/01.jpg')}/>*/}
-        <Icon name='home'/>
-        {/*<Text>{this.props.name}</Text>*/}
-        {this.props.badgeCount > 0 && (
-          <View
-            style={{
-              // On React Native < 0.57 overflow outside of parent will not work on Android, see https://git.io/fhLJ8
-              position: 'absolute',
-              right: -6,
-              top: -3,
-              backgroundColor: 'red',
-              borderRadius: 6,
-              width: 12,
-              height: 12,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>
-              {this.props.badgeCount}
-            </Text>
-          </View>
-        )}
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>我是Notifications</Text>
+        <Button onPress={() => this.props.navigation.goBack()} title="点击去home" />
       </View>
     );
   }
 }
 
-
-const HomeStack = createStackNavigator();
-function HomeStackScreen() {
-  return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen name="Home" component={HomeScreen} />
-      <HomeStack.Screen name="Details" component={DetailsScreen} />
-    </HomeStack.Navigator>
-  );
-}
-const SettingsStack = createStackNavigator();
-function SettingsStackScreen() {
-  return (
-    <SettingsStack.Navigator>
-      <SettingsStack.Screen name="Settings" component={SettingsScreen} />
-      <SettingsStack.Screen name="Details" component={DetailsScreen} />
-    </SettingsStack.Navigator>
-  );
-}
-const Tab = createBottomTabNavigator();
-export default function App3() {
+const Drawer  = createDrawerNavigator();
+export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            console.log(size);
-            let iconName;
-            if (route.name === 'Home') {
-              iconName = focused
-                ? 'ios-information-circle'
-                : 'ios-information-circle-outline';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
-            }
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} badgeCount={5} size={50} color={color} />;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: 'blue',
-          inactiveTintColor: 'gray',
-        }}
-      >
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Settings" component={SettingsStackScreen} />
-      </Tab.Navigator>
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Home" component={HomeScreen} />
+        <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }

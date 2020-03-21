@@ -5066,10 +5066,22 @@ react-native-modal-dropdown@^0.7.0:
     deprecated-react-native-listview "0.0.5"
     prop-types "^15.6.0"
 
+react-native-reanimated@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.npm.taobao.org/react-native-reanimated/download/react-native-reanimated-1.7.0.tgz#896db2576552ac59d288a1f6c7f00afc171f240c"
+  integrity sha1-iW2yV2VSrFnSiKH2x/AK/BcfJAw=
+
 react-native-safe-area-context@^0.7.3:
   version "0.7.3"
   resolved "https://registry.npm.taobao.org/react-native-safe-area-context/download/react-native-safe-area-context-0.7.3.tgz#ad6bd4abbabe195332c53810e4ce5851eb21aa2a"
   integrity sha1-rWvUq7q+GVMyxTgQ5M5YUeshqio=
+
+react-native-safe-area-view@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/react-native-safe-area-view/download/react-native-safe-area-view-1.0.0.tgz#17be33aeb30702e07bb846378f4c9561e2dd6684"
+  integrity sha1-F74zrrMHAuB7uEY3j0yVYeLdZoQ=
+  dependencies:
+    hoist-non-react-statics "^2.3.1"
 
 react-native-screens@^2.3.0:
   version "2.3.0"
