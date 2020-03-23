@@ -14,7 +14,7 @@ import {localStorage} from '../../util'
 
 // 自定义常量
 // const debounce = require('lodash.debounce');
-export default class Login extends Component {
+export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.login ={

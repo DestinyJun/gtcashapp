@@ -5,47 +5,34 @@
  */
 import React, {Component} from 'react';
 import {Text, TouchableHighlight, View, Button} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import FeedScreen from './FeedScreen';
-import MessagesScreen from './MessagesScreen';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-const Tab = createBottomTabNavigator();
+import {Constant} from '../../util';
+import {HomeScreenStyle} from './HomeScreenStyle';
 
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.props.navigation.setOptions({
-      headerRight: () => (
-        <Button onPress={() => alert('我是Home')} title="Update count" />
-      ),
+      title: '中医超市',
     });
   }
   render() {
     return (
-      <View style={[{flex: 1, alignItems: 'center', justifyContent: 'center',paddingTop: 20}]}>
-        <View style={[{backgroundColor: 'yellow',color: 'black',alignItems: 'center', justifyContent: 'center',height: 50},c_styles.w_100]}>
-          <Text>我是主页</Text>
-          <TouchableHighlight
-            onPress={() => this.props.navigation.navigate('Details',{
-              itemId: 86,
-              otherParam: 'anything you want here',
-            })}
-          >
-            <Text>去详情页</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            onPress={() => this.props.navigation.navigate('Feed')}
-          >
-            <Text>去详FeedScreen</Text>
-          </TouchableHighlight>
-        </View>
-        <View style={[{backgroundColor: 'blue',color: 'black',alignItems: 'center', justifyContent: 'center',height: 50},c_styles.w_100]}>
-          <Tab.Navigator initialRouteName="Feed">
-            <Tab.Screen name="Feed" component={FeedScreen} />
-            <Tab.Screen name="Messages" component={MessagesScreen} />
-          </Tab.Navigator>
-        </View>
+      <View style={[HomeScreenStyle.home]}>
+        {
+          Constant.MENU_LIST.map((item,index) => (
+            <TouchableHighlight
+              key={index}
+              style={[HomeScreenStyle.home_card]}
+              onPress={() => this.props.navigation.navigate('SuperScreen',{
+                itemId: 86,
+                otherParam: 'anything you want here',
+              })}
+            >
+              <Text>{item.title}</Text>
+            </TouchableHighlight>
+          ))
+        }
       </View>
     );
   }
