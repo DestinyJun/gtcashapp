@@ -19,7 +19,7 @@ export class Icons extends Component {
     return (
       <View style={[styles.iconBox,{ width: this.props.size}]}>
         <Icon name={this.props.iconName} color={this.props.color} size={this.props.size}/>
-        {this.props.badgeCount > 0 && (
+        {/*{this.props.badgeCount > 0 && (
           <View
             style={styles.iconBox_badge}
           >
@@ -27,7 +27,7 @@ export class Icons extends Component {
               {this.props.badgeCount}
             </Text>
           </View>
-        )}
+        )}*/}
       </View>
     );
   }

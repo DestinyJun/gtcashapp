@@ -1,5 +1,4 @@
-import {StyleSheet} from 'react-native';
-import {Dimensions} from 'react-native'
+import {StyleSheet, Dimensions} from 'react-native';
 global.c_styles = StyleSheet.create({
   text_danger:{
     color: 'red'
@@ -15,6 +14,12 @@ global.c_styles = StyleSheet.create({
   },
   text_center: {
     textAlign: 'center'
+  },
+  p_1: {
+    padding: '1%',
+  },
+  p_3: {
+    padding: '3%',
   },
   p_2:{
     paddingTop: '2%',
@@ -70,6 +75,9 @@ global.c_styles = StyleSheet.create({
   pr_5:{
     paddingRight: '5%'
   },
+  m_1: {
+    margin: '1%',
+  },
   ml_1:{
     marginLeft: '1%'
   },
@@ -91,6 +99,21 @@ global.c_styles = StyleSheet.create({
   mt_5: {
     marginTop: '5%'
   },
+  mb_3: {
+    marginBottom: '3%'
+  },
+  h1:{
+    fontSize: 40
+  },
+  h2:{
+    fontSize: 30
+  },
+  h3:{
+    fontSize: 25
+  },
+  h4:{
+    fontSize: 20
+  },
   h5:{
     fontSize: 18
   },
@@ -99,6 +122,9 @@ global.c_styles = StyleSheet.create({
   },
   h_50: {
     height: '50%'
+  },
+  h_100: {
+    height: '100%'
   },
   w_50:{
     width: '50%'

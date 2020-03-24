@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, ActivityIndicator, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -17,8 +16,14 @@ const HomeTabStack = createStackNavigator();
 // 路由配置
 const DefaultScreenOptions = {
   cardStyle: {
-    backgroundColor: '#F7F7F7'
-  }
+    backgroundColor: 'pink'
+  },
+  headerTransparent: true,
+  headerTitleAlign: 'center',
+  headerTitleStyle: {
+    color: '#fff'
+  },
+  headerBackImage: () => (<Icons iconName={'angle-left'} size={30} color={'white'}/>)
 };
 const TabBarOptions = {
   activeTintColor: '#468F80',
@@ -46,13 +51,10 @@ const TabProFileScreenOption = {
   title: '我的',
 };
 const HomeTabStackHomeScreenOptions = {
-  headerTitleAlign: 'center',
+  headerTransparent: false,
   headerStyle: {
     backgroundColor: '#468F80'
   },
-  headerTitleStyle: {
-    color: '#fff'
-  }
 };
 // 路由分级
 function HomeStackScreen() {
@@ -69,13 +71,13 @@ function HomeStackScreen() {
           } else if (route.name === 'ProFile') {
             iconName = focused ? 'user-o' : 'user-o';
           }
-          return <Icons iconName={iconName} badgeCount={5} size={20} color={color}/>;
+          return <Icons iconName={iconName} badgeCount={5} size={26} color={color}/>;
         },
       })}
     >
       <HomeTab.Screen name="Home" options={TabHomeScreenOption}>
         {() => (
-          <HomeTabStack.Navigator screenOptions={DefaultScreenOptions}>
+          <HomeTabStack.Navigator screenOptions={DefaultScreenOptions} initialRouteName={'HomeScreen'}>
             <HomeTabStack.Screen name="HomeScreen" component={HomeScreen} options={HomeTabStackHomeScreenOptions} />
             <HomeTabStack.Screen name="SuperScreen" component={supermarketScreen} />
           </HomeTabStack.Navigator>
@@ -102,9 +104,6 @@ function LoginStackScreen() {
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showLoading: false,
-    };
   }
 
   render() {

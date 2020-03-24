@@ -3,19 +3,28 @@
  * author：DestinyJun
  * date：  2020/3/23 9:16
  */
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 
 export const HomeScreenStyle = StyleSheet.create({
   home: {
     flex: 1,
-    // paddingTop: 20,
-    // backgroundColor: '#FAFFFE',
-    backgroundColor: 'skyblue',
+    overflow: 'hidden'
   },
   home_card: {
-    backgroundColor: 'yellow',
-    alignItems: 'center',
+    height: Dimensions.get('window').height * 0.16,
+    borderRadius: 5
+  },
+  home_card_view: {
+    flex: 1,
+    height: "100%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#E7F0EF',
+    flexDirection: 'row'
+  },
+  home_card_view_list: {
+    flex: 1,
     justifyContent: 'center',
-    height: 50
+    alignItems: 'center',
   }
 });
