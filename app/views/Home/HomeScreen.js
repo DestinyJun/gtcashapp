@@ -4,7 +4,7 @@
  * date：  2020/3/16 20:25
  */
 import React, {Component} from 'react';
-import {Text, TouchableOpacity, View, Image} from 'react-native';
+import {Text, TouchableOpacity, View, Image, StatusBar} from 'react-native';
 import {Constant, MENU_IMG_LIST} from '../../util';
 import {HomeScreenStyle} from './HomeScreenStyle';
 
@@ -21,6 +21,7 @@ export default class HomeScreen extends Component {
     const a = '../../assets/images/餐饮入口04_1080.png';
     return (
       <View style={[HomeScreenStyle.home, c_styles.pr_3, c_styles.pl_3]}>
+        <StatusBar animated={true} backgroundColor={'#468F80'} barStyle={'light-content'} StatusBarAnimation={'none'}/>
         {
           Constant.MENU_LIST.map((item, index) => (
             <TouchableOpacity
@@ -33,7 +34,7 @@ export default class HomeScreen extends Component {
                 },
               )}
             >
-              <View style={[HomeScreenStyle.home_card, c_styles.mt_3, c_styles.p_1]}>
+              <View elevation={5} style={[HomeScreenStyle.home_card, c_styles.mt_3, c_styles.p_1]}>
                 <View style={[HomeScreenStyle.home_card_view, c_styles]}>
                   <View style={[HomeScreenStyle.home_card_view_list, c_styles.p_2]}>
                     <Image resizeMode='center' source={MENU_IMG_LIST[index]}/>

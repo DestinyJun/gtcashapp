@@ -12,13 +12,14 @@ export const HomeScreenStyle = StyleSheet.create({
   },
   home_card: {
     height: Dimensions.get('window').height * 0.16,
-    borderRadius: 5
+    borderRadius: 5,
+    backgroundColor: 'white'
   },
   home_card_view: {
     flex: 1,
     height: "100%",
     borderRadius: 10,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: '#E7F0EF',
     flexDirection: 'row'
   },

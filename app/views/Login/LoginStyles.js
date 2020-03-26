@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-export default StyleSheet.create({
+export const LoginStyles = StyleSheet.create({
   login:{
     flex:1,
     backgroundColor: 'white',
@@ -61,7 +61,9 @@ export default StyleSheet.create({
     borderRadius: 3,
   },
   input_select_dropdown_text: {
-    color: 'green'
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
   },
   input_select_icon:{
     position: 'absolute',

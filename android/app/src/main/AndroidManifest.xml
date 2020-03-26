@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.gtcashapp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.gtcashapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -22,5 +21,15 @@
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>
+
+    <!--  ***************************react-native-camera相机配置************************  -->
+    <!-- 允许使用相机 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 允许使用手机相册 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 允许使用麦克风 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!--  ***************************react-native-camera相机配置************************  -->
 
 </manifest>

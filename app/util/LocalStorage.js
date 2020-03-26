@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-export default class LocalStorage {
+export class LocalStorage {
   /**
    * 新增键值对
    * @param key:string  键

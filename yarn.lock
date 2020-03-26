@@ -5050,6 +5050,13 @@ react-is@^16.8.1, react-is@^16.8.4, react-is@^16.9.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.10.2.tgz#984120fd4d16800e9a738208ab1fba422d23b5ab"
   integrity sha512-INBT1QEgtcCCgvccr5/86CfD71fw9EPmDxgiJX4I2Ddr6ZsV6iFXsuby+qWJPtmNuMY0zByTsG4468P7nHuNWA==
 
+react-native-camera@^3.21.0:
+  version "3.21.0"
+  resolved "https://registry.npm.taobao.org/react-native-camera/download/react-native-camera-3.21.0.tgz#d8d5149c6bf5d84174093065e08e78b81d785e5d"
+  integrity sha1-2NUUnGv12EF0CTBl4I54uB14Xl0=
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-gesture-handler@^1.6.0:
   version "1.6.0"
   resolved "https://registry.npm.taobao.org/react-native-gesture-handler/download/react-native-gesture-handler-1.6.0.tgz#e9a4e1d0c7ac21eb0d6b6ec013e73f9c0c33a629"

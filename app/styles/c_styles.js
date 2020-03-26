@@ -6,14 +6,54 @@ global.c_styles = StyleSheet.create({
   text_info: {
     color: '#17A2B8'
   },
+  text_secondary: {
+    color: '#A0A2A7'
+  },
   text_darkinfo: {
     color: '#468F80'
   },
-  text_white: {
+  text_light: {
     color: '#FFFFFF'
   },
   text_center: {
     textAlign: 'center'
+  },
+  bg_primary:{
+    backgroundColor: '#007BFF'
+  },
+  bg_secondary:{
+    backgroundColor: '#6C757D'
+  },
+  bg_success:{
+    backgroundColor: '#28A745'
+  },
+  bg_danger:{
+    backgroundColor: '#DC3545'
+  },
+  bg_warning:{
+    backgroundColor: '#FFC107'
+  },
+  bg_info:{
+    backgroundColor: '#17A2B8'
+  },
+  bg_light:{
+    backgroundColor: '#F8F9FA'
+  },
+  bg_dark:{
+    backgroundColor: '#343A40'
+  },
+  bg_white:{
+    backgroundColor: '#FFFFFF'
+  },
+  bg_transparent:{
+    backgroundColor: 'transparent'
+  },
+  bg_darkinfo:{
+    backgroundColor: '#468F80'
+  },
+  flex_center: {
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   p_1: {
     padding: '1%',
@@ -57,6 +97,12 @@ global.c_styles = StyleSheet.create({
   pb_5: {
     paddingBottom: '5%'
   },
+  pl_1:{
+    paddingLeft: '1%'
+  },
+  pl_2:{
+    paddingLeft: '2%'
+  },
   pl_3:{
     paddingLeft: '3%'
   },
@@ -84,6 +130,9 @@ global.c_styles = StyleSheet.create({
   ml_3:{
     marginLeft: '3%'
   },
+  ml_5:{
+    marginLeft: '5%'
+  },
   mr_1:{
     marginRight: '1%'
   },
@@ -98,6 +147,9 @@ global.c_styles = StyleSheet.create({
   },
   mt_5: {
     marginTop: '5%'
+  },
+  mb_2: {
+    marginBottom: '2%'
   },
   mb_3: {
     marginBottom: '3%'
@@ -120,6 +172,9 @@ global.c_styles = StyleSheet.create({
   h6:{
     fontSize: 16
   },
+  h_small:{
+    fontSize: 12
+  },
   h_50: {
     height: '50%'
   },
@@ -135,13 +190,9 @@ global.c_styles = StyleSheet.create({
   dim_height: {
     height: Dimensions.get('window').height
   },
-  bg_primary:{
-    backgroundColor: '#007BFF'
-  },
   row: {
     flex: 1,
     flexDirection: 'row',
-
   },
   cell: {
     flex: 1,

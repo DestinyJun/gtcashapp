@@ -2,18 +2,20 @@ import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Text, View, StatusBar} from 'react-native';
 // 组件
 import {Icons} from './app/views/bases/Icons';
 import LoginScreen from './app/views/Login/LoginScreen';
 import HomeScreen from './app/views/Home/HomeScreen';
-import ProFileScreen from './app/views/Home/ProFileScreen';
+import ProFileScreen from './app/views/ProFile/ProFileScreen';
 import supermarketScreen from './app/views/Home/supermarketScreen';
 // 路由
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
-const HomeTab = createBottomTabNavigator();
-const HomeTabStack = createStackNavigator();
-// 路由配置
+const TabHome = createBottomTabNavigator();
+const TabHomeStack = createStackNavigator();
+/********路由配置**************/
+// 共有路由配置
 const DefaultScreenOptions = {
   cardStyle: {
     backgroundColor: 'pink'
@@ -25,7 +27,12 @@ const DefaultScreenOptions = {
   },
   headerBackImage: () => (<Icons iconName={'angle-left'} size={30} color={'white'}/>)
 };
-const TabBarOptions = {
+
+// TabStackScreen路由配置
+const TabStackScreenOptions = {
+  headerShown: false
+};
+const TabStackHomeOptions = {
   activeTintColor: '#468F80',
   inactiveTintColor: '#C0C0C0',
   style: {
@@ -44,25 +51,43 @@ const TabBarOptions = {
   allowFontScaling: true,
   adaptive: true,
 };
-const TabHomeScreenOption = {
+const TabStackHomeScreenOption = {
   title: '主页',
 };
-const TabProFileScreenOption = {
+const TabStackProFileScreenOption = {
   title: '我的',
 };
-const HomeTabStackHomeScreenOptions = {
+const TabHomeStackHomeScreenOptions = {
   headerTransparent: false,
   headerStyle: {
     backgroundColor: '#468F80'
   },
+  headerTitleAlign: 'center',
+  headerTitleStyle: {
+    color: '#fff'
+  },
 };
+const TabHomeStackProFileScreenOptions = {
+  headerShown: false
+};
+
+// LoginScreen路由配置
+const LoginScreenOptions = {
+  headerShown: false
+};
+
+// 首屏路由
+const LoadingScreenOptions = {
+  headerShown: false
+};
+
 // 路由分级
-function HomeStackScreen() {
+function TabStackScreen() {
   return (
-    <HomeTab.Navigator
+    <TabHome.Navigator
       initialRouteName={'Home'}
       backBehavior={'none'}
-      tabBarOptions={TabBarOptions}
+      tabBarOptions={TabStackHomeOptions}
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
@@ -75,22 +100,21 @@ function HomeStackScreen() {
         },
       })}
     >
-      <HomeTab.Screen name="Home" options={TabHomeScreenOption}>
+      <TabHome.Screen name="Home" options={TabStackHomeScreenOption}>
         {() => (
-          <HomeTabStack.Navigator screenOptions={DefaultScreenOptions} initialRouteName={'HomeScreen'}>
-            <HomeTabStack.Screen name="HomeScreen" component={HomeScreen} options={HomeTabStackHomeScreenOptions} />
-            <HomeTabStack.Screen name="SuperScreen" component={supermarketScreen} />
-          </HomeTabStack.Navigator>
+          <TabHomeStack.Navigator initialRouteName={'HomeScreen'}>
+            <TabHomeStack.Screen name="HomeScreen" component={HomeScreen} options={TabHomeStackHomeScreenOptions}/>
+          </TabHomeStack.Navigator>
         )}
-      </HomeTab.Screen>
-      <HomeTab.Screen name="ProFile" options={TabProFileScreenOption}>
+      </TabHome.Screen>
+      <TabHome.Screen name="ProFile" options={TabStackProFileScreenOption}>
         {() => (
-          <HomeTabStack.Navigator>
-            <HomeTabStack.Screen name="ProFileScreen" component={ProFileScreen}/>
-          </HomeTabStack.Navigator>
+          <TabHomeStack.Navigator>
+            <TabHomeStack.Screen name="ProFileScreen" component={ProFileScreen} options={TabHomeStackProFileScreenOptions}/>
+          </TabHomeStack.Navigator>
         )}
-      </HomeTab.Screen>
-    </HomeTab.Navigator>
+      </TabHome.Screen>
+    </TabHome.Navigator>
   );
 }
 function LoginStackScreen() {
@@ -100,18 +124,34 @@ function LoginStackScreen() {
     </LoginStack.Navigator>
   );
 }
+
+// 加载页
+function LoadingScreen (){
+  return (
+    <View style={[c_styles.cell,c_styles.flex_center]}>
+      <StatusBar hidden={true} translucent={true}/>
+      <Text style={[c_styles.h3,c_styles.text_danger]}>欢迎来到收银APP</Text>
+    </View>
+  );
+}
 // 导出入口模块
 export default class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      loadShow: true,
+    }
   }
-
   render() {
+    if (this.state.loadShow) {
+      return <LoadingScreen />
+    }
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={'HomeStackScreen'} headerMode={'none'}>
-          <Stack.Screen name="HomeStackScreen" component={HomeStackScreen}/>
-          <Stack.Screen name="LoginStackScreen" component={LoginStackScreen}/>
+        <Stack.Navigator>
+          <Stack.Screen name="TabStackScreen" component={TabStackScreen} options={TabStackScreenOptions}/>
+          <Stack.Screen name="LoginStackScreen" component={LoginStackScreen} options={LoginScreenOptions}/>
+          <Stack.Screen name="SuperScreen" component={supermarketScreen} options={DefaultScreenOptions}/>
         </Stack.Navigator>
       </NavigationContainer>
     );

@@ -34,5 +34,8 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+
+       // 这个在我国可能不需要
+        maven { url "https://maven.google.com" }
     }
 }
