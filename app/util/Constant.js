@@ -15,22 +15,22 @@ export class Constant {
     {
       title: '超市入口',
       color: '#629E92',
-      router: 'SuperScreen'
+      router: 'MarketScreen'
     },
     {
       title: '餐饮入口',
       color: '#E9B24D',
-      router: 'SuperScreen'
+      router: 'MarketScreen'
     },
     {
       title: '入库管理',
       color: '#5DA1FF',
-      router: 'SuperScreen'
+      router: 'MarketScreen'
     },
     {
       title: '查看报表',
       color: '#AF93C4',
-      router: 'SuperScreen'
+      router: 'MarketScreen'
     }
   ]
 }

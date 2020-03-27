@@ -1,11 +1,11 @@
 /**
- * desc：  测试组件
+ * desc：  TabHome
  * author：DestinyJun
  * date：  2020/3/16 20:25
  */
 import React, {Component} from 'react';
-import {Text, TouchableOpacity, View, Image, StatusBar} from 'react-native';
-import {Constant, MENU_IMG_LIST} from '../../util';
+import {Text, TouchableOpacity, View, Image, StatusBar, BackHandler, ToastAndroid,NativeModules} from 'react-native';
+import {Constant, LocalStorage, MENU_IMG_LIST} from '../../util';
 import {HomeScreenStyle} from './HomeScreenStyle';
 
 export default class HomeScreen extends Component {
@@ -54,5 +54,30 @@ export default class HomeScreen extends Component {
         }
       </View>
     );
+  }
+  componentDidMount() {
+    if (Platform.OS === 'android'){
+      BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+  }
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+  }
+  onBackAndroid = () => {
+    //判断该页面是否处于聚焦状态
+    if(this.props.navigation.isFocused()) {
+      if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+        //最近2秒内按过back键，可以退出应用。
+        // return true;
+        BackHandler.exitApp();//直接退出APP
+      }else{
+        this.lastBackPressed = Date.now();
+        //退出提示
+        ToastAndroid.show('再按一次退出应用', 1000);
+        return true;
+      }
+    }
   }
 }

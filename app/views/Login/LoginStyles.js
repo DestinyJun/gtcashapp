@@ -38,9 +38,6 @@ export const LoginStyles = StyleSheet.create({
     borderTopColor: 'rgba(212,212,212,0.3)',
     borderTopWidth: 1,
   },
-  input_user_text: {
-    color: 'red',
-  },
   input_select: {
     flex: 1,
     position: 'relative'

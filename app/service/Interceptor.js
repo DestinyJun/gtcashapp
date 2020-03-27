@@ -56,7 +56,6 @@ axios.interceptors.response.use(
           break;
       }
     } else {
-      Alert.alert('','链接服务器失败，请稍后重试！');
       return Promise.reject(response.data);
     }
   },

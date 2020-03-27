@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StatusBar,
   ToastAndroid,
+  DeviceEventEmitter
 } from 'react-native';
 import {Card} from 'react-native-shadow-cards';
 // 样式文件
@@ -55,6 +56,7 @@ export default class LoginScreen extends Component {
               <TextInput
                 style={[c_styles.pl_5, LoginStyles.input_user_text, c_styles.cell, c_styles.h5]}
                 placeholder={'请输入用户名...'}
+                keyboardType={'email-address'}
                 placeholderTextColor={'#90DACB'}
                 onChangeText={(text) => {
                   this.login.user = text;
@@ -63,10 +65,10 @@ export default class LoginScreen extends Component {
             </View>
             <View style={[c_styles.cell, c_styles.w_100, LoginStyles.input_user_password]}>
               <TextInput
-                style={[c_styles.pl_5, LoginStyles.input_user_text, c_styles.cell, c_styles.h5]}
+                style={[c_styles.pl_5,c_styles.cell, c_styles.h5]}
                 placeholder={'请输入密码...'}
                 placeholderTextColor={'#90DACB'}
-                password={true}
+                secureTextEntry={true}
                 onChangeText={(text) => {
                   this.login.password = text;
                 }}
@@ -188,7 +190,7 @@ export default class LoginScreen extends Component {
         LocalStorage.set('merchatCode', res.merchatCode);
         LocalStorage.set('userId', res.userId);
         LocalStorage.set('APPKEY', res.APPKEY);
-        this.props.navigation.navigate('TabStackScreen');
+        DeviceEventEmitter.emit('loginChange',true);
       })
       .catch(e => {
         ToastAndroid.showWithGravity(e.msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
