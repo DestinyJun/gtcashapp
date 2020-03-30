@@ -21,7 +21,6 @@ export default class HomeScreen extends Component {
     const a = '../../assets/images/餐饮入口04_1080.png';
     return (
       <View style={[HomeScreenStyle.home, c_styles.pr_3, c_styles.pl_3]}>
-        <StatusBar animated={true} backgroundColor={'#468F80'} barStyle={'light-content'} StatusBarAnimation={'none'}/>
         {
           Constant.MENU_LIST.map((item, index) => (
             <TouchableOpacity

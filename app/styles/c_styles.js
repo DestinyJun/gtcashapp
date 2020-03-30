@@ -13,6 +13,9 @@ global.c_styles = StyleSheet.create({
     color: '#468F80'
   },
   text_light: {
+    color: '#F8F9FA'
+  },
+  text_white:{
     color: '#FFFFFF'
   },
   text_center: {
@@ -54,6 +57,9 @@ global.c_styles = StyleSheet.create({
   flex_center: {
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  justify_end: {
+    justifyContent: 'flex-end'
   },
   p_1: {
     padding: '1%',
@@ -154,6 +160,12 @@ global.c_styles = StyleSheet.create({
   mb_3: {
     marginBottom: '3%'
   },
+  p_clear: {
+    padding: 0
+  },
+  m_clear: {
+    margin: 0
+  },
   h1:{
     fontSize: 40
   },
@@ -164,7 +176,8 @@ global.c_styles = StyleSheet.create({
     fontSize: 25
   },
   h4:{
-    fontSize: 20
+    fontSize: 20,
+    fontWeight: '600'
   },
   h5:{
     fontSize: 18

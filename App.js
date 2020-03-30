@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text, View, StatusBar,DeviceEventEmitter} from 'react-native';
+import {Text, View, StatusBar, DeviceEventEmitter} from 'react-native';
 // 自定义组件
 import {Icons} from './app/views/bases/Icons';
 import LoginScreen from './app/views/Login/LoginScreen';
@@ -119,7 +119,7 @@ function TabStackScreen() {
 function LoginStackScreen() {
   return (
     <LoginStack.Navigator initialRouteName={'LoginScreen'} headerMode={'none'} screenOptions={DefaultScreenOptions}>
-      <LoginStack.Screen name="LoginScreen" component={LoginScreen}/>
+      {/*<LoginStack.Screen name="LoginScreen" component={LoginScreen}/>*/}
     </LoginStack.Navigator>
   );
 }
@@ -128,7 +128,7 @@ function LoginStackScreen() {
 function LoadingScreen() {
   return (
     <View style={[c_styles.cell, c_styles.flex_center]}>
-      <StatusBar hidden={true} translucent={true}/>
+      {/*<StatusBar hidden={true} translucent={true}/>*/}
       <Text style={[c_styles.h3, c_styles.text_danger]}>欢迎来到收银APP</Text>
     </View>
   );
@@ -170,16 +170,37 @@ export default class App extends Component {
       return <LoadingScreen/>;
     }
     return (
-      <NavigationContainer>
+      <NavigationContainer
+        onStateChange={(newState) => {
+          StatusBar.setBackgroundColor('transparent',true);
+          StatusBar.setTranslucent(true);
+          const state = newState.routes[newState.index].state;
+          const name = newState.routes[newState.index].name;
+          if (newState.routes[newState.index].name === 'TabStackScreen') {
+            const tabName = state.routeNames[state.index];
+            switch (tabName) {
+              case 'Home':
+                StatusBar.setBarStyle('light-content',true);
+                break;
+              case 'ProFile':
+                StatusBar.setBarStyle('dark-content',false);
+                break;
+            }
+            return;
+          }
+          StatusBar.setBarStyle('light-content',true);
+          console.log(name);
+        }}
+      >
         <Stack.Navigator>
           {
-            this.state.userToken?(
+            this.state.userToken ? (
               <>
                 <Stack.Screen name="TabStackScreen" component={TabStackScreen} options={TabStackScreenOptions}/>
                 <Stack.Screen name="RepastScreen" component={RepastScreen} options={DefaultScreenOptions}/>
                 <Stack.Screen name="MarketScreen" component={MarketScreen} options={DefaultScreenOptions}/>
               </>
-            ):(
+            ) : (
               <>
                 <Stack.Screen name="LoginStackScreen" component={LoginStackScreen} options={LoginScreenOptions}/>
               </>
@@ -189,15 +210,17 @@ export default class App extends Component {
       </NavigationContainer>
     );
   }
+
   componentDidMount() {
     // 订阅登陆发射事件
-    this.deEmiter = DeviceEventEmitter.addListener('loginChange',(res) => {
+    this.deEmiter = DeviceEventEmitter.addListener('loginChange', (res) => {
       this.setState({
         isLoading: false,
         userToken: true,
       });
     });
   }
+
   componentWillUnmount() {
     // 组件卸载后取消事件订阅，防止内存泄漏
     this.deEmiter.remove();

@@ -11,6 +11,7 @@ export const MarketScreenStyles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'black',
   },
+  // 相机样式
   camera: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -60,6 +61,7 @@ export const MarketScreenStyles = StyleSheet.create({
     backgroundColor: 'rgba(23,23,23,0.3)',
     // alignSelf: 'stretch'
   },
+  // 商品列表样式
   shop: {
     flex: 5,
     justifyContent: 'center',
@@ -87,4 +89,19 @@ export const MarketScreenStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  // 查询商品模态框
+  search_modal_header: {
+    height: 50,
+    flexDirection: 'row',
+    ...c_styles.flex_center,
+    paddingRight: 25
+  },
+  search_modal_header_left: {
+    height: '100%',
+    width: 50,
+    ...c_styles.flex_center,
+  },
+  search_modal_input: {
+    borderColor: '#F5F5F5',
+  }
 });
