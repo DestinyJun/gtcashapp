@@ -4,12 +4,12 @@
  * date：  2020/3/23 22:09
  */
 import {StyleSheet} from 'react-native';
-
 export const MarketScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
     backgroundColor: 'black',
+    ...StyleSheet.absoluteFill
   },
   // 相机样式
   camera: {
@@ -93,15 +93,23 @@ export const MarketScreenStyles = StyleSheet.create({
   search_modal_header: {
     height: 50,
     flexDirection: 'row',
-    ...c_styles.flex_center,
-    paddingRight: 25
+    paddingRight: 25,
+    ...c_styles.flex_center
   },
   search_modal_header_left: {
     height: '100%',
     width: 50,
     ...c_styles.flex_center,
   },
-  search_modal_input: {
+  search_modal_content: {
+    flex: 1,
+  },
+  search_modal_content_input: {
     borderColor: '#F5F5F5',
+  },
+  search_modal_keyboard: {
+    flex: 5,
+    borderColor: '#F5F5F5',
+    ...c_styles.pt_5
   }
 });

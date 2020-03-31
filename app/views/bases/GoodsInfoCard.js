@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default class GoodsInfoCard extends Component {
+export class GoodsInfoCard extends Component {
   static defaultProps = {
     // 这里是设置props默认属性的值
     queue: 1,
@@ -27,9 +27,22 @@ export default class GoodsInfoCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      numbers: this.props.numbers,
-      show: false
+      numbers: 0,
+      prevPropNumbers: null,
+      show: false,
     };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    // 反模式
+    if (props.numbers !== state.prevPropNumbers) {
+      return {
+        numbers: props.numbers,
+        // 保存初始化的props，从而进行比对赛选，避免原因setState和forceUpdate触发本生命周期导致不断的props赋值给state
+        prevPropNumbers: props.numbers,
+      };
+    }
+    return null;
   }
 
   render() {
@@ -88,7 +101,7 @@ export default class GoodsInfoCard extends Component {
           this.setState(
             {
               show: true,
-            })
+            });
         }
         this.props.change({index: this.props.queue - 1, numbers: this.state.numbers});
       },
@@ -103,6 +116,7 @@ export default class GoodsInfoCard extends Component {
     );
   };
 }
+
 const styles = StyleSheet.create({
   container: {
     height: 70,

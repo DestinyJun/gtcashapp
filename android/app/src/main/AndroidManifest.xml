@@ -32,4 +32,8 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <!--  ***************************react-native-camera相机配置************************  -->
 
+    <!--  ***************************允许触发震动配置************************  -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!--  ***************************允许触发震动配置************************  -->
+
 </manifest>

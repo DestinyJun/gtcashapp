@@ -8,17 +8,20 @@ import {
   Text,
   View,
   TouchableOpacity, Button, TextInput,
-  StatusBar, Animated, Easing, ScrollView, Dimensions,
+  StatusBar, Animated, Easing, ScrollView, Dimensions, Keyboard, KeyboardAvoidingView
 } from 'react-native';
 import {MarketScreenStyles} from './MarketScreenStyles';
 // 自定义组件
 import {Icons} from '../bases/Icons';
-import GoodsInfoCard from '../bases/GoodsInfoCard';
+import {NumberKeyboard} from '../bases/NumberKeyboard';
+import {GoodsInfoCard} from '../bases/GoodsInfoCard';
 // 第三方组件
 import {RNCamera} from 'react-native-camera';
 import { Input } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {event} from 'react-native-reanimated';
+
 
 
 export default class MarketScreen extends Component {
@@ -122,28 +125,38 @@ export default class MarketScreen extends Component {
           style={[c_styles.justify_end, c_styles.m_clear]}
         >
           <View style={[c_styles.h_50, c_styles.bg_white]}>
-            <View style={MarketScreenStyles.search_modal_header}>
-              <TouchableOpacity style={MarketScreenStyles.search_modal_header_left} onPress={this.searchModalToggle}>
+            <View style={[MarketScreenStyles.search_modal_header]}>
+              <TouchableOpacity style={[MarketScreenStyles.search_modal_header_left]} onPress={this.searchModalToggle}>
                 <Icon name={'angle-left'} size={35} color={'#1A1A1A'}/>
               </TouchableOpacity>
               <Text style={[c_styles.h4,c_styles.cell,c_styles.text_center]}>手动查询商品</Text>
             </View>
-            <Input
-              inputStyle={{...c_styles.h5}}
-              inputContainerStyle={MarketScreenStyles.search_modal_input}
-              placeholder='输入自定义编号'
-              rightIcon={{type: 'font-awesome', name: 'times-circle',color: '#999999',size: 20}}
-            />
+            <View style={MarketScreenStyles.search_modal_content}>
+              <KeyboardAvoidingView >
+                <Input
+                  // autoFocus={true}
+                  onFocus={(target) => {
+                    console.log(target);
+                   /* this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow',() => {
+                      return false;
+                    });*/
+                  }}
+                  // editable={false}
+                  inputStyle={{...c_styles.h5}}
+                  inputContainerStyle={MarketScreenStyles.search_modal_content_input}
+                  placeholder='输入自定义编号'
+                  rightIcon={{type: 'font-awesome', name: 'times-circle',color: '#999999',size: 20}}
+                />
+              </KeyboardAvoidingView>
+            </View>
+            <View style={MarketScreenStyles.search_modal_keyboard}>
+              <NumberKeyboard />
+            </View>
           </View>
         </Modal>
       </View>
     );
   }
-
-  componentDidMount() {
-    this.startAnimation();
-  }
-
   takePicture = async () => {
     if (this.camera) {
       const options = {quality: 0.5, base64: true};
@@ -177,13 +190,21 @@ export default class MarketScreen extends Component {
       }, 1000);
     }
   };
-
-  componentWillUnmount() {
-    // this.deEmiter.remove();
-    clearInterval(this.timer);
-  }
   // 搜索商品弹窗切换
   searchModalToggle = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
+  // 模态框输入框焦点捕捉
+  searchModalInputFocus = (event) => {
+    console.log(...event);
+  };
+  // 生命周期钩子
+  componentDidMount() {
+    this.startAnimation();
+  }
+  componentWillUnmount() {
+    // this.deEmiter.remove();
+    clearInterval(this.timer);
+    // this.keyboardDidShowListener.remove();
+  }
 }

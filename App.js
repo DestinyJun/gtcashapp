@@ -189,7 +189,7 @@ export default class App extends Component {
             return;
           }
           StatusBar.setBarStyle('light-content',true);
-          console.log(name);
+          // console.log(name);
         }}
       >
         <Stack.Navigator>
