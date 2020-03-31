@@ -101,15 +101,8 @@ export const MarketScreenStyles = StyleSheet.create({
     width: 50,
     ...c_styles.flex_center,
   },
-  search_modal_content: {
-    flex: 1,
-  },
-  search_modal_content_input: {
-    borderColor: '#F5F5F5',
-  },
   search_modal_keyboard: {
-    flex: 5,
+    flex: 1,
     borderColor: '#F5F5F5',
-    ...c_styles.pt_5
   }
 });

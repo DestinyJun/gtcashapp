@@ -125,32 +125,14 @@ export default class MarketScreen extends Component {
           style={[c_styles.justify_end, c_styles.m_clear]}
         >
           <View style={[c_styles.h_50, c_styles.bg_white]}>
-            <View style={[MarketScreenStyles.search_modal_header]}>
+            <View style={MarketScreenStyles.search_modal_header}>
               <TouchableOpacity style={[MarketScreenStyles.search_modal_header_left]} onPress={this.searchModalToggle}>
                 <Icon name={'angle-left'} size={35} color={'#1A1A1A'}/>
               </TouchableOpacity>
               <Text style={[c_styles.h4,c_styles.cell,c_styles.text_center]}>手动查询商品</Text>
             </View>
-            <View style={MarketScreenStyles.search_modal_content}>
-              <KeyboardAvoidingView >
-                <Input
-                  // autoFocus={true}
-                  onFocus={(target) => {
-                    console.log(target);
-                   /* this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow',() => {
-                      return false;
-                    });*/
-                  }}
-                  // editable={false}
-                  inputStyle={{...c_styles.h5}}
-                  inputContainerStyle={MarketScreenStyles.search_modal_content_input}
-                  placeholder='输入自定义编号'
-                  rightIcon={{type: 'font-awesome', name: 'times-circle',color: '#999999',size: 20}}
-                />
-              </KeyboardAvoidingView>
-            </View>
             <View style={MarketScreenStyles.search_modal_keyboard}>
-              <NumberKeyboard />
+              <NumberKeyboard enterChange={this.searchModalInputChange}/>
             </View>
           </View>
         </Modal>
@@ -194,9 +176,9 @@ export default class MarketScreen extends Component {
   searchModalToggle = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
-  // 模态框输入框焦点捕捉
-  searchModalInputFocus = (event) => {
-    console.log(...event);
+  // 根据商品编号搜索商品编号
+  searchModalInputChange = (value) => {
+    console.log(value);
   };
   // 生命周期钩子
   componentDidMount() {
