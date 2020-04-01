@@ -20,7 +20,7 @@ export class Constant {
     {
       title: '餐饮入口',
       color: '#E9B24D',
-      router: 'MarketScreen'
+      router: 'RepastScreen'
     },
     {
       title: '入库管理',

@@ -24,7 +24,6 @@ const DefaultScreenOptions = {
     backgroundColor: 'pink',
   },
   headerTransparent: true,
-  headerTitleAlign: 'center',
   headerTitleStyle: {
     color: '#fff',
   },
@@ -77,6 +76,21 @@ const TabHomeStackProFileScreenOptions = {
 // LoginScreen路由配置
 const LoginScreenOptions = {
   headerShown: false,
+};
+
+//
+const RepastScreenOptions = {
+    title: 'My home',
+    headerStyle: {
+      // backgroundColor: '#FFFFFF',
+      // color: '#000'
+    },
+    headerTitleAlign: 'center',
+    headerTintColor: '#000',
+        headerTitleStyle: {
+        fontWeight: 'bold',
+    },
+    headerBackImage: () => (<Icons iconName={'angle-left'} size={30} color={'black'}/>),
 };
 
 // 路由分级
@@ -196,7 +210,7 @@ export default class App extends Component {
             this.state.userToken ? (
               <>
                 <Stack.Screen name="TabStackScreen" component={TabStackScreen} options={TabStackScreenOptions}/>
-                <Stack.Screen name="RepastScreen" component={RepastScreen} options={DefaultScreenOptions}/>
+                <Stack.Screen name="RepastScreen" component={RepastScreen} options={RepastScreenOptions}/>
                 <Stack.Screen name="MarketScreen" component={MarketScreen} options={DefaultScreenOptions}/>
               </>
             ) : (
