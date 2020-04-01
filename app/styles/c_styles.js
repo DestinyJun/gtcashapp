@@ -191,6 +191,9 @@ global.c_styles = StyleSheet.create({
   h_50: {
     height: '50%'
   },
+  h_60: {
+    height: '60%'
+  },
   h_100: {
     height: '100%'
   },

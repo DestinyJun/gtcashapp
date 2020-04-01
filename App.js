@@ -119,7 +119,7 @@ function TabStackScreen() {
 function LoginStackScreen() {
   return (
     <LoginStack.Navigator initialRouteName={'LoginScreen'} headerMode={'none'} screenOptions={DefaultScreenOptions}>
-      {/*<LoginStack.Screen name="LoginScreen" component={LoginScreen}/>*/}
+      <LoginStack.Screen name="LoginScreen" component={LoginScreen}/>
     </LoginStack.Navigator>
   );
 }
@@ -128,7 +128,6 @@ function LoginStackScreen() {
 function LoadingScreen() {
   return (
     <View style={[c_styles.cell, c_styles.flex_center]}>
-      {/*<StatusBar hidden={true} translucent={true}/>*/}
       <Text style={[c_styles.h3, c_styles.text_danger]}>欢迎来到收银APP</Text>
     </View>
   );

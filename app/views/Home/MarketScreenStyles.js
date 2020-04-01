@@ -94,15 +94,29 @@ export const MarketScreenStyles = StyleSheet.create({
     height: 50,
     flexDirection: 'row',
     paddingRight: 25,
-    ...c_styles.flex_center
+    ...c_styles.flex_center,
+    borderColor: '#EFEFEF',
+    borderBottomWidth: 1
   },
   search_modal_header_left: {
     height: '100%',
     width: 50,
     ...c_styles.flex_center,
   },
-  search_modal_keyboard: {
+  search_modal_content: {
     flex: 1,
     borderColor: '#F5F5F5',
+  },
+  search_modal_shop_list: {
+    flex: 1,
+    position: 'relative'
+  },
+  search_modal_add_btn: {
+    position: 'absolute',
+    height: 60,
+    bottom: 0,
+    ...c_styles.w_100,
+    ...c_styles.bg_darkinfo,
+    ...c_styles.flex_center
   }
 });

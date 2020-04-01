@@ -193,6 +193,7 @@ export default class LoginScreen extends Component {
         DeviceEventEmitter.emit('loginChange',true);
       })
       .catch(e => {
+        console.log(e);
         ToastAndroid.showWithGravity(e.msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
       });
   };

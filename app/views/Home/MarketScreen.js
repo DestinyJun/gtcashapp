@@ -21,8 +21,10 @@ import { Input } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {event} from 'react-native-reanimated';
-
-
+// 自定义工具
+import {post} from '../../service/Interceptor';
+import api from '../../service/Api';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class MarketScreen extends Component {
   constructor(props) {
@@ -43,6 +45,7 @@ export default class MarketScreen extends Component {
         {title: '泡脚竹笋', price: 12, numbers: 5, code: 154245184, unit: '500ml'},
       ],
       moveAnim: new Animated.Value(0), // 扫动条动画
+      contentState: 1
     };
     this.props.navigation.setOptions({
       title: '超市收银',
@@ -124,15 +127,49 @@ export default class MarketScreen extends Component {
           backdropOpacity={0.5}
           style={[c_styles.justify_end, c_styles.m_clear]}
         >
-          <View style={[c_styles.h_50, c_styles.bg_white]}>
+          <View style={[c_styles.h_60, c_styles.bg_white]}>
             <View style={MarketScreenStyles.search_modal_header}>
               <TouchableOpacity style={[MarketScreenStyles.search_modal_header_left]} onPress={this.searchModalToggle}>
                 <Icon name={'angle-left'} size={35} color={'#1A1A1A'}/>
               </TouchableOpacity>
-              <Text style={[c_styles.h4,c_styles.cell,c_styles.text_center]}>手动查询商品</Text>
+              <Text style={[c_styles.h4,c_styles.cell,c_styles.text_center]}>
+                {
+                  this.state.contentState === 1?'手动查询商品':
+                  this.state.contentState === 2?'查询结果':
+                  this.state.contentState === 3?'选择商品': '收款成功'
+                }
+              </Text>
             </View>
-            <View style={MarketScreenStyles.search_modal_keyboard}>
-              <NumberKeyboard enterChange={this.searchModalInputChange}/>
+            <View style={MarketScreenStyles.search_modal_content}>
+              {
+                this.state.contentState === 1?(<NumberKeyboard enterChange={this.searchModalInputChange}/>):
+                this.state.contentState === 2?(
+                  <View style={MarketScreenStyles.search_modal_shop_list}>
+                    <ScrollView
+                      style={[c_styles.cell,{marginBottom:70}]}
+                      alwaysBounceVertical={true}
+                    >
+                      {
+                        this.state.goods.map((item, index) => {
+                          return (
+                            <GoodsInfoCard
+                              key={index}
+                              queue={index + 1} title={item.title}
+                              price={item.price} code={item.code}
+                              unit={item.unit} numbers={item.numbers}
+                              change={this.totalPriceOperate}
+                            />
+                          );
+                        })
+                      }
+                    </ScrollView>
+                    <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]}>
+                      <Text style={[c_styles.h4,c_styles.text_white]}>确认添加</Text>
+                    </TouchableOpacity>
+                  </View>
+                ):
+                this.state.contentState === 3?'选择商品': '收款成功'
+              }
             </View>
           </View>
         </Modal>
@@ -177,8 +214,15 @@ export default class MarketScreen extends Component {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
   // 根据商品编号搜索商品编号
-  searchModalInputChange = (value) => {
-    console.log(value);
+   searchModalInputChange = async (value) => {
+     const merchatCode = await AsyncStorage.getItem('merchatCode');
+     post(api.SEARCH_GOODS_CODE,{merchatCode: merchatCode,code: value})
+         .then((val) => {
+           console.log(val);
+         })
+         .catch((err) => {
+           console.log(err);
+         });
   };
   // 生命周期钩子
   componentDidMount() {

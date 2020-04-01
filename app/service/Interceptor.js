@@ -3,7 +3,7 @@
  */
 import axios from 'axios'
 import {Alert} from 'react-native';
-import {LocalStorage} from '../util';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // 设置全局请求的地址
 // axios.defaults.baseURL = 'http://192.168.28.28:8999';
@@ -18,18 +18,12 @@ axios.defaults.timeout = 3000;
 
 // 请求拦截
 axios.interceptors.request.use(
-  function (config) {
+  async function (config) {
     const str = config.url;
     // 判断那些接口需要添加token，那些接口需要添加请求类型，判断APPKEY是否存在
     if (!(str.includes('/user'))) {
-      LocalStorage.get('APPKEY')
-        .then((res) => {
-          config.headers.post['APPKEY'] = res
-        });
-      LocalStorage.get('userCode')
-        .then((res) => {
-          config.headers.post['userId'] = res
-        });
+      config.headers.post['APPKEY'] = await AsyncStorage.getItem('APPKEY');
+      config.headers.post['userId'] = await AsyncStorage.getItem('userCode');
     }
     return config;
   },
