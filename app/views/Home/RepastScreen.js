@@ -5,7 +5,7 @@
  */
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, StatusBar} from 'react-native';
-import SettlementUI from '../bases/ComponentUi/SettlementUI'
+import SettlementUI from '../bases/SettlementUI'
 import {RepastScreenStyles} from "./RepastScreenStyles";
 import {Icon} from 'react-native-elements';
 

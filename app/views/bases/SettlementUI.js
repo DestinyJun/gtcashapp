@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, TouchableOpacity, View} from "react-native";
-import {MarketScreenStyles} from "../../Home/MarketScreenStyles";
+import {MarketScreenStyles} from "../Home/MarketScreenStyles";
 import {Icon, Badge} from 'react-native-elements';
 import {StyleSheet} from 'react-native';
 const SettlementStyles = StyleSheet.create({
