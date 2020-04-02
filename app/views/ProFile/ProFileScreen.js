@@ -19,8 +19,10 @@ export default class ProFileScreen extends Component {
 
   render() {
     return (
-      <View style={[{ flex: 1, alignItems: 'center', justifyContent: 'center' }]}>
-        <Text>Details Screen</Text>
+      <View style={[{ flex: 1}]}>
+        <View style={[{height: 30,width: '100%',backgroundColor: 'rgba(23,23,23,0.5)'}]}>
+
+        </View>
       </View>
     );
   }

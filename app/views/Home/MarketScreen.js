@@ -8,7 +8,7 @@ import {
   Text,
   View,
   TouchableOpacity, Button, TextInput,
-  StatusBar, Animated, Easing, ScrollView, Dimensions, Keyboard, KeyboardAvoidingView
+  StatusBar, Animated, Easing, ScrollView, Dimensions, Keyboard, KeyboardAvoidingView,
 } from 'react-native';
 import {MarketScreenStyles} from './MarketScreenStyles';
 // 自定义组件
@@ -17,7 +17,7 @@ import {NumberKeyboard} from '../bases/NumberKeyboard';
 import {GoodsInfoCard} from '../bases/GoodsInfoCard';
 // 第三方组件
 import {RNCamera} from 'react-native-camera';
-import { Input } from 'react-native-elements';
+import {Input, PricingCard} from 'react-native-elements';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {event} from 'react-native-reanimated';
@@ -32,21 +32,13 @@ export default class MarketScreen extends Component {
     this.isScan = true;
     this.state = {
       totalPrice: 12,
-      isModalVisible: true,
-      goods: [
-        {title: '小辣狗', price: 1.5, numbers: 3, code: 154245184, unit: '500ml'},
-        {title: '卤鸡爪', price: 8, numbers: 10, code: 154245184, unit: '500ml'},
-        {title: '泡脚竹笋', price: 12, numbers: 5, code: 154245184, unit: '500ml'},
-        {title: '泡脚竹笋', price: 12, numbers: 5, code: 154245184, unit: '500ml'},
-        {title: '泡脚竹笋', price: 12, numbers: 5, code: 154245184, unit: '500ml'},
-        {title: '泡脚竹笋', price: 12, numbers: 5, code: 154245184, unit: '500ml'},
-        {title: '泡脚竹笋', price: 12, numbers: 5, code: 154245184, unit: '500ml'},
-        {title: '泡脚竹笋', price: 12, numbers: 5, code: 154245184, unit: '500ml'},
-        {title: '泡脚竹笋', price: 12, numbers: 5, code: 154245184, unit: '500ml'},
-      ],
+      isModalVisible: false,
       moveAnim: new Animated.Value(0), // 扫动条动画
-      contentState: 1
+      contentState: 1,
+      goods: [],
     };
+    this.addGoodsList = [];
+    this.searchGoodList = [];
     this.props.navigation.setOptions({
       title: '超市收银',
       headerRightContainerStyle: {},
@@ -67,7 +59,7 @@ export default class MarketScreen extends Component {
     return (
       <View style={MarketScreenStyles.container}>
         <View style={[MarketScreenStyles.camera]}>
-          {/*  <RNCamera
+            <RNCamera
             ref={ref => {this.camera = ref}}
             style={MarketScreenStyles.camera_preview}
             type={RNCamera.Constants.Type.back}
@@ -83,48 +75,59 @@ export default class MarketScreen extends Component {
               </View>
               <View style={MarketScreenStyles.box_bottom} />
             </View>
-          </RNCamera>*/}
+          </RNCamera>
         </View>
         <View style={[MarketScreenStyles.shop]}>
-          <View style={[MarketScreenStyles.shop_content]}>
-            <ScrollView
-              style={[{flex: 1}]}
-              alwaysBounceVertical={true}
-            >
-              {
-                this.state.goods.map((item, index) => {
-                  return (
-                    <GoodsInfoCard
-                      key={index}
-                      queue={index + 1} title={item.title}
-                      price={item.price} code={item.code}
-                      unit={item.unit} numbers={item.numbers}
-                      change={this.totalPriceOperate}
-                    />
-                  );
-                })
-              }
-            </ScrollView>
-          </View>
-          <View style={[MarketScreenStyles.shop_bottom]}>
-            <View style={MarketScreenStyles.shop_bottom_price}>
-              <Text style={[c_styles.h5, c_styles.ml_5]}>
-                合计金额：<Text style={c_styles.text_danger}>￥{this.state.totalPrice}</Text>
-              </Text>
-            </View>
-            <View style={MarketScreenStyles.shop_bottom_settle}>
-              <TouchableOpacity
-                onPress={this.takePicture.bind(this)}
-                style={[{flex: 1}, c_styles.w_100, c_styles.flex_center]}>
-                <Text style={[c_styles.h5, c_styles.text_light]}>结算</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          {
+            this.state.goods.length === 0?
+              (<View style={[c_styles.cell,c_styles.flex_center]}>
+                <Text style={[c_styles.h4,c_styles.text_darkinfo]}>请扫码或手动添加商品！</Text>
+              </View>) :
+              (<View style={c_styles.cell}>
+                <View style={[MarketScreenStyles.shop_content]}>
+                  <ScrollView
+                    style={[{flex: 1}]}
+                    alwaysBounceVertical={true}
+                  >
+                    {
+                      this.state.goods.map((item, index) => {
+                        return (
+                          <GoodsInfoCard
+                            key={index}
+                            queue={index + 1} title={item.goodsName}
+                            price={item.unitPrice} code={item.goodsCode}
+                            unit={item.company} numbers={item.numbers}
+                            change={this.totalPriceOperate}
+                          />
+                        );
+                      })
+                    }
+                  </ScrollView>
+                </View>
+                <View style={[MarketScreenStyles.shop_bottom]}>
+                  <View style={MarketScreenStyles.shop_bottom_price}>
+                    <Text style={[c_styles.h5, c_styles.ml_5]}>
+                      合计金额：<Text style={c_styles.text_danger}>￥{this.state.totalPrice}</Text>
+                    </Text>
+                  </View>
+                  <View style={MarketScreenStyles.shop_bottom_settle}>
+                    <TouchableOpacity
+                      style={[{flex: 1}, c_styles.w_100, c_styles.flex_center]}>
+                      <Text style={[c_styles.h5, c_styles.text_light]}>结算</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>)
+          }
         </View>
         {/* 查询商品模态框*/}
         <Modal
           isVisible={this.state.isModalVisible}
           backdropOpacity={0.5}
+          onModalHide={() => {
+            this.setState({contentState: 1});
+            this.addGoodsList = [];
+          }}
           style={[c_styles.justify_end, c_styles.m_clear]}
         >
           <View style={[c_styles.h_60, c_styles.bg_white]}>
@@ -132,43 +135,51 @@ export default class MarketScreen extends Component {
               <TouchableOpacity style={[MarketScreenStyles.search_modal_header_left]} onPress={this.searchModalToggle}>
                 <Icon name={'angle-left'} size={35} color={'#1A1A1A'}/>
               </TouchableOpacity>
-              <Text style={[c_styles.h4,c_styles.cell,c_styles.text_center]}>
+              <Text style={[c_styles.h4, c_styles.cell, c_styles.text_center]}>
                 {
-                  this.state.contentState === 1?'手动查询商品':
-                  this.state.contentState === 2?'查询结果':
-                  this.state.contentState === 3?'选择商品': '收款成功'
+                  this.state.contentState === 1 ? '手动查询商品' :
+                    this.state.contentState === 2 ? '查询结果' :
+                      this.state.contentState === 3 ? '结算' : '收款成功'
                 }
               </Text>
             </View>
             <View style={MarketScreenStyles.search_modal_content}>
               {
-                this.state.contentState === 1?(<NumberKeyboard enterChange={this.searchModalInputChange}/>):
-                this.state.contentState === 2?(
-                  <View style={MarketScreenStyles.search_modal_shop_list}>
-                    <ScrollView
-                      style={[c_styles.cell,{marginBottom:70}]}
-                      alwaysBounceVertical={true}
-                    >
-                      {
-                        this.state.goods.map((item, index) => {
-                          return (
-                            <GoodsInfoCard
-                              key={index}
-                              queue={index + 1} title={item.title}
-                              price={item.price} code={item.code}
-                              unit={item.unit} numbers={item.numbers}
-                              change={this.totalPriceOperate}
-                            />
-                          );
-                        })
-                      }
-                    </ScrollView>
-                    <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]}>
-                      <Text style={[c_styles.h4,c_styles.text_white]}>确认添加</Text>
-                    </TouchableOpacity>
+                this.state.contentState === 1 ? (<NumberKeyboard enterChange={this.searchModalInputChange}/>) :
+                this.state.contentState === 2 ? (
+                  <View  style={c_styles.cell}>
+                    {
+                      this.searchGoodList.length === 0 ?
+                        (<View style={[c_styles.cell,c_styles.flex_center]}>
+                          <Text style={c_styles.h4}>查询无结果!</Text>
+                          <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]} onPress={this.searchModalToggle}>
+                            <Text style={[c_styles.h4, c_styles.text_white]}>关闭</Text>
+                          </TouchableOpacity>
+                        </View>) :
+                        (<View style={MarketScreenStyles.search_modal_shop_list}>
+                          <ScrollView style={[c_styles.cell, {marginBottom: 70}]} alwaysBounceVertical={true}>
+                            {
+                              this.searchGoodList.map((item, index) => {
+                                return (
+                                  <GoodsInfoCard
+                                    key={index}
+                                    queue={index + 1} title={item.goodsName}
+                                    price={item.unitPrice} code={item.goodsCode}
+                                    unit={item.company} numbers={item.numbers}
+                                    change={this.selectGoodsChange}
+                                  />
+                                );
+                              })
+                            }
+                          </ScrollView>
+                          <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]} onPress={this.addGoodsOperate}>
+                            <Text style={[c_styles.h4, c_styles.text_white]}>确认添加</Text>
+                          </TouchableOpacity>
+                        </View>)
+                    }
                   </View>
-                ):
-                this.state.contentState === 3?'选择商品': '收款成功'
+                ) :
+                this.state.contentState === 3 ? (<Text>结算</Text>) :(<Text>收款成功</Text>)
               }
             </View>
           </View>
@@ -176,16 +187,97 @@ export default class MarketScreen extends Component {
       </View>
     );
   }
-  takePicture = async () => {
-    if (this.camera) {
-      const options = {quality: 0.5, base64: true};
-      const data = await this.camera.takePictureAsync(options);
-      console.log(data.uri);
-    }
-  };
+  // 总价操作
   totalPriceOperate = (item) => {
     let goods = {...item};
-    console.debug(goods);
+  };
+  // 选择商品操作
+  selectGoodsChange = (item) => {
+    let select = {...item};
+    this.searchGoodList.forEach((value,index) => {
+      if (index === select.index) {
+        if (select.numbers > 0) {
+          this.addGoodsList.splice(index,1,Object.assign(value,{numbers: select.numbers}));
+        } else{
+          this.addGoodsList.splice(index,1);
+        }
+      }
+    });
+  };
+  // 手动添加购物商品
+  addGoodsOperate = () => {
+    let arr = [...this.state.goods];
+    this.addGoodsList.forEach((item)=> {
+      const code = arr.findIndex((element) => element.goodsCode === item.goodsCode);
+      if (code < 0) {
+        arr.push(item);
+      } else {
+        arr[code].numbers++;
+      }
+    });
+    this.setState({
+      goods: arr
+    });
+    this.searchModalToggle();
+  };
+  //  扫码添加购物商品
+  onBarCodeRead = (result) => {
+    if (this.isScan) {
+      this.isScan = false;
+      this.searchGoodsCode(result.data)
+        .then((res) => {
+          const arr = this.state.goods;
+          res.forEach((item)=> {
+            const code = this.state.goods.findIndex((element) => element.goodsCode === item.goodsCode);
+            if (code < 0) {
+              arr.push(item);
+            } else {
+              arr[code].numbers++;
+            }
+          });
+        this.setState({
+          goods: arr
+        });
+        })
+        .catch(err=> {})
+      ;
+      this.timer = setTimeout(() => {
+        this.isScan = true;
+      }, 2000);
+    }
+  };
+  // 搜索商品弹窗切换
+  searchModalToggle = () => {
+    this.setState({
+      isModalVisible: !this.state.isModalVisible,
+    });
+  };
+  // 手动查询商品
+  searchModalInputChange = (value) => {
+    this.searchGoodsCode(value)
+      .then((arr) => {
+        this.addGoodsList = [...arr];
+        this.searchGoodList = [...arr];
+        this.setState({
+          contentState: 2,
+        });
+      })
+      .catch((err) => console.log(err))
+  };
+  // 根据商品编号搜索商品编号
+  searchGoodsCode = async (value) => {
+    const merchatCode = await AsyncStorage.getItem('merchatCode');
+    return post(api.SEARCH_GOODS_CODE, {merchatCode: merchatCode, code: value})
+      .then((val) => {
+        const arr = [];
+        for (const value of val) {
+          arr.push(Object.assign({}, value, {numbers: 1}));
+        }
+        return arr;
+      })
+      .catch((err) => {
+        return err;
+      });
   };
   // 二维码动画
   startAnimation = () => {
@@ -198,31 +290,6 @@ export default class MarketScreen extends Component {
         easing: Easing.linear,
       },
     ).start(() => this.startAnimation());
-  };
-  //  识别二维码
-  onBarCodeRead = (result) => {
-    if (this.isScan) {
-      this.isScan = false;
-      console.log(result.data);
-      this.timer = setTimeout(() => {
-        this.isScan = true;
-      }, 1000);
-    }
-  };
-  // 搜索商品弹窗切换
-  searchModalToggle = () => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
-  };
-  // 根据商品编号搜索商品编号
-   searchModalInputChange = async (value) => {
-     const merchatCode = await AsyncStorage.getItem('merchatCode');
-     post(api.SEARCH_GOODS_CODE,{merchatCode: merchatCode,code: value})
-         .then((val) => {
-           console.log(val);
-         })
-         .catch((err) => {
-           console.log(err);
-         });
   };
   // 生命周期钩子
   componentDidMount() {

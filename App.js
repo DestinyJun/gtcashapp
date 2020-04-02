@@ -12,9 +12,8 @@ import MarketScreen from './app/views/Home/MarketScreen';
 import RepastScreen from './app/views/Home/RepastScreen';
 // 工具
 import {LocalStorage} from './app/util';
-//
-import store from './app/views/ReduxHome/store.js'
-import {startUpPageAtion} from './app/views/ReduxHome/actionCreators'
+import store from './app/Redux/store.js'
+import {startUpPageAtion} from './app/Redux/actionCreators'
 // 路由
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
@@ -179,22 +178,19 @@ export default class App extends Component {
           StatusBar.setTranslucent(true);
           const state = newState.routes[newState.index].state;
           const name = newState.routes[newState.index].name;
-          if (newState.routes[newState.index].name === 'TabStackScreen') {
+          if (name === 'TabStackScreen') {
             const tabName = state.routeNames[state.index];
             switch (tabName) {
               case 'Home':
-                StatusBar.setBarStyle('light-content',true);
+                // StatusBar.setBarStyle('light-content',true);
                 break;
               case 'ProFile':
-                StatusBar.setBarStyle('dark-content',false);
+                // StatusBar.setBarStyle('dark-content',false);
                 break;
             }
-            return;
-          }else if (newState.routes[newState.index].name === 'RepastScreen'){
-              StatusBar.setBarStyle('dark-content',true);
+            // return;
           }
-          StatusBar.setBarStyle('dark-content',true);
-          // console.log(name);
+          // StatusBar.setBarStyle('light-content',true);
         }}
       >
         <Stack.Navigator>
@@ -218,6 +214,17 @@ export default class App extends Component {
 
   componentDidMount() {
       // LocalStorage.clear();
+
+      // 订阅登陆发射事件
+    // this.deEmiter = DeviceEventEmitter.addListener('loginChange', (res) => {
+    //     const  action = startUpPageAtion({
+    //         isLoading: false,
+    //         userToken: true
+    //     });
+    //     store.dispatch(action);
+    //     // console.log(123);
+    //     // console.log(this.state.data);
+    // });
   }
 
 }

@@ -21,6 +21,7 @@ export class GoodsInfoCard extends Component {
     code: null,
     unit: null,
     numbers: 0,
+    isClear: true,
     change: null,
   };
 
@@ -61,8 +62,9 @@ export class GoodsInfoCard extends Component {
         <View style={[styles.content]}>
           <View style={[styles.content_title, c_styles.pl_2]}>
             <Text numberOfLines={1} style={c_styles.h6}>
-              {this.props.title}500ml
-              <Text style={[c_styles.h_small, c_styles.text_secondary]}>({this.props.code})</Text>
+              {this.props.title}
+              {this.props.unit?(<Text style={c_styles.h_small}>{`【单位：${this.props.unit}】`}</Text>):null}
+              {this.props.code?( <Text style={[c_styles.h_small, c_styles.text_secondary]}>({this.props.code})</Text>):null}
             </Text>
           </View>
           <View style={[styles.content_price, c_styles.pl_2]}>
@@ -93,19 +95,35 @@ export class GoodsInfoCard extends Component {
   }
 
   operateMinus = () => {
-    this.setState({
-        numbers: this.state.numbers - 1,
-      },
-      () => {
-        if (this.state.numbers === 0) {
-          this.setState(
-            {
-              show: true,
-            });
+    if (this.props.isClear) {
+      this.setState({
+          numbers: this.state.numbers - 1,
+        },
+        () => {
+          if (this.state.numbers === 0) {
+            this.setState(
+              {
+                show: true,
+              });
+          }
+          this.props.change({index: this.props.queue - 1, numbers: this.state.numbers});
+        },
+      );
+      return;
+    }
+    this.setState((state,props) => {
+      if (state.numbers === 0) {
+        this.props.change({index: this.props.queue - 1, numbers: 0});
+        return {
+          numbers: 0
         }
-        this.props.change({index: this.props.queue - 1, numbers: this.state.numbers});
-      },
-    );
+      } else {
+        this.props.change({index: this.props.queue - 1, numbers: state.numbers - 1});
+        return  {
+          numbers: state.numbers - 1
+        }
+      }
+    })
   };
   operateAdd = () => {
     this.setState(
