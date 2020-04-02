@@ -37,7 +37,6 @@ export default class RepastScreen extends Component {
   render() {
     return (
       <View>
-        <StatusBar translucent={false} backgroundColor='#fff' barStyle="dark-content" />
         <View style={RepastScreenStyles.leftTab}>
             <ScrollView  alwaysBounceVertical={true}>
                 {

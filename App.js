@@ -190,8 +190,10 @@ export default class App extends Component {
                 break;
             }
             return;
+          }else if (newState.routes[newState.index].name === 'RepastScreen'){
+              StatusBar.setBarStyle('dark-content',true);
           }
-          StatusBar.setBarStyle('light-content',true);
+          StatusBar.setBarStyle('dark-content',true);
           // console.log(name);
         }}
       >
@@ -216,17 +218,6 @@ export default class App extends Component {
 
   componentDidMount() {
       // LocalStorage.clear();
-
-      // 订阅登陆发射事件
-    // this.deEmiter = DeviceEventEmitter.addListener('loginChange', (res) => {
-    //     const  action = startUpPageAtion({
-    //         isLoading: false,
-    //         userToken: true
-    //     });
-    //     store.dispatch(action);
-    //     // console.log(123);
-    //     // console.log(this.state.data);
-    // });
   }
 
 }
