@@ -189,6 +189,8 @@ export default class App extends Component {
                 break;
             }
             // return;
+          }else if (name === 'RepastScreen'){
+              StatusBar.setBarStyle('dark-content',true);
           }
           // StatusBar.setBarStyle('light-content',true);
         }}
