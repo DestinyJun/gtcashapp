@@ -34,7 +34,7 @@ export default class SettlementUI extends Component{
           return (
               <View style={SettlementStyles.shop_bottom_content}>
                   <View style={SettlementStyles.shop_bottom_price}>
-                      <Icon type={'font-awesome'} name={'shopping-cart'} size={30} color={'#E6E6E6'}/>
+                      <Icon type={'font-awesome'} name={'shopping-cart'} size={30} color={'#E6E6E6'} onPress={this.props.showListModal}/>
                       <Badge
                           status="error"
                           value={this.props.num}

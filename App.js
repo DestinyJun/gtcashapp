@@ -215,7 +215,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-      LocalStorage.clear();
+      // LocalStorage.clear();
 
       // 订阅登陆发射事件
     // this.deEmiter = DeviceEventEmitter.addListener('loginChange', (res) => {
