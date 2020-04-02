@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   StatusBar,
   ToastAndroid,
-  DeviceEventEmitter
+  DeviceEventEmitter,
 } from 'react-native';
 import {Card} from 'react-native-shadow-cards';
 // 样式文件
@@ -20,8 +20,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {post} from '../../service/Interceptor';
 import api from '../../service/Api';
 import {LocalStorage} from '../../util';
-import {startUpPageAtion} from "../ReduxHome/actionCreators";
-import store from "../ReduxHome/store";
+import {startUpPageAtion} from '../Redux/actionCreators';
+import store from '../Redux/store';
 
 // 自定义常量
 export default class LoginScreen extends Component {
@@ -40,6 +40,7 @@ export default class LoginScreen extends Component {
       gender: null,
     };
   }
+
   render() {
     return (
       <View style={[LoginStyles.login, c_styles.w_100, c_styles.dim_height]}>
@@ -67,7 +68,7 @@ export default class LoginScreen extends Component {
             </View>
             <View style={[c_styles.cell, c_styles.w_100, LoginStyles.input_user_password]}>
               <TextInput
-                style={[c_styles.pl_5,c_styles.cell, c_styles.h5]}
+                style={[c_styles.pl_5, c_styles.cell, c_styles.h5]}
                 placeholder={'请输入密码...'}
                 placeholderTextColor={'#90DACB'}
                 secureTextEntry={true}
@@ -139,6 +140,7 @@ export default class LoginScreen extends Component {
       </View>
     );
   }
+
   selectWillShow = () => {
     this.setState({
       select_icon_transform: true,
@@ -192,15 +194,13 @@ export default class LoginScreen extends Component {
         LocalStorage.set('merchatCode', res.merchatCode);
         LocalStorage.set('userId', res.userId);
         LocalStorage.set('APPKEY', res.APPKEY);
-        // DeviceEventEmitter.emit('loginChange',true);
-          const  action = startUpPageAtion({
-              isLoading: false,
-              userToken: true
-          });
-          store.dispatch(action);
+        const action = startUpPageAtion({
+          isLoading: false,
+          userToken: true,
+        });
+        store.dispatch(action);
       })
       .catch(e => {
-        console.log(e);
         ToastAndroid.showWithGravity(e.msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
       });
   };

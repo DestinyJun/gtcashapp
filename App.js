@@ -12,9 +12,8 @@ import MarketScreen from './app/views/Home/MarketScreen';
 import RepastScreen from './app/views/Home/RepastScreen';
 // 工具
 import {LocalStorage} from './app/util';
-//
-import store from './app/views/ReduxHome/store.js'
-import {startUpPageAtion} from './app/views/ReduxHome/actionCreators'
+import store from './app/views/Redux/store.js'
+import {startUpPageAtion} from './app/views/Redux/actionCreators'
 // 路由
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
