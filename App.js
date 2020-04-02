@@ -12,6 +12,9 @@ import MarketScreen from './app/views/Home/MarketScreen';
 import RepastScreen from './app/views/Home/RepastScreen';
 // 工具
 import {LocalStorage} from './app/util';
+//
+import store from './app/views/ReduxHome/store.js'
+import {startUpPageAtion} from './app/views/ReduxHome/actionCreators'
 // 路由
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
@@ -152,30 +155,17 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
-      userToken: false,
+        isLoading: store.getState().isLoading,
+        userToken: store.getState().userToken,
     };
-    LocalStorage.get('APPKEY')
-      .then((res) => {
-        if (res) {
-          this.setState({
-            isLoading: false,
-            userToken: true,
-          });
-        } else {
-          this.setState({
-            isLoading: false,
-            userToken: false,
-          });
-        }
-      })
-      .catch(((err) => {
-        this.setState({
-          isLoading: false,
-          userToken: false,
-        });
-      }));
-    // LocalStorage.clear();
+    const action = startUpPageAtion();
+    store.dispatch(action);
+    store.subscribe(() => {
+       this.setState({
+           isLoading: store.getState().isLoading,
+           userToken: store.getState().userToken,
+       })
+    });
   }
 
   render() {
@@ -225,17 +215,18 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    // 订阅登陆发射事件
-    this.deEmiter = DeviceEventEmitter.addListener('loginChange', (res) => {
-      this.setState({
-        isLoading: false,
-        userToken: true,
-      });
-    });
+      LocalStorage.clear();
+
+      // 订阅登陆发射事件
+    // this.deEmiter = DeviceEventEmitter.addListener('loginChange', (res) => {
+    //     const  action = startUpPageAtion({
+    //         isLoading: false,
+    //         userToken: true
+    //     });
+    //     store.dispatch(action);
+    //     // console.log(123);
+    //     // console.log(this.state.data);
+    // });
   }
 
-  componentWillUnmount() {
-    // 组件卸载后取消事件订阅，防止内存泄漏
-    this.deEmiter.remove();
-  }
 }
