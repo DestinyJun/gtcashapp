@@ -1,5 +1,5 @@
 import {IS_LOADING} from './actionTypes';
-import {LocalStorage} from '../../util';
+import {LocalStorage} from '../util';
 
 export const setStartUpPageAtion = (data) => (
   {

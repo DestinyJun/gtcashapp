@@ -20,8 +20,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {post} from '../../service/Interceptor';
 import api from '../../service/Api';
 import {LocalStorage} from '../../util';
-import {startUpPageAtion} from '../Redux/actionCreators';
-import store from '../Redux/store';
+import {startUpPageAtion} from '../../Redux/actionCreators';
+import store from '../../Redux/store';
 
 // 自定义常量
 export default class LoginScreen extends Component {
