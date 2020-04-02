@@ -175,20 +175,19 @@ export default class App extends Component {
           StatusBar.setTranslucent(true);
           const state = newState.routes[newState.index].state;
           const name = newState.routes[newState.index].name;
-          if (newState.routes[newState.index].name === 'TabStackScreen') {
+          if (name === 'TabStackScreen') {
             const tabName = state.routeNames[state.index];
             switch (tabName) {
               case 'Home':
-                StatusBar.setBarStyle('light-content',true);
+                // StatusBar.setBarStyle('light-content',true);
                 break;
               case 'ProFile':
-                StatusBar.setBarStyle('dark-content',false);
+                // StatusBar.setBarStyle('dark-content',false);
                 break;
             }
-            return;
+            // return;
           }
-          StatusBar.setBarStyle('light-content',true);
-          // console.log(name);
+          // StatusBar.setBarStyle('light-content',true);
         }}
       >
         <Stack.Navigator>

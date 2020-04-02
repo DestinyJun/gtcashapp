@@ -64,7 +64,7 @@ export const MarketScreenStyles = StyleSheet.create({
   // 商品列表样式
   shop: {
     flex: 5,
-    justifyContent: 'center',
+    // ...c_styles.flex_center,
     backgroundColor: '#FAFFFE',
     borderColor: '#468F80',
     borderTopWidth: 5,
@@ -109,7 +109,7 @@ export const MarketScreenStyles = StyleSheet.create({
   },
   search_modal_shop_list: {
     flex: 1,
-    position: 'relative'
+    position: 'relative',
   },
   search_modal_add_btn: {
     position: 'absolute',

@@ -215,6 +215,17 @@ global.c_styles = StyleSheet.create({
   },
   transform_90: {
     transform: [{rotate:'180deg'}]
+  },
+  position_relative: {
+    position: 'relative'
+  },
+  position_absolute: {
+    position: 'absolute'
+  },
+  border_clean: {
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
   }
 });
-// export default c_styles

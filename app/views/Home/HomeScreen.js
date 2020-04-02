@@ -5,7 +5,7 @@
  */
 import React, {Component} from 'react';
 import {Text, TouchableOpacity, View, Image, StatusBar, BackHandler, ToastAndroid,NativeModules} from 'react-native';
-import {Constant, LocalStorage, MENU_IMG_LIST} from '../../util';
+import {Constant, MENU_IMG_LIST} from '../../util';
 import {HomeScreenStyle} from './HomeScreenStyle';
 
 export default class HomeScreen extends Component {
@@ -21,6 +21,7 @@ export default class HomeScreen extends Component {
     const a = '../../assets/images/餐饮入口04_1080.png';
     return (
       <View style={[HomeScreenStyle.home, c_styles.pr_3, c_styles.pl_3]}>
+        <StatusBar backgroundColor={'transparent'} translucent={true} animated={false} />
         {
           Constant.MENU_LIST.map((item, index) => (
             <TouchableOpacity
