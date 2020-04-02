@@ -35,7 +35,8 @@
     "react-native-shadow-cards": "^1.0.2",
     "react-native-switch-selector": "^2.0.3",
     "react-native-vector-icons": "^6.6.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.3",

@@ -12,6 +12,9 @@ import MarketScreen from './app/views/Home/MarketScreen';
 import RepastScreen from './app/views/Home/RepastScreen';
 // 工具
 import {LocalStorage} from './app/util';
+//
+import store from './app/views/ReduxHome/store.js'
+import {startUpPageAtion} from './app/views/ReduxHome/actionCreators'
 // 路由
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
@@ -24,7 +27,6 @@ const DefaultScreenOptions = {
     backgroundColor: 'pink',
   },
   headerTransparent: true,
-  headerTitleAlign: 'center',
   headerTitleStyle: {
     color: '#fff',
   },
@@ -77,6 +79,21 @@ const TabHomeStackProFileScreenOptions = {
 // LoginScreen路由配置
 const LoginScreenOptions = {
   headerShown: false,
+};
+
+//
+const RepastScreenOptions = {
+    title: 'My home',
+    headerStyle: {
+      // backgroundColor: '#FFFFFF',
+      // color: '#000'
+    },
+    headerTitleAlign: 'center',
+    headerTintColor: '#000',
+        headerTitleStyle: {
+        fontWeight: 'bold',
+    },
+    headerBackImage: () => (<Icons iconName={'angle-left'} size={30} color={'black'}/>),
 };
 
 // 路由分级
@@ -138,30 +155,17 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
-      userToken: false,
+        isLoading: store.getState().isLoading,
+        userToken: store.getState().userToken,
     };
-    LocalStorage.get('APPKEY')
-      .then((res) => {
-        if (res) {
-          this.setState({
-            isLoading: false,
-            userToken: true,
-          });
-        } else {
-          this.setState({
-            isLoading: false,
-            userToken: false,
-          });
-        }
-      })
-      .catch(((err) => {
-        this.setState({
-          isLoading: false,
-          userToken: false,
-        });
-      }));
-    // LocalStorage.clear();
+    const action = startUpPageAtion();
+    store.dispatch(action);
+    store.subscribe(() => {
+       this.setState({
+           isLoading: store.getState().isLoading,
+           userToken: store.getState().userToken,
+       })
+    });
   }
 
   render() {
@@ -195,7 +199,7 @@ export default class App extends Component {
             this.state.userToken ? (
               <>
                 <Stack.Screen name="TabStackScreen" component={TabStackScreen} options={TabStackScreenOptions}/>
-                <Stack.Screen name="RepastScreen" component={RepastScreen} options={DefaultScreenOptions}/>
+                <Stack.Screen name="RepastScreen" component={RepastScreen} options={RepastScreenOptions}/>
                 <Stack.Screen name="MarketScreen" component={MarketScreen} options={DefaultScreenOptions}/>
               </>
             ) : (
@@ -210,17 +214,18 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    // 订阅登陆发射事件
-    this.deEmiter = DeviceEventEmitter.addListener('loginChange', (res) => {
-      this.setState({
-        isLoading: false,
-        userToken: true,
-      });
-    });
+      // LocalStorage.clear();
+
+      // 订阅登陆发射事件
+    // this.deEmiter = DeviceEventEmitter.addListener('loginChange', (res) => {
+    //     const  action = startUpPageAtion({
+    //         isLoading: false,
+    //         userToken: true
+    //     });
+    //     store.dispatch(action);
+    //     // console.log(123);
+    //     // console.log(this.state.data);
+    // });
   }
 
-  componentWillUnmount() {
-    // 组件卸载后取消事件订阅，防止内存泄漏
-    this.deEmiter.remove();
-  }
 }

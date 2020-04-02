@@ -20,6 +20,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {post} from '../../service/Interceptor';
 import api from '../../service/Api';
 import {LocalStorage} from '../../util';
+import {startUpPageAtion} from "../ReduxHome/actionCreators";
+import store from "../ReduxHome/store";
 
 // 自定义常量
 export default class LoginScreen extends Component {
@@ -190,7 +192,12 @@ export default class LoginScreen extends Component {
         LocalStorage.set('merchatCode', res.merchatCode);
         LocalStorage.set('userId', res.userId);
         LocalStorage.set('APPKEY', res.APPKEY);
-        DeviceEventEmitter.emit('loginChange',true);
+        // DeviceEventEmitter.emit('loginChange',true);
+          const  action = startUpPageAtion({
+              isLoading: false,
+              userToken: true
+          });
+          store.dispatch(action);
       })
       .catch(e => {
         console.log(e);
