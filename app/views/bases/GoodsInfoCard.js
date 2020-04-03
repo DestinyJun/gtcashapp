@@ -23,6 +23,9 @@ export class GoodsInfoCard extends Component {
     numbers: 0,
     isClear: true,
     change: null,
+    isqueue: true,  // 判断 isqueue 是否显示,
+    type: '', // 操作符
+    symbol: ''
   };
 
   constructor(props) {
@@ -53,7 +56,7 @@ export class GoodsInfoCard extends Component {
     return (
       <View style={[styles.container]}>
         {
-          this.props.queue > 0 ? (<View style={[styles.number, c_styles.flex_center]}>
+          this.props.isqueue? (<View style={[styles.number, c_styles.flex_center]}>
             <Text style={[c_styles.text_darkinfo, c_styles.h5]}>
               {this.props.queue}
             </Text>
@@ -112,19 +115,19 @@ export class GoodsInfoCard extends Component {
                 show: true,
               });
           }
-          this.props.change({index: this.props.queue - 1, numbers: this.state.numbers});
+          this.props.change({index: this.props.queue - 1, numbers: this.state.numbers, type: 'less',symbol: this.state.symbol});
         },
       );
       return;
     }
     this.setState((state,props) => {
       if (state.numbers === 0) {
-        this.props.change({index: this.props.queue - 1, numbers: 0});
+        this.props.change({index: this.props.queue - 1, numbers: 0 , type: 'less', symbol: this.props.symbol});
         return {
           numbers: 0
         }
       } else {
-        this.props.change({index: this.props.queue - 1, numbers: state.numbers - 1});
+        this.props.change({index: this.props.queue - 1, numbers: state.numbers - 1, type: 'less', symbol: this.props.symbol});
         return  {
           numbers: state.numbers - 1
         }
@@ -135,7 +138,7 @@ export class GoodsInfoCard extends Component {
     this.setState(
       {numbers: this.state.numbers + 1},
       () => {
-        this.props.change({index: this.props.queue - 1, numbers: this.state.numbers});
+        this.props.change({index: this.props.queue - 1, numbers: this.state.numbers, type: 'add', symbol: this.props.symbol});
       },
     );
   };
