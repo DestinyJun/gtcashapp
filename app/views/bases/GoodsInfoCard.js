@@ -72,16 +72,22 @@ export class GoodsInfoCard extends Component {
           </View>
         </View>
         <View style={[styles.operate]}>
-          <View style={[styles.operate_minus]}>
-            <TouchableOpacity
-              onPress={this.operateMinus}
-              style={[c_styles.cell, c_styles.w_100, c_styles.flex_center]}>
-              <Icon name={'minus-circle'} style={[c_styles.text_darkinfo, c_styles.h4]}/>
-            </TouchableOpacity>
-          </View>
-          <View style={[styles.operate_number, c_styles.flex_center]}>
-            <Text style={c_styles.h5}>{this.state.numbers}</Text>
-          </View>
+            {
+                this.state.numbers === 0? null: (
+                    <View style={[styles.operate_minus]}>
+                        <TouchableOpacity
+                            onPress={this.operateMinus}
+                            style={[c_styles.cell, c_styles.w_100, c_styles.flex_center]}>
+                            <Icon name={'minus-circle'} style={[c_styles.text_darkinfo, c_styles.h4]}/>
+                        </TouchableOpacity>
+                    </View>)
+            }
+            {
+                this.state.numbers === 0? null: (
+                    <View style={[styles.operate_number, c_styles.flex_center]}>
+                        <Text style={c_styles.h5}>{this.state.numbers}</Text>
+                    </View>)
+            }
           <View style={[styles.operate_add]}>
             <TouchableOpacity
               onPress={this.operateAdd}

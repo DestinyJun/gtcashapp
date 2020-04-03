@@ -6,7 +6,7 @@
 import {StyleSheet} from 'react-native';
 const style = {
     // 左边tab
-    leftTab: {
+    left_tab: {
         width: '30%',
         height: '92%',
         paddingTop: 10,
@@ -32,10 +32,13 @@ const style = {
     // 右边的标题
     title: {
         color: '#B2B2B2',
-        fontSize: 16
+        fontSize: 18,
+        marginTop: '1%',
+        marginLeft: '3%',
+        marginBottom: '1%'
     },
     // 右边的列表内容
-    rightContent: {
+    right_content: {
         width: '70%',
         right: 0,
         position: 'absolute',
@@ -44,6 +47,44 @@ const style = {
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: '#F0F1F1'
+    },
+    modal_contnet: {
+        height: '100%',
+        // marginTop: '10%',
+        // paddingTop: '10%',
+        position: 'absolute',
+        width: '100%',
+        // zIndex: 9999
+    },
+    model_title: {
+      height: '15%',
+      // backgroundColor:'red',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    model_amount: {
+      height: '20%',
+      width: '100%',
+      alignItems: 'center',
+      justifyContent:'center'
+    },
+    model_btn: {
+      // height: '10%',
+      // width: '28%',
+      paddingLeft: '10%',
+      paddingRight: '10%',
+      paddingTop: '3%',
+      marginBottom: '3%',
+      paddingBottom: '2%',
+      borderColor: '#56988B',
+      borderStyle: 'solid',
+      color: '#56988B',
+      borderWidth: 1.3,
+      borderRadius: 25,
+      fontSize: 18
+
+      // borderWidth: 1
     },
     //
     bottom_price: {
