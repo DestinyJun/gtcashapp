@@ -11,7 +11,6 @@ import ProFileScreen from './app/views/ProFile/ProFileScreen';
 import MarketScreen from './app/views/Home/MarketScreen';
 import RepastScreen from './app/views/Home/RepastScreen';
 // 工具
-import {LocalStorage} from './app/util';
 import store from './app/Redux/store.js'
 import {startUpPageAtion} from './app/Redux/actionCreators'
 // 路由
@@ -72,7 +71,14 @@ const TabHomeStackHomeScreenOptions = {
   },
 };
 const TabHomeStackProFileScreenOptions = {
-  headerShown: false,
+  headerTransparent: false,
+  headerStyle: {
+    backgroundColor: '#468F80',
+  },
+  headerTitleAlign: 'center',
+  headerTitleStyle: {
+    color: '#fff',
+  },
 };
 
 // LoginScreen路由配置

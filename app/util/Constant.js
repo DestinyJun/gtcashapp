@@ -9,6 +9,9 @@ export const MENU_IMG_LIST = [
   require('../assets/images/入库管理02_1080.png'),
   require('../assets/images/查看报表03_1080.png'),
 ];
+export const HEADER_IMAGE = {
+  img:  require('../assets/images/秀智1.jpg'),
+};
 export class Constant {
   // 首页导航菜单
   static MENU_LIST = [
@@ -30,7 +33,7 @@ export class Constant {
     {
       title: '查看报表',
       color: '#AF93C4',
-      router: 'MarketScreen'
+      router: 'EchartsScreen'
     }
   ]
 }

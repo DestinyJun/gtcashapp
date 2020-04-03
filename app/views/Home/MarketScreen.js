@@ -7,20 +7,16 @@ import React, {Component} from 'react';
 import {
   Text,
   View,
-  TouchableOpacity, Button, TextInput,
-  StatusBar, Animated, Easing, ScrollView, Dimensions, Keyboard, KeyboardAvoidingView,
+  TouchableOpacity,Animated, Easing, ScrollView
 } from 'react-native';
 import {MarketScreenStyles} from './MarketScreenStyles';
 // 自定义组件
-import {Icons} from '../bases/Icons';
 import {NumberKeyboard} from '../bases/NumberKeyboard';
 import {GoodsInfoCard} from '../bases/GoodsInfoCard';
 // 第三方组件
 import {RNCamera} from 'react-native-camera';
-import {Input, PricingCard} from 'react-native-elements';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {event} from 'react-native-reanimated';
 // 自定义工具
 import {post} from '../../service/Interceptor';
 import api from '../../service/Api';
@@ -31,7 +27,7 @@ export default class MarketScreen extends Component {
     super(props);
     this.isScan = true;
     this.state = {
-      totalPrice: 12,
+      totalPrice: 0,
       isModalVisible: false,
       moveAnim: new Animated.Value(0), // 扫动条动画
       contentState: 1,
@@ -62,7 +58,7 @@ export default class MarketScreen extends Component {
             <RNCamera
             ref={ref => {this.camera = ref}}
             style={MarketScreenStyles.camera_preview}
-            type={RNCamera.Constants.Type.back}
+            type={'back'}
             flashMode={RNCamera.Constants.FlashMode.on}
             onBarCodeRead={this.onBarCodeRead}
           >
@@ -188,8 +184,14 @@ export default class MarketScreen extends Component {
     );
   }
   // 总价操作
-  totalPriceOperate = (item) => {
-    let goods = {...item};
+  totalPriceOperate = () => {
+    let price = 0;
+    this.state.goods.forEach((val) => {
+      price+=(parseFloat(val.numbers) * parseFloat(val.unitPrice));
+    });
+    this.setState({
+      totalPrice: price
+    })
   };
   // 选择商品操作
   selectGoodsChange = (item) => {
@@ -217,6 +219,8 @@ export default class MarketScreen extends Component {
     });
     this.setState({
       goods: arr
+    },() => {
+      this.totalPriceOperate();
     });
     this.searchModalToggle();
   };
@@ -237,6 +241,8 @@ export default class MarketScreen extends Component {
           });
         this.setState({
           goods: arr
+        },() => {
+          this.totalPriceOperate();
         });
         })
         .catch(err=> {})

@@ -64,14 +64,17 @@ global.c_styles = StyleSheet.create({
   p_1: {
     padding: '1%',
   },
-  p_3: {
-    padding: '3%',
-  },
   p_2:{
     paddingTop: '2%',
     paddingBottom: '2%',
     paddingLeft: '2%',
     paddingRight: '2%'
+  },
+  p_3: {
+    padding: '3%',
+  },
+  p_5: {
+    padding: '5%',
   },
   pt_1: {
     paddingTop: '1%'
@@ -130,8 +133,21 @@ global.c_styles = StyleSheet.create({
   m_1: {
     margin: '1%',
   },
+  m_2: {
+    margin: '2%',
+  },
+  m_3: {
+    margin: '3%',
+  },
+  m_4: {
+    margin: '4%',
+  },
+
   ml_1:{
     marginLeft: '1%'
+  },
+  ml_2:{
+    marginLeft: '2%'
   },
   ml_3:{
     marginLeft: '3%'
@@ -141,6 +157,9 @@ global.c_styles = StyleSheet.create({
   },
   mr_1:{
     marginRight: '1%'
+  },
+  mr_2:{
+    marginRight: '2%'
   },
   mr_3:{
     marginRight: '3%'
@@ -173,7 +192,8 @@ global.c_styles = StyleSheet.create({
     fontSize: 30
   },
   h3:{
-    fontSize: 25
+    fontSize: 25,
+    fontWeight: '600'
   },
   h4:{
     fontSize: 20,
@@ -227,5 +247,8 @@ global.c_styles = StyleSheet.create({
     borderBottomWidth: 0,
     borderLeftWidth: 0,
     borderRightWidth: 0,
+  },
+  rounded_circle: {
+    borderRadius: 50
   }
 });
