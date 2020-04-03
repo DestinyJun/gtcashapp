@@ -29,7 +29,7 @@ const SettlementStyles = StyleSheet.create({
         justifyContent: 'center'
     },
 });
-export default class SettlementUI extends Component{
+export class SettlementUI extends Component{
       render(){
           return (
               <View style={SettlementStyles.shop_bottom_content}>

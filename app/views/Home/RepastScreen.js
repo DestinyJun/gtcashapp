@@ -5,11 +5,12 @@
  */
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, StatusBar, ScrollView, Button} from 'react-native';
-import SettlementUI from '../bases/SettlementUI'
+import {SettlementUI} from '../bases/SettlementUI'
 import Modal from 'react-native-modal';
 import {RepastScreenStyles} from "./RepastScreenStyles";
 import {Icon} from 'react-native-elements';
 import {GoodsInfoCard} from "../bases/GoodsInfoCard";
+import {CollectionUI} from "../bases/CollectionUI";
 import {Icons} from "../bases/Icons";
 
 export default class RepastScreen extends Component {
@@ -35,8 +36,12 @@ export default class RepastScreen extends Component {
             {title: '打卤面', price: '15.00', numbers: 5, code: null, unit: ''},
             {title: '打卤面', price: '15.00', numbers: 5, code: null, unit: ''},
         ],
+        btnData: [
+            {label: '现金支付', tcolor: '#56988B', bgcolor: '#fff', value: '1'},
+            {label: '网上支付', tcolor: '#56988B', bgcolor: '#fff', value: '2'}
+            ]
     };
-    this.props.navigation.setOptions({
+      this.props.navigation.setOptions({
        title: '餐饮收银',
     });
   }
@@ -150,30 +155,13 @@ export default class RepastScreen extends Component {
                       })
                   }}
                   style={[c_styles.justify_end, c_styles.m_clear]}
-              >
-                  <View style={{height: '56%', backgroundColor: '#fff'}}>
-                      <View style={RepastScreenStyles.model_title}>
-                          <TouchableOpacity style={{position:'absolute',left:'2%'}} onPress={this.showListModal}>
-                              <Icons iconName={'angle-left'} size={30} color={'black'} />
-                          </TouchableOpacity>
-                          <Text style={{fontSize: 18}}>结算</Text>
-                      </View>
-                      <View style={RepastScreenStyles.model_amount}>
-                          <Text style={{color: 'red', fontSize: 38,marginRight: '4%'}}>￥{this.state.amount.toFixed(2)}</Text>
-                      </View>
-                      <View style={{  flexDirection: 'row',alignItems: 'center',paddingLeft: '2%', paddingRight: '2%',marginTop:'2%'}}>
-                          <Text style={{width: '40%',backgroundColor:'#D3D3D3',height: 1,marginRight: '2%'}}></Text>
-                          <Text>支付方式</Text>
-                          <Text style={{width: '40%',backgroundColor:'#D3D3D3',height: 1,marginLeft: '2%'}}></Text>
-                      </View>
-                      <View  style={{alignItems: 'center',marginTop:'4%',justifyContent: 'center', height: '36%'}}>
-                          <Text style={RepastScreenStyles.model_btn}>现金支付</Text>
-                          <Text style={RepastScreenStyles.model_btn}>网上支付</Text>
-                      </View>
-                      <View  style={{alignItems: 'center',justifyContent: 'center', height: '14%',marginTop:'2%',backgroundColor: '#468F80'}}>
-                          <Text style={{color:'#fff',fontSize: 18}}>确认收款成功</Text>
-                      </View>
-                  </View>
+               >
+                  <CollectionUI
+                      amount={this.state.amount}
+                      pay_type={this.state.btnData}
+                      sure_text ={'确认收款成功'}
+                      payTypeClick={this.payTypeClick}
+                      sureColletion={this.sureColletion}/>
               </Modal>
           </View>
         <View style={RepastScreenStyles.bottom_price}>
@@ -212,7 +200,7 @@ export default class RepastScreen extends Component {
       })
   };
   // 展示模态框
-   showListModal = () => {
+  showListModal = () => {
       console.log(231);
       console.log(this.state.isModalVisible);
       if (!this.state.isModalVisible){
@@ -232,7 +220,22 @@ export default class RepastScreen extends Component {
       //
       // })
    };
-    totalPriceOperate(item){
+  payTypeClick = (index) => {
+      let data = this.state.btnData;
+       data.forEach(v=>{
+           v.bgcolor = '#fff';
+           v.tColor = '#56988B'
+       });
+       data[index].bgcolor = '#56988B';
+       data[index].tColor = '#fff';
+       this.setState({
+           btnData: data
+       });
+  };
+  sureColletion = () => {
+    console.log('收款');
+  };
+  totalPriceOperate(item){
         // let goods = {...item};
         console.log(item);
     }
