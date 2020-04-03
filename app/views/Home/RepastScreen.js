@@ -11,6 +11,7 @@ import {RepastScreenStyles} from "./RepastScreenStyles";
 import {Icon} from 'react-native-elements';
 import {GoodsInfoCard} from "../bases/GoodsInfoCard";
 import {CollectionUI} from "../bases/CollectionUI";
+import {PrintTicketUI} from "../bases/PrintTicketUI";
 import {Icons} from "../bases/Icons";
 
 export default class RepastScreen extends Component {
@@ -25,7 +26,11 @@ export default class RepastScreen extends Component {
         ],
         num: 2,
         amount: 222022999,
-        isModalVisible: true,
+        isModalVisible: false,
+        // 显示商品的模态款
+        showShopModel: false,
+        // 显示
+        showpaymentModel: false,
         modalHeight: 0,
         goods: [
             {title: '红烧牛肉面', price: '15.00', numbers: 3, code: null, unit: ''},
@@ -94,76 +99,77 @@ export default class RepastScreen extends Component {
                   }
               </ScrollView>
           </View>
-          {/*s商品模态框*/}
-          <View style={[RepastScreenStyles.modal_contnet , {bottom:'8%'}]}>
-              {/*/!*遮罩层*!/*/}
-              {/*<View  style={{height: 50 + '%', backgroundColor: 'rgba(75,75,75, 0.7)'}} />*/}
-              {/*/!*内 容*!/*/}
-              {/*<View  style={{height: 50 + '%', backgroundColor: '#fff'}}>*/}
-
-              {/*</View>*/}
-              {/*{*/}
-              {/*    isModalVisible ? */}
-              {/*}*/}
-
-              {/*<Modal*/}
-              {/*    coverScreen={false}*/}
-              {/*    deviceHeight={400}*/}
-              {/*    isVisible={this.state.isModalVisible}*/}
-              {/*    onBackButtonPress={()=>{*/}
-              {/*        this.setState({*/}
-              {/*            isModalVisible: false*/}
-              {/*        })*/}
-              {/*    }}*/}
-              {/*    style={[c_styles.justify_end, c_styles.m_clear]}*/}
-              {/*>*/}
-              {/*    <View style={{height: '50%', backgroundColor: '#fff'}}>*/}
-              {/*      <View style={RepastScreenStyles.model_title}>*/}
-              {/*          <View style={{flex: 1}}>*/}
-              {/*              <Icons iconName={'angle-left'} size={30} color={'black'}/>*/}
-              {/*          </View>*/}
-              {/*          <Text style={{flex: 1.5, fontSize: 18}}>已选菜品</Text>*/}
-              {/*      </View>*/}
-              {/*      <ScrollView>*/}
-              {/*          {*/}
-              {/*              this.state.goods.map((item, index) => {*/}
-              {/*                  return (*/}
-              {/*                      <GoodsInfoCard*/}
-              {/*                          key={index}*/}
-              {/*                          queue={index+1} title={item.title}*/}
-              {/*                          price={item.price} code={item.code}*/}
-              {/*                          unit={item.unit} numbers={item.numbers}*/}
-              {/*                          change={this.totalPriceOperate}*/}
-              {/*                      />*/}
-              {/*                  );*/}
-              {/*              })*/}
-              {/*          }*/}
-              {/*      </ScrollView>*/}
-              {/*    </View>*/}
-              {/*</Modal>*/}
-
-          </View>
-          {/*结算模态框*/}
-          <View style={RepastScreenStyles.modal_contnet}>
-              <Modal
-                  coverScreen={false}
-                  // deviceHeight={400}
-                  isVisible={this.state.isModalVisible}
-                  onBackButtonPress={()=>{
-                      this.setState({
-                          isModalVisible: false
-                      })
-                  }}
-                  style={[c_styles.justify_end, c_styles.m_clear]}
-               >
-                  <CollectionUI
-                      amount={this.state.amount}
-                      pay_type={this.state.btnData}
-                      sure_text ={'确认收款成功'}
-                      payTypeClick={this.payTypeClick}
-                      sureColletion={this.sureColletion}/>
-              </Modal>
-          </View>
+          {
+              // 判断是否显示商品
+              this.state.showShopModel === true ?
+                  <View style={[RepastScreenStyles.modal_contnet, {bottom: '8%'}]}>
+                      <Modal
+                          coverScreen={false}
+                          deviceHeight={400}
+                          isVisible={this.state.isModalVisible}
+                          onBackButtonPress={() => {
+                              this.setState({
+                                  isModalVisible: false
+                              })
+                          }}
+                          style={[c_styles.justify_end, c_styles.m_clear]}
+                      >
+                          <View style={{height: '50%', backgroundColor: '#fff'}}>
+                              <View style={RepastScreenStyles.model_title}>
+                                  <View style={{flex: 1}}>
+                                      <Icons iconName={'angle-left'} size={30} color={'black'}/>
+                                  </View>
+                                  <Text style={{flex: 1.5, fontSize: 18}}>已选菜品</Text>
+                              </View>
+                              <ScrollView>
+                                  {
+                                      this.state.goods.map((item, index) => {
+                                          return (
+                                              <GoodsInfoCard
+                                                  key={index}
+                                                  queue={index + 1} title={item.title}
+                                                  price={item.price} code={item.code}
+                                                  unit={item.unit} numbers={item.numbers}
+                                                  change={this.totalPriceOperate}
+                                              />
+                                          );
+                                      })
+                                  }
+                              </ScrollView>
+                          </View>
+                      </Modal>
+                  </View>
+                  : null
+          }
+          {
+              //  结算模态框
+              this.state.showpaymentModel === true?
+               <View style={RepastScreenStyles.modal_contnet}>
+                  <Modal
+                      coverScreen={false}
+                      // deviceHeight={400}
+                      isVisible={this.state.isModalVisible}
+                      onBackButtonPress={()=>{
+                          this.setState({
+                              isModalVisible: false
+                          })
+                      }}
+                      style={[c_styles.justify_end, c_styles.m_clear]}
+                  >
+                      <CollectionUI
+                          amount={this.state.amount}
+                          pay_type={this.state.btnData}
+                          sure_text ={'确认收款成功'}
+                          payTypeClick={this.payTypeClick}
+                          closeModel={this.payTypeClick}
+                          sureColletion={this.sureColletion}/>
+                      <PrintTicketUI
+                          closeModel={this.closeModel}
+                          text ={'订单支付成功！是否打印小票？'}
+                          printTicket={this.printTicket}/>
+                  </Modal>
+              </View> : null
+          }
         <View style={RepastScreenStyles.bottom_price}>
               {/*<Text style={RepastScreenStyles.title}>123</Text>*/}
             <SettlementUI num={this.state.num} amount={this.state.amount} Settlement={this.settlementClick} showListModal={this.showListModal}/>
@@ -171,6 +177,8 @@ export default class RepastScreen extends Component {
       </View>
     );
   }
+
+
   componentDidMount(): void {
       console.log(this.props.navigation);
   }
@@ -196,29 +204,23 @@ export default class RepastScreen extends Component {
   // 结算
   settlementClick = () => {
       this.setState({
-          isModalVisible: true
+          showShopModel: true
       })
   };
   // 展示模态框
   showListModal = () => {
-      console.log(231);
-      console.log(this.state.isModalVisible);
-      if (!this.state.isModalVisible){
-          this.setState({
-              isModalVisible: true
-          })
-
-      }else {
-          this.setState({
-              isModalVisible: false
-          })
-      }
-
-      // this.setState({
-      //     isModalVisible: true,
-      //     modalHeight: 40
+      console.log(1234);
+      // if (!this.state.showShopModel){
+      //     this.setState({
+      //         showShopModel: false
+      //     })
       //
-      // })
+      // }else {
+      //
+      // }
+      this.setState({
+          showShopModel: true
+      })
    };
   payTypeClick = (index) => {
       let data = this.state.btnData;
@@ -232,9 +234,15 @@ export default class RepastScreen extends Component {
            btnData: data
        });
   };
+    closeModel= () =>{
+      console.log('123')
+    };
   sureColletion = () => {
     console.log('收款');
   };
+    printTicket = () => {
+        console.log('打印');
+    };
   totalPriceOperate(item){
         // let goods = {...item};
         console.log(item);

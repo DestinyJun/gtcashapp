@@ -86,7 +86,7 @@ export class CollectionUI extends Component{
         return (
             <View style={CollectionUIStyle.content}>
                 <View style={CollectionUIStyle.title}>
-                    <TouchableOpacity style={CollectionUIStyle.title_icon} onPress={this.closeModel}>
+                    <TouchableOpacity style={CollectionUIStyle.title_icon} onPress={this.props.closeModel}>
                         <Icons iconName={'angle-left'} size={30} color={'black'} />
                     </TouchableOpacity>
                     <Text style={CollectionUIStyle.title_text}>结算</Text>
