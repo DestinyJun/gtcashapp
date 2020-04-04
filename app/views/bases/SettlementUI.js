@@ -16,7 +16,7 @@ const SettlementStyles = StyleSheet.create({
         // backgroundColor: 'red',
     },
     shop_bottom_price: {
-        flex: 4,
+        flex: 6,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start'
@@ -35,18 +35,21 @@ export class SettlementUI extends Component{
               <View style={SettlementStyles.shop_bottom_content}>
                   <View style={SettlementStyles.shop_bottom_price}>
                       <Icon type={'font-awesome'} name={'shopping-cart'} size={30} color={'#E6E6E6'} onPress={this.props.showListModal}/>
-                      <Badge
-                          status="error"
-                          value={this.props.num}
-                          textStyle={{fontSize: 10}}
-                          containerStyle={{top: '-4%', left: '-20%'}}
-                      />
-                      <Text  style={[c_styles.h5, c_styles.ml_5, {flex: 4}]}>
-                          合计金额：<Text style={[c_styles.text_danger, c_styles.h5]}>￥{this.props.amount}</Text>
+                      {
+                        this.props.num !== 0?
+                          <Badge
+                            status="error"
+                            value={this.props.num}
+                            textStyle={{fontSize: 10}}
+                            containerStyle={{top: '-4%', left: '-20%'}}
+                        />: <View style={[{width: '5%'}]} />
+                      }
+                      <Text  style={[c_styles.h5, c_styles.ml_1, {flex: 4}]}>
+                        合计金额：<Text style={[c_styles.text_danger, c_styles.h5]}>￥{this.props.amount.toFixed(2)}</Text>
                       </Text>
                   </View>
-                  <View style={{flex: 1}}>
-                  </View>
+                  {/*<View style={{flex: 1}}>*/}
+                  {/*</View>*/}
                   <View style={SettlementStyles.shop_bottom_settle}>
                       <TouchableOpacity
                           onPress={this.props.Settlement}
