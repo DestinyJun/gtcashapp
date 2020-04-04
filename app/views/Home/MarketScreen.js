@@ -13,6 +13,7 @@ import {MarketScreenStyles} from './MarketScreenStyles';
 // 自定义组件
 import {NumberKeyboard} from '../bases/NumberKeyboard';
 import {GoodsInfoCard} from '../bases/GoodsInfoCard';
+import {Pricing} from '../bases/Pricing';
 // 第三方组件
 import {RNCamera} from 'react-native-camera';
 import Modal from 'react-native-modal';
@@ -22,15 +23,16 @@ import {post} from '../../service/Interceptor';
 import api from '../../service/Api';
 import AsyncStorage from '@react-native-community/async-storage';
 
+
 export default class MarketScreen extends Component {
   constructor(props) {
     super(props);
     this.isScan = true;
     this.state = {
       totalPrice: 0,
-      isModalVisible: false,
+      isModalVisible: true,
       moveAnim: new Animated.Value(0), // 扫动条动画
-      contentState: 1,
+      contentState: 3,
       goods: [],
     };
     this.addGoodsList = [];
@@ -55,7 +57,7 @@ export default class MarketScreen extends Component {
     return (
       <View style={MarketScreenStyles.container}>
         <View style={[MarketScreenStyles.camera]}>
-            <RNCamera
+           {/* <RNCamera
             ref={ref => {this.camera = ref}}
             style={MarketScreenStyles.camera_preview}
             type={'back'}
@@ -71,7 +73,7 @@ export default class MarketScreen extends Component {
               </View>
               <View style={MarketScreenStyles.box_bottom} />
             </View>
-          </RNCamera>
+          </RNCamera>*/}
         </View>
         <View style={[MarketScreenStyles.shop]}>
           {
@@ -134,8 +136,8 @@ export default class MarketScreen extends Component {
               <Text style={[c_styles.h4, c_styles.cell, c_styles.text_center]}>
                 {
                   this.state.contentState === 1 ? '手动查询商品' :
-                    this.state.contentState === 2 ? '查询结果' :
-                      this.state.contentState === 3 ? '结算' : '收款成功'
+                  this.state.contentState === 2 ? '查询结果' :
+                  this.state.contentState === 3 ? '结算' : '收款成功'
                 }
               </Text>
             </View>
@@ -175,7 +177,7 @@ export default class MarketScreen extends Component {
                     }
                   </View>
                 ) :
-                this.state.contentState === 3 ? (<Text>结算</Text>) :(<Text>收款成功</Text>)
+                this.state.contentState === 3 ? (<Pricing />) :(<Text>收款成功</Text>)
               }
             </View>
           </View>

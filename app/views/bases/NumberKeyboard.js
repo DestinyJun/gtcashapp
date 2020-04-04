@@ -9,8 +9,7 @@ import {Icon} from 'react-native-elements';
 
 export class NumberKeyboard extends Component {
   static defaultProps = {
-    // 这里是设置props默认属性的值
-    enterChange: null,
+    enterChange: null, // 键盘值改变回调
   };
   constructor(props) {
     super(props);
