@@ -302,8 +302,6 @@ export default class MarketScreen extends Component {
     this.startAnimation();
   }
   componentWillUnmount() {
-    // this.deEmiter.remove();
     clearInterval(this.timer);
-    // this.keyboardDidShowListener.remove();
   }
 }

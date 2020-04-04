@@ -18,7 +18,6 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    const a = '../../assets/images/餐饮入口04_1080.png';
     return (
       <View style={[HomeScreenStyle.home, c_styles.pr_3, c_styles.pl_3]}>
         <StatusBar backgroundColor={'transparent'} translucent={true} animated={false} />
@@ -55,6 +54,7 @@ export default class HomeScreen extends Component {
       </View>
     );
   }
+  // 生命周期
   componentDidMount() {
     if (Platform.OS === 'android'){
       BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
@@ -65,6 +65,7 @@ export default class HomeScreen extends Component {
       BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
     }
   }
+  // 二次返回退出App
   onBackAndroid = () => {
     //判断该页面是否处于聚焦状态
     if(this.props.navigation.isFocused()) {

@@ -5,17 +5,18 @@
  */
 import {StyleSheet} from 'react-native';
 
-export default StyleSheet.create({
+export const ProFileScreenStyles = StyleSheet.create({
   header: {
     flex: 4,
     ...c_styles.flex_center,
     ...c_styles.bg_white,
-    ...c_styles.m_3,
+    ...c_styles.ml_3,
+    ...c_styles.mr_3,
   },
   header_img: {
     width: 120,
     height: 120,
-    borderRadius: 120
+    borderRadius: 120,
   },
   list: {
     flex: 6,

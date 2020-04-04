@@ -5,7 +5,7 @@
  */
 import React, {Component} from 'react';
 import {Text, View,Image} from 'react-native';
-import styles from './ProFileScreenStyles'
+import {ProFileScreenStyles as styles} from './ProFileScreenStyles'
 import {HEADER_IMAGE} from '../../util/Constant';
 import { Icon } from 'react-native-elements'
 export default class ProFileScreen extends Component {
@@ -19,9 +19,9 @@ export default class ProFileScreen extends Component {
 
   render() {
     return (
-      <View style={[{ flex: 1}]}>
+      <View style={[c_styles.pt_3,c_styles.cell]}>
         <View style={[styles.header]}>
-          <Image source={HEADER_IMAGE.img} style={styles.header_img} />
+          <Image source={HEADER_IMAGE.img} style={styles.header_img}/>
           <View style={[{flexDirection: 'row'}, c_styles.pt_5]}>
             <Text style={c_styles.h4}>裴</Text>
             <Text style={[c_styles.h4,c_styles.ml_2,c_styles.mr_2]}>秀</Text>

@@ -33,7 +33,7 @@ export class Constant {
     {
       title: '查看报表',
       color: '#AF93C4',
-      router: 'EchartsScreen'
+      router: 'ChartScreen'
     }
   ]
 }

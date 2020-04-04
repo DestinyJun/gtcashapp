@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text, View, StatusBar, DeviceEventEmitter} from 'react-native';
+import {Text, View, StatusBar} from 'react-native';
 // 自定义组件
 import {Icons} from './app/views/bases/Icons';
 import LoginScreen from './app/views/Login/LoginScreen';
@@ -11,8 +11,9 @@ import ProFileScreen from './app/views/ProFile/ProFileScreen';
 import MarketScreen from './app/views/Home/MarketScreen';
 import RepastScreen from './app/views/Home/RepastScreen';
 // 工具
-import store from './app/Redux/store.js'
-import {startUpPageAtion} from './app/Redux/actionCreators'
+import store from './app/Redux/store.js';
+import {startUpPageAtion} from './app/Redux/actionCreators';
+import ChartScreen from './app/views/Home/ChartScreen';
 // 路由
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
@@ -29,6 +30,14 @@ const DefaultScreenOptions = {
     color: '#fff',
   },
   headerBackImage: () => (<Icons iconName={'angle-left'} size={30} color={'white'}/>),
+};
+const WhiteThemeScreenOptions = {
+  headerTitleAlign: 'center',
+  headerTintColor: '#000',
+  headerTitleStyle: {
+    fontWeight: 'bold',
+  },
+  headerBackImage: () => (<Icons iconName={'angle-left'} size={30} color={'black'}/>),
 };
 
 // TabStackScreen路由配置
@@ -86,19 +95,15 @@ const LoginScreenOptions = {
   headerShown: false,
 };
 
-//
+// RepastScreen路由配置
 const RepastScreenOptions = {
-    title: 'My home',
-    headerStyle: {
-      // backgroundColor: '#FFFFFF',
-      // color: '#000'
-    },
-    headerTitleAlign: 'center',
-    headerTintColor: '#000',
-        headerTitleStyle: {
-        fontWeight: 'bold',
-    },
-    headerBackImage: () => (<Icons iconName={'angle-left'} size={30} color={'black'}/>),
+  title: 'My home',
+  ...WhiteThemeScreenOptions
+};
+// ChartScreen路由配置
+const ChartScreenOptions = {
+  title: '查看报表',
+  ...WhiteThemeScreenOptions
 };
 
 // 路由分级
@@ -160,16 +165,16 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        isLoading: store.getState().isLoading,
-        userToken: store.getState().userToken,
+      isLoading: store.getState().isLoading,
+      userToken: store.getState().userToken,
     };
     const action = startUpPageAtion();
     store.dispatch(action);
     store.subscribe(() => {
-       this.setState({
-           isLoading: store.getState().isLoading,
-           userToken: store.getState().userToken,
-       })
+      this.setState({
+        isLoading: store.getState().isLoading,
+        userToken: store.getState().userToken,
+      });
     });
   }
 
@@ -180,10 +185,11 @@ export default class App extends Component {
     return (
       <NavigationContainer
         onStateChange={(newState) => {
-          StatusBar.setBackgroundColor('transparent',true);
+          StatusBar.setBackgroundColor('transparent', true);
           StatusBar.setTranslucent(true);
           const state = newState.routes[newState.index].state;
           const name = newState.routes[newState.index].name;
+          StatusBar.setBarStyle('light-content', true);
           if (name === 'TabStackScreen') {
             const tabName = state.routeNames[state.index];
             switch (tabName) {
@@ -195,10 +201,9 @@ export default class App extends Component {
                 break;
             }
             // return;
-          }else if (name === 'RepastScreen'){
-              StatusBar.setBarStyle('dark-content',true);
+          } else if (name === 'RepastScreen' || name === 'ChartScreen') {
+            StatusBar.setBarStyle('dark-content', true);
           }
-          // StatusBar.setBarStyle('light-content',true);
         }}
       >
         <Stack.Navigator>
@@ -208,6 +213,7 @@ export default class App extends Component {
                 <Stack.Screen name="TabStackScreen" component={TabStackScreen} options={TabStackScreenOptions}/>
                 <Stack.Screen name="RepastScreen" component={RepastScreen} options={RepastScreenOptions}/>
                 <Stack.Screen name="MarketScreen" component={MarketScreen} options={DefaultScreenOptions}/>
+                <Stack.Screen name="ChartScreen" component={ChartScreen} options={ChartScreenOptions}/>
               </>
             ) : (
               <>
@@ -219,20 +225,4 @@ export default class App extends Component {
       </NavigationContainer>
     );
   }
-
-  componentDidMount() {
-      // LocalStorage.clear();
-
-      // 订阅登陆发射事件
-    // this.deEmiter = DeviceEventEmitter.addListener('loginChange', (res) => {
-    //     const  action = startUpPageAtion({
-    //         isLoading: false,
-    //         userToken: true
-    //     });
-    //     store.dispatch(action);
-    //     // console.log(123);
-    //     // console.log(this.state.data);
-    // });
-  }
-
 }

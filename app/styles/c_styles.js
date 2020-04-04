@@ -62,122 +62,154 @@ global.c_styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   p_1: {
-    padding: '1%',
+    padding: 6,
   },
   p_2:{
-    paddingTop: '2%',
-    paddingBottom: '2%',
-    paddingLeft: '2%',
-    paddingRight: '2%'
+    padding: 9,
   },
   p_3: {
-    padding: '3%',
+    padding: 12,
+  },
+  p_4: {
+    padding: 15,
   },
   p_5: {
-    padding: '5%',
+    padding: 18,
   },
   pt_1: {
-    paddingTop: '1%'
+    paddingTop: 6
   },
   pt_2: {
-    paddingTop: '2%'
+    paddingTop: 9
   },
   pt_3: {
-    paddingTop: '3%'
+    paddingTop: 12
   },
   pt_4: {
-    paddingTop: '4%'
+    paddingTop: 15
   },
   pt_5: {
-    paddingTop: '5%'
+    paddingTop: 18
   },
   pb_1: {
-    paddingBottom: '1%'
+    paddingBottom: 6
   },
   pb_2: {
-    paddingBottom: '2%'
+    paddingBottom: 9
   },
   pb_3: {
-    paddingBottom: '3%'
+    paddingBottom: 12
   },
   pb_4: {
-    paddingBottom: '4%'
+    paddingBottom: 15
   },
   pb_5: {
-    paddingBottom: '5%'
+    paddingBottom: 18
   },
   pl_1:{
-    paddingLeft: '1%'
+    paddingLeft: 6
   },
   pl_2:{
-    paddingLeft: '2%'
+    paddingLeft: 9
   },
   pl_3:{
-    paddingLeft: '3%'
+    paddingLeft: 12
   },
   pl_4:{
-    paddingLeft: '4%'
+    paddingLeft: 15
   },
   pl_5:{
-    paddingLeft: '5%'
+    paddingLeft: 18
+  },
+  pr_1:{
+    paddingRight: 6
+  },
+  pr_2:{
+    paddingRight: 9
   },
   pr_3:{
-    paddingRight: '3%'
+    paddingRight: 12
   },
   pr_4:{
-    paddingRight: '4%'
+    paddingRight: 15
   },
   pr_5:{
-    paddingRight: '5%'
+    paddingRight: 18
   },
   m_1: {
-    margin: '1%',
+    margin: 6,
   },
   m_2: {
-    margin: '2%',
+    margin: 9,
   },
   m_3: {
-    margin: '3%',
+    margin: 12,
   },
   m_4: {
-    margin: '4%',
+    margin: 15,
   },
-
+  m_5: {
+    margin: 18,
+  },
   ml_1:{
-    marginLeft: '1%'
+    marginLeft: 6
   },
   ml_2:{
-    marginLeft: '2%'
+    marginLeft: 9
   },
   ml_3:{
-    marginLeft: '3%'
+    marginLeft: 12
+  },
+  ml_4:{
+    marginLeft: 15
   },
   ml_5:{
-    marginLeft: '5%'
+    marginLeft: 18
   },
   mr_1:{
-    marginRight: '1%'
+    marginRight: 6
   },
   mr_2:{
-    marginRight: '2%'
+    marginRight: 9
   },
   mr_3:{
-    marginRight: '3%'
+    marginRight: 12
+  },
+  mr_4:{
+    marginRight: 15
+  },
+  mr_5:{
+    marginRight: 18
+  },
+  mt_1: {
+    marginTop: 6
   },
   mt_2: {
-    marginTop: '2%'
+    marginTop: 9
   },
   mt_3: {
-    marginTop: '3%'
+    marginTop: 12
+  },
+  mt_4: {
+    marginTop: 15
   },
   mt_5: {
-    marginTop: '5%'
+    marginTop: 18
+  },
+  mb_1: {
+    marginBottom: 6
   },
   mb_2: {
-    marginBottom: '2%'
+    marginBottom: 9
   },
   mb_3: {
-    marginBottom: '3%'
+    marginBottom: 12
+  },
+  mb_4: {
+    marginBottom: 15
+  },
+  mb_5: {
+    marginBottom: 18
   },
   p_clear: {
     padding: 0
@@ -214,11 +246,17 @@ global.c_styles = StyleSheet.create({
   h_60: {
     height: '60%'
   },
+  h_75: {
+    height: '75%'
+  },
   h_100: {
     height: '100%'
   },
   w_50:{
     width: '50%'
+  },
+  w_75:{
+    width: '75%'
   },
   w_100:{
     width: '100%'
