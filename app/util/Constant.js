@@ -28,7 +28,7 @@ export class Constant {
     {
       title: '入库管理',
       color: '#5DA1FF',
-      router: 'MarketScreen'
+      router: 'MarketStoreScreen'
     },
     {
       title: '查看报表',

@@ -9,7 +9,6 @@ export const MarketScreenStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: 'black',
-    ...StyleSheet.absoluteFill
   },
   // 相机样式
   camera: {

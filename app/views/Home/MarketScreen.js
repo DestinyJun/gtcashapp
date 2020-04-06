@@ -22,6 +22,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {post} from '../../service/Interceptor';
 import api from '../../service/Api';
 import AsyncStorage from '@react-native-community/async-storage';
+import {PaySuccess} from '../bases/PaySuccess';
 
 
 export default class MarketScreen extends Component {
@@ -30,16 +31,17 @@ export default class MarketScreen extends Component {
     this.isScan = true;
     this.state = {
       totalPrice: 0,
-      isModalVisible: true,
+      isModalVisible: false,
       moveAnim: new Animated.Value(0), // 扫动条动画
-      contentState: 3,
+      contentState: 1,
       goods: [],
     };
     this.addGoodsList = [];
     this.searchGoodList = [];
+    this.merchatCode = null;
+    this.userId = null;
     this.props.navigation.setOptions({
       title: '超市收银',
-      headerRightContainerStyle: {},
       headerRight: () => {
         return (
           <TouchableOpacity
@@ -110,6 +112,9 @@ export default class MarketScreen extends Component {
                   </View>
                   <View style={MarketScreenStyles.shop_bottom_settle}>
                     <TouchableOpacity
+                      onPress={() => {
+                        this.setState({contentState: 3,isModalVisible: true});
+                      }}
                       style={[{flex: 1}, c_styles.w_100, c_styles.flex_center]}>
                       <Text style={[c_styles.h5, c_styles.text_light]}>结算</Text>
                     </TouchableOpacity>
@@ -177,7 +182,8 @@ export default class MarketScreen extends Component {
                     }
                   </View>
                 ) :
-                this.state.contentState === 3 ? (<Pricing />) :(<Text>收款成功</Text>)
+                this.state.contentState === 3 ? (<Pricing amount={this.state.totalPrice} onPress={this.paySure}/>) :
+                  (<PaySuccess onPress={()=>{this.setState({isModalVisible: false},()=> {this.setState({contentState: 1})})}} />)
               }
             </View>
           </View>
@@ -274,8 +280,7 @@ export default class MarketScreen extends Component {
   };
   // 根据商品编号搜索商品编号
   searchGoodsCode = async (value) => {
-    const merchatCode = await AsyncStorage.getItem('merchatCode');
-    return post(api.SEARCH_GOODS_CODE, {merchatCode: merchatCode, code: value})
+    return post(api.SEARCH_GOODS_CODE, {merchatCode: this.merchatCode, code: value})
       .then((val) => {
         const arr = [];
         for (const value of val) {
@@ -299,9 +304,34 @@ export default class MarketScreen extends Component {
       },
     ).start(() => this.startAnimation());
   };
+  // 结算操作
+  paySure = async (val) => {
+    const payList = {
+      merchatCode: this.merchatCode,
+      userId: this.merchatCode,
+      payType: val,
+      accountsReceivable: 0.00,
+      sales: this.state.totalPrice,
+      data: []
+    };
+    post(api.SURE_PAY_SUCCESS, payList)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
   // 生命周期钩子
   componentDidMount() {
     this.startAnimation();
+    // 初始化本地参数
+    AsyncStorage.getItem('merchatCode').then((res) => {
+      this.merchatCode = res ;
+    });
+    AsyncStorage.getItem('userCode').then((res) => {
+      this.userId = res ;
+    });
   }
   componentWillUnmount() {
     clearInterval(this.timer);

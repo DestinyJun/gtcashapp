@@ -201,6 +201,7 @@ export default class LoginScreen extends Component {
         store.dispatch(action);
       })
       .catch(e => {
+        console.log(e);
         ToastAndroid.showWithGravity(e.msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
       });
   };

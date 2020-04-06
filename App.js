@@ -14,6 +14,8 @@ import RepastScreen from './app/views/Home/RepastScreen';
 import store from './app/Redux/store.js';
 import {startUpPageAtion} from './app/Redux/actionCreators';
 import ChartScreen from './app/views/Home/ChartScreen';
+import {LocalStorage} from './app/util';
+import {MarketStoreScreen} from './app/views/Home/MarketStoreScreen';
 // 路由
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
@@ -23,13 +25,14 @@ const TabHomeStack = createStackNavigator();
 // 共有路由配置
 const DefaultScreenOptions = {
   cardStyle: {
-    backgroundColor: 'pink',
+    backgroundColor: '#FAFFFE',
   },
   headerTransparent: true,
   headerTitleStyle: {
-    color: '#fff',
+    color: '#FFFFFF',
   },
-  headerBackImage: () => (<Icons iconName={'angle-left'} size={30} color={'white'}/>),
+  headerTitleAlign: 'center',
+  headerBackImage: () => (<Icons iconName={'angle-left'} size={30} color={'#FFFFFF'}/>),
 };
 const WhiteThemeScreenOptions = {
   headerTitleAlign: 'center',
@@ -176,6 +179,7 @@ export default class App extends Component {
         userToken: store.getState().userToken,
       });
     });
+    // LocalStorage.clear();
   }
 
   render() {
@@ -213,6 +217,7 @@ export default class App extends Component {
                 <Stack.Screen name="TabStackScreen" component={TabStackScreen} options={TabStackScreenOptions}/>
                 <Stack.Screen name="RepastScreen" component={RepastScreen} options={RepastScreenOptions}/>
                 <Stack.Screen name="MarketScreen" component={MarketScreen} options={DefaultScreenOptions}/>
+                <Stack.Screen name="MarketStoreScreen" component={MarketStoreScreen} options={DefaultScreenOptions}/>
                 <Stack.Screen name="ChartScreen" component={ChartScreen} options={ChartScreenOptions}/>
               </>
             ) : (

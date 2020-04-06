@@ -11,8 +11,7 @@ export class Pricing extends Component {
   static defaultProps = {
     amount: 200, // 金额
     sure_text: '确认收款成功', // 底部按钮文字
-    sureColletion: null, //
-    payTypeClick: null, //
+    onPress: null, // 点击事件
     pay_type: ['现金支付','网上支付'], // 方式文字
   };
   constructor(props) {
@@ -20,6 +19,7 @@ export class Pricing extends Component {
     this.state = {
       bgState: 0
     };
+    this.payType = '现金支付';
   }
 
   render() {
@@ -56,10 +56,14 @@ export class Pricing extends Component {
                       if (this.state.bgState === 1) {
                         this.setState({
                           bgState: 0
+                        },() => {
+                          this.payType = '现金支付';
                         })
                       } else {
                         this.setState({
                           bgState: 1
+                        },() => {
+                          this.payType = '网上支付';
                         })
                       }
                     }}
@@ -71,7 +75,7 @@ export class Pricing extends Component {
           </View>
         </View>
         <View style={styles.content_bottom}>
-          <TouchableOpacity onPress={this.props.sureColletion}>
+          <TouchableOpacity onPress={() => {this.props.onPress(this.payType)}}>
             <Text style={styles.content_bottom_text}>{this.props.sure_text}</Text>
           </TouchableOpacity>
         </View>
