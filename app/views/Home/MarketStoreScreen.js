@@ -6,12 +6,13 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Animated, Easing, ScrollView} from 'react-native';
 import {MarketStoreScreenStyles as styles} from './MarketStoreScreenStyles'
+import AsyncStorage from '@react-native-community/async-storage';
 // 第三方组件库
 import {Icon} from 'react-native-elements';
 import {RNCamera} from 'react-native-camera';
 import {GoodsInfoCard} from '../bases/GoodsInfoCard';
-import AsyncStorage from '@react-native-community/async-storage';
-
+// 自定义组件
+import {GoodsStoreCard} from '../bases/GoodsStoreCard';
 
 export class MarketStoreScreen extends Component {
   constructor(props) {
@@ -65,7 +66,7 @@ export class MarketStoreScreen extends Component {
             (<View style={c_styles.cell}>
               <View style={[styles.goods_content]}>
                 <ScrollView style={[{flex: 1}]} alwaysBounceVertical={true}>
-
+                  <GoodsStoreCard />
                 </ScrollView>
               </View>
               <View style={[styles.goods_bottom]}>
