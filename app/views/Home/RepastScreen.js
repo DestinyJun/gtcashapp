@@ -241,10 +241,20 @@ export default class RepastScreen extends Component {
   }
   // 确认的收款
   sureDateAndSubmit(diesList){
-    console.log(diesList);
-    return post(api.PAY_MONEY, {payType: this.state.payMentType, merchatCode: LocalStorage.get('merchatCode'), date: diesList, userId: LocalStorage.get('userId')}).then(val => {
+    let merchatCode = '';
+    // 获取 数据
+    AsyncStorage.getItem('merchatCode').then(val =>{
+      merchatCode = val;
+      return AsyncStorage.getItem('userId')
+    }).then(res => {
+      // 请求收款
+      return post(api.PAY_MONEY, {
+          payType: this.state.payMentType,
+          merchatCode: merchatCode,
+          date: diesList,
+          userId: res
+      }).then(val => {
         // 重置数据
-       console.log(val);
         let data = this.state.dishesList;
         data.forEach(v => {
           v.numbers = 0;
@@ -256,6 +266,7 @@ export default class RepastScreen extends Component {
           amount: 0, // 置空金额
           dishesList: data // 置空菜品的数量
         });
+      })
     });
   }
   // 切换选项卡

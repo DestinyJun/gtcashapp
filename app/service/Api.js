@@ -23,5 +23,5 @@ export default class Api {
   // 查询全部菜品的数据
   static GET_DISHES_ALL_LIST = '/cateringcashier/getallgoodsinfocash';
   // 餐饮付款
-  static PAY_MONEY = '//cateringcashier/pay';
+  static PAY_MONEY = '/cateringcashier/pay';
 }
