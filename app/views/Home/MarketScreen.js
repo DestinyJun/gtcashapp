@@ -16,7 +16,7 @@ import {GoodsInfoCard} from '../bases/GoodsInfoCard';
 import {Pricing} from '../bases/Pricing';
 // 第三方组件
 import {RNCamera} from 'react-native-camera';
-import Modal from 'react-native-modal';
+import Modal from 'react-native-translucent-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // 自定义工具
 import {post} from '../../service/Interceptor';
@@ -125,66 +125,68 @@ export default class MarketScreen extends Component {
         </View>
         {/* 查询商品模态框*/}
         <Modal
-          isVisible={this.state.isModalVisible}
-          backdropOpacity={0.5}
-          onModalHide={() => {
-            this.setState({contentState: 1});
+          animationType={'fade'} transparent={true}
+          visible={this.state.isModalVisible}
+          onRequestClose={() => {
+            this.setState({contentState: 1,isModalVisible: !this.state.isModalVisible});
             this.addGoodsList = [];
           }}
           style={[c_styles.justify_end, c_styles.m_clear]}
         >
-          <View style={[c_styles.h_60, c_styles.bg_white]}>
-            <View style={MarketScreenStyles.search_modal_header}>
-              <TouchableOpacity style={[MarketScreenStyles.search_modal_header_left]} onPress={this.searchModalToggle}>
-                <Icon name={'angle-left'} size={35} color={'#1A1A1A'}/>
-              </TouchableOpacity>
-              <Text style={[c_styles.h4, c_styles.cell, c_styles.text_center]}>
+          <View style={[c_styles.h_100,c_styles.justify_end,{backgroundColor: 'rgba(0,0,0,0.3)'}]}>
+            <View style={[c_styles.h_60, c_styles.bg_white]}>
+              <View style={MarketScreenStyles.search_modal_header}>
+                <TouchableOpacity style={[MarketScreenStyles.search_modal_header_left]} onPress={this.searchModalToggle}>
+                  <Icon name={'angle-left'} size={35} color={'#1A1A1A'}/>
+                </TouchableOpacity>
+                <Text style={[c_styles.h4, c_styles.cell, c_styles.text_center]}>
+                  {
+                    this.state.contentState === 1 ? '手动查询商品' :
+                      this.state.contentState === 2 ? '查询结果' :
+                        this.state.contentState === 3 ? '结算' : '收款成功'
+                  }
+                </Text>
+              </View>
+              <View style={MarketScreenStyles.search_modal_content}>
                 {
-                  this.state.contentState === 1 ? '手动查询商品' :
-                  this.state.contentState === 2 ? '查询结果' :
-                  this.state.contentState === 3 ? '结算' : '收款成功'
+                  this.state.contentState === 1 ? (<NumberKeyboard enterChange={this.searchModalInputChange}/>) :
+                    this.state.contentState === 2 ? (
+                        <View  style={c_styles.cell}>
+                          {
+                            this.searchGoodList.length === 0 ?
+                              (<View style={[c_styles.cell,c_styles.flex_center]}>
+                                <Text style={c_styles.h4}>查询无结果!</Text>
+                                <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]} onPress={this.searchModalToggle}>
+                                  <Text style={[c_styles.h4, c_styles.text_white]}>关闭</Text>
+                                </TouchableOpacity>
+                              </View>) :
+                              (<View style={MarketScreenStyles.search_modal_shop_list}>
+                                <ScrollView style={[c_styles.cell, {marginBottom: 70}]} alwaysBounceVertical={true}>
+                                  {
+                                    this.searchGoodList.map((item, index) => {
+                                      return (
+                                        <GoodsInfoCard
+                                          key={index}
+                                          queue={index + 1} title={item.goodsName}
+                                          price={item.unitPrice} code={item.goodsCode}
+                                          unit={item.company} numbers={item.numbers}
+                                          change={this.selectGoodsChange}
+                                        />
+                                      );
+                                    })
+                                  }
+                                </ScrollView>
+                                <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]} onPress={this.addGoodsOperate}>
+                                  <Text style={[c_styles.h4, c_styles.text_white]}>确认添加</Text>
+                                </TouchableOpacity>
+                              </View>)
+                          }
+                        </View>
+                      ) :
+                      this.state.contentState === 3 ? (<Pricing amount={this.state.totalPrice} onPress={this.paySure}/>) :
+                        (<PaySuccess onPress={()=>{this.setState({isModalVisible: false},()=> {this.setState({contentState: 1})})}} />)
                 }
-              </Text>
-            </View>
-            <View style={MarketScreenStyles.search_modal_content}>
-              {
-                this.state.contentState === 1 ? (<NumberKeyboard enterChange={this.searchModalInputChange}/>) :
-                this.state.contentState === 2 ? (
-                  <View  style={c_styles.cell}>
-                    {
-                      this.searchGoodList.length === 0 ?
-                        (<View style={[c_styles.cell,c_styles.flex_center]}>
-                          <Text style={c_styles.h4}>查询无结果!</Text>
-                          <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]} onPress={this.searchModalToggle}>
-                            <Text style={[c_styles.h4, c_styles.text_white]}>关闭</Text>
-                          </TouchableOpacity>
-                        </View>) :
-                        (<View style={MarketScreenStyles.search_modal_shop_list}>
-                          <ScrollView style={[c_styles.cell, {marginBottom: 70}]} alwaysBounceVertical={true}>
-                            {
-                              this.searchGoodList.map((item, index) => {
-                                return (
-                                  <GoodsInfoCard
-                                    key={index}
-                                    queue={index + 1} title={item.goodsName}
-                                    price={item.unitPrice} code={item.goodsCode}
-                                    unit={item.company} numbers={item.numbers}
-                                    change={this.selectGoodsChange}
-                                  />
-                                );
-                              })
-                            }
-                          </ScrollView>
-                          <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]} onPress={this.addGoodsOperate}>
-                            <Text style={[c_styles.h4, c_styles.text_white]}>确认添加</Text>
-                          </TouchableOpacity>
-                        </View>)
-                    }
-                  </View>
-                ) :
-                this.state.contentState === 3 ? (<Pricing amount={this.state.totalPrice} onPress={this.paySure}/>) :
-                  (<PaySuccess onPress={()=>{this.setState({isModalVisible: false},()=> {this.setState({contentState: 1})})}} />)
-              }
+              </View>
             </View>
           </View>
         </Modal>
@@ -262,9 +264,8 @@ export default class MarketScreen extends Component {
   };
   // 搜索商品弹窗切换
   searchModalToggle = () => {
-    this.setState({
-      isModalVisible: !this.state.isModalVisible,
-    });
+    this.setState({contentState: 1,isModalVisible: !this.state.isModalVisible});
+    this.addGoodsList = [];
   };
   // 手动查询商品
   searchModalInputChange = (value) => {

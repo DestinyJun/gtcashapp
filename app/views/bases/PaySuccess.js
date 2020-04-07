@@ -8,7 +8,12 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 export class PaySuccess extends Component {
   static defaultProps = {
-    onPress: null
+    onPress: null, // 点击回调函数
+    option: {
+      content: '订单支付成功！是否打印小票？', // 提示内容
+      leftBtnTitle: '关闭', // 底部左按钮标题
+      rightBtnTitle: '打印',// 底部右按钮标题
+    }
   };
   constructor(props) {
     super(props);
@@ -19,14 +24,14 @@ export class PaySuccess extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.content_text}>订单支付成功！是否打印小票？</Text>
+          <Text style={styles.content_text}>{this.props.option.content}</Text>
         </View>
         <View style={styles.bottom}>
-          <TouchableOpacity style={styles.bottom_close} onPress={() => {this.props.onPress("close")}}>
-            <Text style={styles.bottom_text}>关闭</Text>
+          <TouchableOpacity style={styles.bottom_close} onPress={() => {this.props.onPress(this.props.option.leftBtnTitle)}}>
+            <Text style={styles.bottom_text}>{this.props.option.leftBtnTitle}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.bottom_print} onPress={() => {this.props.onPress("print")}}>
-            <Text style={styles.bottom_text}>打印</Text>
+          <TouchableOpacity style={styles.bottom_print} onPress={() => {this.props.onPress(this.props.option.rightBtnTitle)}}>
+            <Text style={styles.bottom_text}>{this.props.option.rightBtnTitle}</Text>
           </TouchableOpacity>
         </View>
       </View>

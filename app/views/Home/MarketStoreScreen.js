@@ -10,9 +10,14 @@ import AsyncStorage from '@react-native-community/async-storage';
 // 第三方组件库
 import {Icon} from 'react-native-elements';
 import {RNCamera} from 'react-native-camera';
-import {GoodsInfoCard} from '../bases/GoodsInfoCard';
+import Modal from 'react-native-translucent-modal';
 // 自定义组件
 import {GoodsStoreCard} from '../bases/GoodsStoreCard';
+import {MarketScreenStyles} from './MarketScreenStyles';
+import {NumberKeyboard} from '../bases/NumberKeyboard';
+import {GoodsInfoCard} from '../bases/GoodsInfoCard';
+import {Pricing} from '../bases/Pricing';
+import {PaySuccess} from '../bases/PaySuccess';
 
 export class MarketStoreScreen extends Component {
   constructor(props) {
@@ -20,19 +25,33 @@ export class MarketStoreScreen extends Component {
     this.state = {
       goods: [1],
       moveAnim: new Animated.Value(0), // 扫动条动画
+      selectDownShow: false,
+      modalShow: false,
+      modalHeaderTitle: '手动查询商品',
+      modalContentState: 3
     };
     this.isScan = true;
+    this.searchGoodList = [];
     this.props.navigation.setOptions({
       title: '超市收银',
       headerRightContainerStyle: {},
       headerRight: () => {
         return (
-          <TouchableOpacity style={[c_styles.pl_3, {width: 100}]} onPress={this.searchModalToggle}>
-            <Icon name='dehaze' type='material' color='#FFFFFF' size={30}/>
-          </TouchableOpacity>
+          <View style={c_styles.cell}>
+            <TouchableOpacity
+              style={[c_styles.cell,c_styles.flex_center,c_styles.pl_3,c_styles.pr_3]}
+              onPress={() => {this.setState({selectDownShow: !this.state.selectDownShow})}}>
+              <Icon name='dehaze' type='material' color='#FFFFFF' size={30}/>
+            </TouchableOpacity>
+          </View>
         );
       },
     });
+    this.successModalOption = {
+      content: '入库成功！', // 提示内容
+      leftBtnTitle: '取消入库', // 底部左按钮标题
+      rightBtnTitle: '继续入库',// 底部右按钮标题
+    }
   }
 
   render() {
@@ -66,7 +85,11 @@ export class MarketStoreScreen extends Component {
             (<View style={c_styles.cell}>
               <View style={[styles.goods_content]}>
                 <ScrollView style={[{flex: 1}]} alwaysBounceVertical={true}>
-                  <GoodsStoreCard />
+                  {
+                    [1,1,1].map((item, index) => {
+                      return (<GoodsStoreCard change={this.test} key={index} goodsIndex={index}/>);
+                    })
+                  }
                 </ScrollView>
               </View>
               <View style={[styles.goods_bottom]}>
@@ -81,6 +104,83 @@ export class MarketStoreScreen extends Component {
             </View>)
           }
         </View>
+        {/*手动查询入库*/}
+        <Modal animationType={'fade'} transparent={true} visible={this.state.modalShow} onRequestClose={this.modalToggle}>
+          <View style={styles.modal_mask}>
+            <View style={styles.modal_container}>
+              <View style={styles.modal_header}>
+                <TouchableOpacity style={[styles.modal_header_left]} onPress={this.modalToggle}>
+                  <Icon type={'font-awesome'} name={'angle-left'} size={35} color={'#1A1A1A'}/>
+                </TouchableOpacity>
+                <Text style={[c_styles.h4, c_styles.cell, c_styles.text_center]}>
+                  {this.state.modalHeaderTitle}
+                </Text>
+              </View>
+              <View style={styles.modal_content}>
+                {
+                  this.state.modalContentState === 1 ? (<NumberKeyboard enterChange={this.searchModalInputChange}/>) :
+                  this.state.modalContentState === 2 ? (
+                    <View  style={c_styles.cell}>
+                      {
+                        this.searchGoodList.length === 0 ?
+                          (<View style={[c_styles.cell,c_styles.flex_center]}>
+                            <Text style={c_styles.h4}>查询无结果!</Text>
+                            <TouchableOpacity style={[styles.modal_content_btn]} onPress={this.modalToggle}>
+                              <Text style={[c_styles.h4, c_styles.text_white]}>关闭</Text>
+                            </TouchableOpacity>
+                          </View>) :
+                          (<View style={styles.modal_content_list}>
+                            <ScrollView style={[c_styles.cell, {marginBottom: 70}]} alwaysBounceVertical={true}>
+                              {
+                                this.searchGoodList.map((item, index) => {
+                                  return (<GoodsStoreCard />);
+                                })
+                              }
+                            </ScrollView>
+                            <TouchableOpacity style={[styles.modal_content_btn]} onPress={this.addGoodsOperate}>
+                              <Text style={[c_styles.h4, c_styles.text_white]}>确认添加</Text>
+                            </TouchableOpacity>
+                          </View>)
+                      }
+                      </View>
+                  ):(<PaySuccess option={this.successModalOption} onPress={this.modalToggle} />)
+                }
+              </View>
+            </View>
+          </View>
+        </Modal>
+        {/*顶部菜单栏*/}
+        {
+          this.state.selectDownShow?(
+            <View style={styles.select_down}>
+              <TouchableOpacity
+                style={styles.select_down_list}
+                onPress={() => this.setState({
+                  modalShow: !this.state.modalShow,
+                  selectDownShow: !this.state.selectDownShow
+                })}
+              >
+                <Text style={styles.select_down_text}>手动查询</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.select_down_list,{borderColor: '#EAEAEA',borderBottomWidth: 1,borderTopWidth: 1}]}
+                onPress={() => this.setState({
+                  selectDownShow: !this.state.selectDownShow
+                })}
+              >
+                <Text style={styles.select_down_text}>新增有条码商品</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.select_down_list}
+                onPress={() => this.setState({
+                  selectDownShow: !this.state.selectDownShow
+                })}
+              >
+                <Text style={styles.select_down_text}>新增无条码商品</Text>
+              </TouchableOpacity>
+            </View>
+          ): null
+        }
       </View>
     );
   }
@@ -95,6 +195,17 @@ export class MarketStoreScreen extends Component {
         easing: Easing.linear,
       },
     ).start(() => this.startAnimation());
+  };
+  // 模态框切换
+  modalToggle = () => {
+    this.setState({
+      modalShow: !this.state.modalShow,
+      contentState: 1,
+    })
+  };
+  // 测试
+  test= (value) => {
+    console.log(value);
   };
   // 生命周期钩子
   componentDidMount() {

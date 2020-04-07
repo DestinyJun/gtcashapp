@@ -5381,6 +5381,11 @@ react-native-switch-selector@^2.0.3:
   resolved "https://registry.npm.taobao.org/react-native-switch-selector/download/react-native-switch-selector-2.0.3.tgz#7ef296afe0988fd5baa38305bd78c4fcdc20bd72"
   integrity sha1-fvKWr+CYj9W6o4MFvXjE/NwgvXI=
 
+react-native-translucent-modal@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.npm.taobao.org/react-native-translucent-modal/download/react-native-translucent-modal-1.1.2.tgz#f260446f4a3af8a71018151486f9f5301d8da1fd"
+  integrity sha1-8mBEb0o6+KcQGBUUhvn1MB2Nof0=
+
 react-native-vector-icons@^6.6.0:
   version "6.6.0"
   resolved "https://registry.npm.taobao.org/react-native-vector-icons/download/react-native-vector-icons-6.6.0.tgz#66cf004918eb05d90778d64bd42077c1800d481b"

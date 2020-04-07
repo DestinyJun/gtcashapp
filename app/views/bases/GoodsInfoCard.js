@@ -25,7 +25,7 @@ export class GoodsInfoCard extends Component {
     change: null,
     isqueue: true,  // 判断 isqueue 是否显示,
     type: '', // 操作符
-    symbol: ''
+    symbol: '',
   };
 
   constructor(props) {
@@ -56,7 +56,7 @@ export class GoodsInfoCard extends Component {
     return (
       <View style={[styles.container]}>
         {
-          this.props.isqueue? (<View style={[styles.number, c_styles.flex_center]}>
+          this.props.isqueue ? (<View style={[styles.number, c_styles.flex_center]}>
             <Text style={[c_styles.text_darkinfo, c_styles.h5]}>
               {this.props.queue}
             </Text>
@@ -66,8 +66,9 @@ export class GoodsInfoCard extends Component {
           <View style={[styles.content_title, c_styles.pl_2]}>
             <Text numberOfLines={1} style={c_styles.h6}>
               {this.props.title}
-              {this.props.unit?(<Text style={c_styles.h_small}>{`【单位：${this.props.unit}】`}</Text>):null}
-              {this.props.code?( <Text style={[c_styles.h_small, c_styles.text_secondary]}>({this.props.code})</Text>):null}
+              {this.props.unit ? (<Text style={c_styles.h_small}>{`【单位：${this.props.unit}】`}</Text>) : null}
+              {this.props.code ? (
+                <Text style={[c_styles.h_small, c_styles.text_secondary]}>({this.props.code})</Text>) : null}
             </Text>
           </View>
           <View style={[styles.content_price, c_styles.pl_2]}>
@@ -75,22 +76,22 @@ export class GoodsInfoCard extends Component {
           </View>
         </View>
         <View style={[styles.operate]}>
-            {
-                this.state.numbers === 0? null: (
-                    <View style={[styles.operate_minus]}>
-                        <TouchableOpacity
-                            onPress={this.operateMinus}
-                            style={[c_styles.cell, c_styles.w_100, c_styles.flex_center]}>
-                            <Icon name={'minus-circle'} style={[c_styles.text_darkinfo, c_styles.h4]}/>
-                        </TouchableOpacity>
-                    </View>)
-            }
-            {
-                this.state.numbers === 0? null: (
-                    <View style={[styles.operate_number, c_styles.flex_center]}>
-                        <Text style={c_styles.h5}>{this.state.numbers}</Text>
-                    </View>)
-            }
+          {
+            this.state.numbers === 0 ? null : (
+              <View style={[styles.operate_minus]}>
+                <TouchableOpacity
+                  onPress={this.operateMinus}
+                  style={[c_styles.cell, c_styles.w_100, c_styles.flex_center]}>
+                  <Icon name={'minus-circle'} style={[c_styles.text_darkinfo, c_styles.h4]}/>
+                </TouchableOpacity>
+              </View>)
+          }
+          {
+            this.state.numbers === 0 ? null : (
+              <View style={[styles.operate_number, c_styles.flex_center]}>
+                <Text style={c_styles.h5}>{this.state.numbers}</Text>
+              </View>)
+          }
           <View style={[styles.operate_add]}>
             <TouchableOpacity
               onPress={this.operateAdd}
@@ -115,30 +116,45 @@ export class GoodsInfoCard extends Component {
                 show: true,
               });
           }
-          this.props.change({index: this.props.queue - 1, numbers: this.state.numbers, type: 'less',symbol: this.state.symbol});
+          this.props.change({
+            index: this.props.queue - 1,
+            numbers: this.state.numbers,
+            type: 'less',
+            symbol: this.state.symbol,
+          });
         },
       );
       return;
     }
-    this.setState((state,props) => {
+    this.setState((state, props) => {
       if (state.numbers === 0) {
-        this.props.change({index: this.props.queue - 1, numbers: 0 , type: 'less', symbol: this.props.symbol});
+        this.props.change({index: this.props.queue - 1, numbers: 0, type: 'less', symbol: this.props.symbol});
         return {
-          numbers: 0
-        }
+          numbers: 0,
+        };
       } else {
-        this.props.change({index: this.props.queue - 1, numbers: state.numbers - 1, type: 'less', symbol: this.props.symbol});
-        return  {
-          numbers: state.numbers - 1
-        }
+        this.props.change({
+          index: this.props.queue - 1,
+          numbers: state.numbers - 1,
+          type: 'less',
+          symbol: this.props.symbol,
+        });
+        return {
+          numbers: state.numbers - 1,
+        };
       }
-    })
+    });
   };
   operateAdd = () => {
     this.setState(
       {numbers: this.state.numbers + 1},
       () => {
-        this.props.change({index: this.props.queue - 1, numbers: this.state.numbers, type: 'add', symbol: this.props.symbol});
+        this.props.change({
+          index: this.props.queue - 1,
+          numbers: this.state.numbers,
+          type: 'add',
+          symbol: this.props.symbol,
+        });
       },
     );
   };
