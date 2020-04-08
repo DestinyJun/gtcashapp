@@ -49,7 +49,7 @@ export class MarketStoreScreen extends Component {
     });
     this.successModalOption = {
       content: '入库成功！', // 提示内容
-      leftBtnTitle: '取消入库', // 底部左按钮标题
+      leftBtnTitle: '关闭', // 底部左按钮标题
       rightBtnTitle: '继续入库',// 底部右按钮标题
     };
     this.merchatCode = null;
@@ -65,7 +65,7 @@ export class MarketStoreScreen extends Component {
             style={styles.camera_preview}
             type={'back'}
             flashMode={RNCamera.Constants.FlashMode.on}
-            onBarCodeRead={this.onBarCodeRead}
+            onBarCodeRead={this.scanCodeOperate}
           >
             <View style={styles.camera_preview_mask}>
               <View style={styles.box_top} />
@@ -89,16 +89,14 @@ export class MarketStoreScreen extends Component {
                 <ScrollView style={[{flex: 1}]} alwaysBounceVertical={true}>
                   {
                     this.state.goods.map((item, index) => {
-                      return (<GoodsStoreCard change={this.test} key={index} goodsIndex={index} option={item}/>);
+                      return (<GoodsStoreCard change={this.storeGoodsChange} key={index} goodsIndex={index} option={item}/>);
                     })
                   }
                 </ScrollView>
               </View>
               <View style={[styles.goods_bottom]}>
                 <TouchableOpacity
-                  onPress={() => {
-                    this.setState({contentState: 3,isModalVisible: true});
-                  }}
+                  onPress={this.storageSubmit}
                   style={[{flex: 1}, c_styles.w_100, c_styles.flex_center]}>
                   <Text style={[c_styles.h4, c_styles.text_light]}>提交入库</Text>
                 </TouchableOpacity>
@@ -121,8 +119,7 @@ export class MarketStoreScreen extends Component {
               <View style={styles.modal_content}>
                 {
                   this.state.modalContentState === 1 ? (<NumberKeyboard enterChange={this.searchModalInputChange}/>) :
-                  this.state.modalContentState === 2 ? (
-                    <View  style={c_styles.cell}>
+                  this.state.modalContentState === 2 ? (<View  style={c_styles.cell}>
                       {
                         this.searchGoodList.length === 0 ?
                           (<View style={[c_styles.cell,c_styles.flex_center]}>
@@ -144,8 +141,7 @@ export class MarketStoreScreen extends Component {
                             </TouchableOpacity>
                           </View>)
                       }
-                      </View>
-                  ):(<PaySuccess option={this.successModalOption} onPress={this.modalToggle} />)
+                      </View>) : (<PaySuccess option={this.successModalOption} onPress={() =>{this.modalToggle();this.setState({goods: []})}} />)
                 }
               </View>
             </View>
@@ -203,7 +199,8 @@ export class MarketStoreScreen extends Component {
     this.setState({
       modalShow: !this.state.modalShow,
       modalContentState: 1,
-    })
+    });
+    this.addGoodsList = [];
   };
   // 手动查询商品
   searchModalInputChange = (value) => {
@@ -215,11 +212,9 @@ export class MarketStoreScreen extends Component {
           modalContentState: 2,
         });
       })
-      .catch(err => {
-        ToastAndroid.show(err.msg, 1000);
-      })
+      .catch((err) => {})
   };
-  // 操作入库数量
+  // 操作查询入库数量
   selectGoodsChange = (item) => {
     let select = {...item};
     this.searchGoodList.forEach((value,index) => {
@@ -246,19 +241,70 @@ export class MarketStoreScreen extends Component {
     this.setState({goods: arr});
     this.modalToggle();
   };
+  //  扫码添加入库商品
+  scanCodeOperate = (result) => {
+    if (this.isScan) {
+      this.isScan = false;
+      this.searchGoodsCode(result.data)
+        .then((res) => {
+          const arr = this.state.goods;
+          res.forEach((item)=> {
+            const code = this.state.goods.findIndex((element) => element.goodsCode === item.goodsCode);
+            if (code < 0) {
+              arr.push(item);
+            } else {
+              arr[code].number++;
+            }
+          });
+          this.setState({goods: arr});
+        })
+        .catch(err=> {});
+      this.timer = setTimeout(() => {
+        this.isScan = true;
+      }, 2000);
+    }
+  };
+  // 操作提交入库数量
+  storeGoodsChange = (item) => {
+    let select = {...item};
+    this.state.goods.forEach((value,index) => {
+      if (index === select.index) {
+        if (select.number > 0) {
+          this.state.goods.splice(index,1,Object.assign(value,{number: select.number}));
+        } else{
+          this.state.goods.splice(index,1);
+        }
+      }
+    });
+  };
+  // 提交商品入库
+  storageSubmit = () => {
+    const data = [];
+    this.state.goods.forEach((value) => {
+      data.push(Object.assign({},{id: value.id,type: value.type,number:value.number}));
+    });
+    post(api.STORE_GOODS_SUBMIT,data)
+      .then((res) => {
+        this.setState({
+          modalContentState: 3,
+          modalShow: true
+        });
+      })
+      .catch((err) => {})
+  };
   // 根据商品编号搜索商品编号
-  searchGoodsCode = async (value) => {
+  searchGoodsCode = (value) => {
     return post(api.STORE_SEARCH_CODE, {merchatCode: this.merchatCode, goodsCode: value})
-      .then((val) => {
+      .then((res) => {
         const arr = [];
-        for (const value of val) {
+        for (const value of res.data) {
           arr.push(Object.assign({}, value, {number: 1}));
         }
         return Promise.resolve(arr);
       })
       .catch((err) => {
         return Promise.reject(err);
-      });
+      })
   };
   // 测试
   test= (value) => {

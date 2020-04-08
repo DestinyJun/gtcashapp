@@ -2,7 +2,7 @@
  * axios拦截器
  */
 import axios from 'axios'
-import {Alert} from 'react-native';
+import {Alert, ToastAndroid} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 // 设置全局请求的地址
@@ -43,13 +43,16 @@ axios.interceptors.response.use(
           return Promise.resolve(response.data);
           break;
         case '1005':
+          ToastAndroid.show(response.data.msg, 1000);
           return Promise.reject(response.data);
           break;
         default:
+          ToastAndroid.show(response.data.msg, 1000);
           return Promise.reject(response.data);
           break;
       }
     } else {
+      ToastAndroid.show('连接网络失败，请检查网络！', 1000);
       return Promise.reject(response.data);
     }
   },
@@ -78,12 +81,12 @@ axios.interceptors.response.use(
 // 封装get请求
 export function get(url, params){
   return new Promise((resolve, reject) =>{
-    axios.get(url, {
-      params: params
-    }).then(res => {
-      resolve(res.data);
-    }).catch(err =>{
-      reject(err.data)
+    axios.get(url, {params: params})
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err =>{
+        reject(err)
     })
   });
 }
@@ -93,13 +96,9 @@ export function post(url, params) {
   return new Promise((resolve, reject) => {
     axios.post(url, params)
       .then(res => {
-        resolve(res.data);
+        resolve(res)
       })
-      .catch(err =>{
-        // console.log(err);
-        // 抛出异常以后，拦截器哪里已经做了提醒处理，所以无需再处理
-        // console.log(err.data);
-        // reject(EMPTY)
+      .catch((err) => {
         reject(err)
       })
   });

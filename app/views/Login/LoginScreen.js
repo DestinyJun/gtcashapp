@@ -148,7 +148,7 @@ export default class LoginScreen extends Component {
     post(api.SHOP_LIST_URL, {user: this.login.user})
       .then((res) => {
         this.setState({
-          input_select_data: res,
+          input_select_data: res.data,
           input_select_defaultValue: '请选择店铺...',
         });
       })
@@ -159,7 +159,6 @@ export default class LoginScreen extends Component {
           select_icon_transform: false,
         });
         this.modelDown.hide();
-        ToastAndroid.showWithGravity(err.msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
       });
   };
   selectWillHide = () => {
@@ -191,19 +190,17 @@ export default class LoginScreen extends Component {
   loginClick = () => {
     post(api.LOGIN_URL, this.login)
       .then((res) => {
-        LocalStorage.set('merchatCode', res.merchatCode);
-        LocalStorage.set('userId', res.userId);
-        LocalStorage.set('APPKEY', res.APPKEY);
+        LocalStorage.set('merchatCode', res.data.merchatCode);
+        LocalStorage.set('userId', res.data.userId);
+        LocalStorage.set('APPKEY', res.data.APPKEY);
+        LocalStorage.set('serverId', res.data.serverId);
         const action = startUpPageAtion({
           isLoading: false,
           userToken: true,
         });
         store.dispatch(action);
       })
-      .catch(e => {
-        console.log(e);
-        ToastAndroid.showWithGravity(e.msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
-      });
+      .catch(e => {});
   };
 };
 
