@@ -9,13 +9,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export class GoodsStoreCard extends Component {
   static defaultProps = {
-    data: {
+    option: {
       goodsName: '商品名称', // 商品名称
       goodsCode: '商品编号', // 商品编号
-      stock: 1, // 商品库存
+      nowSize: 1, // 商品库存
       company: '单位', // 商品单位
       unitPrice: 1, // 商品单价
       purchasePrice: 1, // 商品进价
+      number: 0, // 入库数量
     },
     change: null,
     goodsIndex: 0, // 下标
@@ -24,8 +25,20 @@ export class GoodsStoreCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      amount: 1, // 入库数量
+      number: 0, // 入库数量
+      prevPropNumbers: null,
     };
+  }
+  static getDerivedStateFromProps(props, state) {
+    // 反模式
+    if (props.option.number !== state.prevPropNumbers) {
+      return {
+        number: props.option.number,
+        // 保存初始化的props，从而进行比对赛选，避免原因setState和forceUpdate触发本生命周期导致不断的props赋值给state
+        prevPropNumbers: props.option.number,
+      };
+    }
+    return null;
   }
 
   render() {
@@ -33,9 +46,9 @@ export class GoodsStoreCard extends Component {
       <View style={styles.container}>
         <View style={styles.title}>
           <Text style={styles.title_head} numberOfLines={1}>
-            {this.props.data.goodsName}
+            {this.props.option.goodsName}
             <Text style={styles.title_sub}>
-              ({this.props.data.goodsCode})
+              ({this.props.option.goodsCode})
             </Text>
           </Text>
         </View>
@@ -43,21 +56,21 @@ export class GoodsStoreCard extends Component {
           <View style={styles.info_left}>
             <View style={styles.info_card}>
               <Text style={styles.info_btnText}>库存</Text>
-              <Text>{this.props.data.stock}</Text>
+              <Text>{this.props.option.nowSize}</Text>
             </View>
             <View style={styles.info_card}>
               <Text style={styles.info_btnText}>单价</Text>
-              <Text>￥ {this.props.data.unitPrice.toFixed(2)}</Text>
+              <Text>￥ {parseFloat(this.props.option.unitPrice).toFixed(2)}</Text>
             </View>
           </View>
           <View style={styles.info_center}>
             <View style={styles.info_card}>
               <Text style={styles.info_btnText}>单位</Text>
-              <Text>{this.props.data.company}</Text>
+              <Text>{this.props.option.company}</Text>
             </View>
             <View style={styles.info_card}>
               <Text style={styles.info_btnText}>进价</Text>
-              <Text>￥ {this.props.data.purchasePrice.toFixed(2)}</Text>
+              <Text>￥ {parseFloat(this.props.option.purchasePrice).toFixed(2)}</Text>
             </View>
           </View>
           {
@@ -70,7 +83,7 @@ export class GoodsStoreCard extends Component {
                     style={styles.info_touch}>
                     <Icon name={'minus-circle'} color={'#468F80'} size={22}/>
                   </TouchableOpacity>
-                  <Text style={[styles.info_font_size,styles.info_font_color]}>{this.state.amount}</Text>
+                  <Text style={[styles.info_font_size,styles.info_font_color]}>{this.state.number}</Text>
                   <TouchableOpacity
                     onPress={this.operateAdd}
                     style={styles.info_touch}>
@@ -87,51 +100,59 @@ export class GoodsStoreCard extends Component {
   operateMinus = () => {
     if (this.props.isClear) {
       this.setState({
-          amount: this.state.amount - 1,
+          number: this.state.number - 1,
         },
         () => {
-          if (this.state.amount === 0) {
+          if (this.state.number === 0) {
             this.setState(
               {
                 show: true,
               });
           }
-          this.props.change({
-            index: this.props.goodsIndex,
-            amount: this.state.amount,
-          });
+          if (this.props.change) {
+            this.props.change({
+              index: this.props.goodsIndex,
+              number: this.state.number,
+            });
+          }
         },
       );
       return;
     }
     this.setState((state, props) => {
-      if (state.amount === 0) {
-        this.props.change({
-          index: this.props.goodsIndex,
-          amount: 0,
-        });
+      if (state.number === 0) {
+        if (this.props.change) {
+          this.props.change({
+            index: this.props.goodsIndex,
+            number: this.state.number,
+          });
+        }
         return {
-          amount: 0,
+          number: 0,
         };
       } else {
-        this.props.change({
-          index: this.props.goodsIndex,
-          amount: state.amount - 1,
-        });
+        if (this.props.change) {
+          this.props.change({
+            index: this.props.goodsIndex,
+            number: this.state.number,
+          });
+        }
         return {
-          amount: state.amount - 1,
+          number: state.number - 1,
         };
       }
     });
   };
   operateAdd = () => {
     this.setState(
-      {amount: this.state.amount + 1},
+      {number: this.state.number + 1},
       () => {
-        this.props.change({
-          index: this.props.goodsIndex,
-          amount: this.state.amount,
-        });
+        if (this.props.change) {
+          this.props.change({
+            index: this.props.goodsIndex,
+            number: this.state.number,
+          });
+        }
       },
     );
   };

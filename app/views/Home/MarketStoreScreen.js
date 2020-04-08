@@ -4,7 +4,7 @@
  * date：  2020/4/6 14:19
  */
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Animated, Easing, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, Animated, Easing, ScrollView, ToastAndroid} from 'react-native';
 import {MarketStoreScreenStyles as styles} from './MarketStoreScreenStyles'
 import AsyncStorage from '@react-native-community/async-storage';
 // 第三方组件库
@@ -13,27 +13,27 @@ import {RNCamera} from 'react-native-camera';
 import Modal from 'react-native-translucent-modal';
 // 自定义组件
 import {GoodsStoreCard} from '../bases/GoodsStoreCard';
-import {MarketScreenStyles} from './MarketScreenStyles';
 import {NumberKeyboard} from '../bases/NumberKeyboard';
-import {GoodsInfoCard} from '../bases/GoodsInfoCard';
-import {Pricing} from '../bases/Pricing';
 import {PaySuccess} from '../bases/PaySuccess';
+import {post} from '../../service/Interceptor';
+import api from '../../service/Api';
 
 export class MarketStoreScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      goods: [1],
+      goods: [],
       moveAnim: new Animated.Value(0), // 扫动条动画
       selectDownShow: false,
       modalShow: false,
       modalHeaderTitle: '手动查询商品',
-      modalContentState: 3
+      modalContentState: 1
     };
     this.isScan = true;
+    this.addGoodsList = [];
     this.searchGoodList = [];
     this.props.navigation.setOptions({
-      title: '超市收银',
+      title: '超市入库',
       headerRightContainerStyle: {},
       headerRight: () => {
         return (
@@ -51,7 +51,9 @@ export class MarketStoreScreen extends Component {
       content: '入库成功！', // 提示内容
       leftBtnTitle: '取消入库', // 底部左按钮标题
       rightBtnTitle: '继续入库',// 底部右按钮标题
-    }
+    };
+    this.merchatCode = null;
+    this.userId = null;
   }
 
   render() {
@@ -86,8 +88,8 @@ export class MarketStoreScreen extends Component {
               <View style={[styles.goods_content]}>
                 <ScrollView style={[{flex: 1}]} alwaysBounceVertical={true}>
                   {
-                    [1,1,1].map((item, index) => {
-                      return (<GoodsStoreCard change={this.test} key={index} goodsIndex={index}/>);
+                    this.state.goods.map((item, index) => {
+                      return (<GoodsStoreCard change={this.test} key={index} goodsIndex={index} option={item}/>);
                     })
                   }
                 </ScrollView>
@@ -133,7 +135,7 @@ export class MarketStoreScreen extends Component {
                             <ScrollView style={[c_styles.cell, {marginBottom: 70}]} alwaysBounceVertical={true}>
                               {
                                 this.searchGoodList.map((item, index) => {
-                                  return (<GoodsStoreCard />);
+                                  return (<GoodsStoreCard option={item} goodsIndex={index} key={index} change={this.selectGoodsChange}/>);
                                 })
                               }
                             </ScrollView>
@@ -200,8 +202,63 @@ export class MarketStoreScreen extends Component {
   modalToggle = () => {
     this.setState({
       modalShow: !this.state.modalShow,
-      contentState: 1,
+      modalContentState: 1,
     })
+  };
+  // 手动查询商品
+  searchModalInputChange = (value) => {
+    this.searchGoodsCode(value)
+      .then((arr) => {
+        this.addGoodsList = [...arr];
+        this.searchGoodList = [...arr];
+        this.setState({
+          modalContentState: 2,
+        });
+      })
+      .catch(err => {
+        ToastAndroid.show(err.msg, 1000);
+      })
+  };
+  // 操作入库数量
+  selectGoodsChange = (item) => {
+    let select = {...item};
+    this.searchGoodList.forEach((value,index) => {
+      if (index === select.index) {
+        if (select.number > 0) {
+          this.addGoodsList.splice(index,1,Object.assign(value,{number: select.number}));
+        } else{
+          this.addGoodsList.splice(index,1);
+        }
+      }
+    });
+  };
+  // 手动添加入库商品
+  addGoodsOperate = () => {
+    let arr = [...this.state.goods];
+    this.addGoodsList.forEach((item)=> {
+      const code = arr.findIndex((element) => element.goodsCode === item.goodsCode);
+      if (code < 0) {
+        arr.push(item);
+      } else {
+        arr[code].numbers++;
+      }
+    });
+    this.setState({goods: arr});
+    this.modalToggle();
+  };
+  // 根据商品编号搜索商品编号
+  searchGoodsCode = async (value) => {
+    return post(api.STORE_SEARCH_CODE, {merchatCode: this.merchatCode, goodsCode: value})
+      .then((val) => {
+        const arr = [];
+        for (const value of val) {
+          arr.push(Object.assign({}, value, {number: 1}));
+        }
+        return Promise.resolve(arr);
+      })
+      .catch((err) => {
+        return Promise.reject(err);
+      });
   };
   // 测试
   test= (value) => {

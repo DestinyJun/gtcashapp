@@ -97,7 +97,6 @@ const TabHomeStackProFileScreenOptions = {
 const LoginScreenOptions = {
   headerShown: false,
 };
-
 // RepastScreen路由配置
 const RepastScreenOptions = {
   title: 'My home',
