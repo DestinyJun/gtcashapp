@@ -191,9 +191,9 @@ export default class App extends Component {
         onStateChange={(newState) => {
           StatusBar.setBackgroundColor('transparent', true);
           StatusBar.setTranslucent(true);
+          StatusBar.setBarStyle('light-content', true);
           const state = newState.routes[newState.index].state;
           const name = newState.routes[newState.index].name;
-          StatusBar.setBarStyle('light-content', true);
           if (name === 'TabStackScreen') {
             const tabName = state.routeNames[state.index];
             switch (tabName) {

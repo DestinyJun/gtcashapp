@@ -43,4 +43,66 @@ export const MarketStoreScreenStyles = StyleSheet.create({
     backgroundColor: '#468F80',
     ...c_styles.flex_center
   },
+  // 头部弹窗菜单
+  select_down: {
+    position: 'absolute',
+    right: 14,
+    top: 70,
+    width: 150,
+    zIndex: 9999,
+    borderRadius: 5,
+    ...c_styles.bg_white,
+    ...c_styles.pl_3,
+    ...c_styles.pr_3,
+  },
+  select_down_list: {
+    flex: 1,
+    ...c_styles.pt_3,
+    ...c_styles.pb_3,
+    ...c_styles.flex_center,
+  },
+  select_down_text: {
+    color: '#3C3C3C',
+    ...c_styles.h6,
+  },
+  // 手动查询入库弹窗
+  modal_mask: {
+    flex:1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    height: '100%',
+    justifyContent: 'flex-end'
+  },
+  modal_container: {
+    ...c_styles.h_60,
+    backgroundColor: '#FFFFFF',
+  },
+  modal_header: {
+    height: 50,
+    flexDirection: 'row',
+    paddingRight: 25,
+    ...c_styles.flex_center,
+    borderColor: '#EFEFEF',
+    borderBottomWidth: 1
+  },
+  modal_header_left: {
+    height: '100%',
+    width: 50,
+    ...c_styles.flex_center,
+  },
+  modal_content: {
+    flex: 1,
+    borderColor: '#F5F5F5',
+  },
+  modal_content_btn: {
+    position: 'absolute',
+    height: 60,
+    bottom: 0,
+    ...c_styles.w_100,
+    ...c_styles.bg_darkinfo,
+    ...c_styles.flex_center
+  },
+  modal_content_list: {
+    flex: 1,
+    position: 'relative',
+  },
 });

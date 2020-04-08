@@ -4,7 +4,8 @@
  * date：  2020/4/6 20:23
  */
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export class GoodsStoreCard extends Component {
   static defaultProps = {
@@ -15,13 +16,16 @@ export class GoodsStoreCard extends Component {
       company: '单位', // 商品单位
       unitPrice: 1, // 商品单价
       purchasePrice: 1, // 商品进价
-      amount: 1, // 入库数量
     },
+    change: null,
+    goodsIndex: 0, // 下标
     showAmount: true
   };
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      amount: 1, // 入库数量
+    };
   }
 
   render() {
@@ -60,7 +64,19 @@ export class GoodsStoreCard extends Component {
             this.props.showAmount?(
               <View style={styles.info_right}>
                 <Text style={[styles.info_font_size]}>入库数量</Text>
-                <Text style={[styles.info_font_size,styles.info_font_color]}>{this.props.data.amount}</Text>
+                <View style={styles.info_right_operate}>
+                  <TouchableOpacity
+                    onPress={this.operateMinus}
+                    style={styles.info_touch}>
+                    <Icon name={'minus-circle'} color={'#468F80'} size={22}/>
+                  </TouchableOpacity>
+                  <Text style={[styles.info_font_size,styles.info_font_color]}>{this.state.amount}</Text>
+                  <TouchableOpacity
+                    onPress={this.operateAdd}
+                    style={styles.info_touch}>
+                    <Icon name={'plus-circle'} color={'#468F80'} size={22}/>
+                  </TouchableOpacity>
+                </View>
               </View>
             ): null
           }
@@ -68,6 +84,57 @@ export class GoodsStoreCard extends Component {
       </View>
     );
   }
+  operateMinus = () => {
+    if (this.props.isClear) {
+      this.setState({
+          amount: this.state.amount - 1,
+        },
+        () => {
+          if (this.state.amount === 0) {
+            this.setState(
+              {
+                show: true,
+              });
+          }
+          this.props.change({
+            index: this.props.goodsIndex,
+            amount: this.state.amount,
+          });
+        },
+      );
+      return;
+    }
+    this.setState((state, props) => {
+      if (state.amount === 0) {
+        this.props.change({
+          index: this.props.goodsIndex,
+          amount: 0,
+        });
+        return {
+          amount: 0,
+        };
+      } else {
+        this.props.change({
+          index: this.props.goodsIndex,
+          amount: state.amount - 1,
+        });
+        return {
+          amount: state.amount - 1,
+        };
+      }
+    });
+  };
+  operateAdd = () => {
+    this.setState(
+      {amount: this.state.amount + 1},
+      () => {
+        this.props.change({
+          index: this.props.goodsIndex,
+          amount: this.state.amount,
+        });
+      },
+    );
+  };
 }
 const styles = StyleSheet.create({
   container: {
@@ -100,19 +167,24 @@ const styles = StyleSheet.create({
   },
   info_center: {
     flex: 1,
+    justifyContent: 'center',
   },
   info_right: {
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
     borderColor: '#6DA79B',
-    borderLeftWidth: 1
+    borderLeftWidth: 1,
+  },
+  info_right_operate: {
+    flexDirection: 'row'
   },
   // 公共样式
   info_card: {
+    flex: 1,
     flexDirection:'row',
     alignItems: 'center',
-    marginBottom: 15
+    height: 40,
   },
   info_btnText: {
     borderColor: '#6DA79B',
@@ -130,5 +202,11 @@ const styles = StyleSheet.create({
   },
   info_font_color: {
     color: '#6DA79B'
+  },
+  info_touch: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
