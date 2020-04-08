@@ -24,4 +24,8 @@ export default class Api {
   static GET_DISHES_ALL_LIST = '/cateringcashier/getallgoodsinfocash';
   // 餐饮付款
   static PAY_MONEY = '//cateringcashier/pay';
+
+  /**  **************超市入库**************   **/
+  // 根据商品码查询入库商品
+  static STORE_SEARCH_CODE = '/supermarketmanagement/supermarketstorage';
 }
