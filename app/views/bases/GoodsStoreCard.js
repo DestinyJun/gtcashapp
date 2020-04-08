@@ -18,7 +18,7 @@ export class GoodsStoreCard extends Component {
       purchasePrice: 1, // 商品进价
       number: 0, // 入库数量
     },
-    change: null,
+    change: null, // 回调
     goodsIndex: 0, // 下标
     showAmount: true
   };

@@ -28,6 +28,39 @@ export const MarketStoreScreenStyles = StyleSheet.create({
     zIndex: 999,
     justifyContent: 'space-between'
   },
+  box_top: {
+    width: '100%',
+    height: '35%',
+    backgroundColor: 'rgba(23,23,23,0.3)',
+  },
+  box_center: {
+    width: '100%',
+    height: '55%',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  box_center_left: {
+    height: '100%',
+    width: '10%',
+    backgroundColor: 'rgba(23,23,23,0.3)',
+  },
+  box_center_right: {
+    height: '100%',
+    width: '10%',
+    backgroundColor: 'rgba(23,23,23,0.3)',
+  },
+  box_center_line: {
+    flex: 0,
+    height: 2,
+    width: '80%',
+    backgroundColor: '#02FECA',
+  },
+  box_bottom: {
+    width: '100%',
+    height: '10%',
+    backgroundColor: 'rgba(23,23,23,0.3)',
+    // alignSelf: 'stretch'
+  },
   // 商品列表样式
   goods: {
     flex: 5,

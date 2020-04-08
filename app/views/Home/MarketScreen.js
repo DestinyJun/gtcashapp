@@ -40,6 +40,7 @@ export default class MarketScreen extends Component {
     this.searchGoodList = [];
     this.merchatCode = null;
     this.userId = null;
+    this.serverId = null;
     this.props.navigation.setOptions({
       title: '超市收银',
       headerRight: () => {
@@ -59,7 +60,7 @@ export default class MarketScreen extends Component {
     return (
       <View style={MarketScreenStyles.container}>
         <View style={[MarketScreenStyles.camera]}>
-           {/* <RNCamera
+            <RNCamera
             ref={ref => {this.camera = ref}}
             style={MarketScreenStyles.camera_preview}
             type={'back'}
@@ -75,7 +76,7 @@ export default class MarketScreen extends Component {
               </View>
               <View style={MarketScreenStyles.box_bottom} />
             </View>
-          </RNCamera>*/}
+          </RNCamera>
         </View>
         <View style={[MarketScreenStyles.shop]}>
           {
@@ -112,9 +113,7 @@ export default class MarketScreen extends Component {
                   </View>
                   <View style={MarketScreenStyles.shop_bottom_settle}>
                     <TouchableOpacity
-                      onPress={() => {
-                        this.setState({contentState: 3,isModalVisible: true});
-                      }}
+                      onPress={() => {this.setState({contentState: 3,isModalVisible: true})}}
                       style={[{flex: 1}, c_styles.w_100, c_styles.flex_center]}>
                       <Text style={[c_styles.h5, c_styles.text_light]}>结算</Text>
                     </TouchableOpacity>
@@ -151,40 +150,40 @@ export default class MarketScreen extends Component {
                 {
                   this.state.contentState === 1 ? (<NumberKeyboard enterChange={this.searchModalInputChange}/>) :
                     this.state.contentState === 2 ? (
-                        <View  style={c_styles.cell}>
-                          {
-                            this.searchGoodList.length === 0 ?
-                              (<View style={[c_styles.cell,c_styles.flex_center]}>
-                                <Text style={c_styles.h4}>查询无结果!</Text>
-                                <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]} onPress={this.searchModalToggle}>
-                                  <Text style={[c_styles.h4, c_styles.text_white]}>关闭</Text>
-                                </TouchableOpacity>
-                              </View>) :
-                              (<View style={MarketScreenStyles.search_modal_shop_list}>
-                                <ScrollView style={[c_styles.cell, {marginBottom: 70}]} alwaysBounceVertical={true}>
-                                  {
-                                    this.searchGoodList.map((item, index) => {
-                                      return (
-                                        <GoodsInfoCard
-                                          key={index}
-                                          queue={index + 1} title={item.goodsName}
-                                          price={item.unitPrice} code={item.goodsCode}
-                                          unit={item.company} numbers={item.numbers}
-                                          change={this.selectGoodsChange}
-                                        />
-                                      );
-                                    })
-                                  }
-                                </ScrollView>
-                                <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]} onPress={this.addGoodsOperate}>
-                                  <Text style={[c_styles.h4, c_styles.text_white]}>确认添加</Text>
-                                </TouchableOpacity>
-                              </View>)
-                          }
-                        </View>
+                      <View  style={c_styles.cell}>
+                        {
+                          this.searchGoodList.length === 0 ?
+                            (<View style={[c_styles.cell,c_styles.flex_center]}>
+                              <Text style={c_styles.h4}>查询无结果!</Text>
+                              <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]} onPress={this.searchModalToggle}>
+                                <Text style={[c_styles.h4, c_styles.text_white]}>关闭</Text>
+                              </TouchableOpacity>
+                            </View>) :
+                            (<View style={MarketScreenStyles.search_modal_shop_list}>
+                              <ScrollView style={[c_styles.cell, {marginBottom: 70}]} alwaysBounceVertical={true}>
+                                {
+                                  this.searchGoodList.map((item, index) => {
+                                    return (
+                                      <GoodsInfoCard
+                                        key={index}
+                                        queue={index + 1} title={item.goodsName}
+                                        price={item.unitPrice} code={item.goodsCode}
+                                        unit={item.company} numbers={item.numbers}
+                                        change={this.selectGoodsChange}
+                                      />
+                                    );
+                                  })
+                                }
+                              </ScrollView>
+                              <TouchableOpacity style={[MarketScreenStyles.search_modal_add_btn]} onPress={this.addGoodsOperate}>
+                                <Text style={[c_styles.h4, c_styles.text_white]}>确认添加</Text>
+                              </TouchableOpacity>
+                            </View>)
+                        }
+                      </View>
                       ) :
                       this.state.contentState === 3 ? (<Pricing amount={this.state.totalPrice} onPress={this.paySure}/>) :
-                        (<PaySuccess onPress={()=>{this.setState({isModalVisible: false},()=> {this.setState({contentState: 1})})}} />)
+                        (<PaySuccess onPress={() => {this.searchModalToggle();this.setState({goods: []})}} />)
                 }
               </View>
             </View>
@@ -280,17 +279,17 @@ export default class MarketScreen extends Component {
       .catch((err) => console.log(err))
   };
   // 根据商品编号搜索商品编号
-  searchGoodsCode = async (value) => {
+  searchGoodsCode = (value) => {
     return post(api.SEARCH_GOODS_CODE, {merchatCode: this.merchatCode, code: value})
-      .then((val) => {
+      .then((res) => {
         const arr = [];
-        for (const value of val) {
+        for (const value of res.data) {
           arr.push(Object.assign({}, value, {numbers: 1}));
         }
-        return arr;
+        return Promise.resolve(arr);
       })
       .catch((err) => {
-        return err;
+        return Promise.reject(err);
       });
   };
   // 二维码动画
@@ -306,22 +305,21 @@ export default class MarketScreen extends Component {
     ).start(() => this.startAnimation());
   };
   // 结算操作
-  paySure = async (val) => {
+  paySure = (value) => {
     const payList = {
       merchatCode: this.merchatCode,
       userId: this.merchatCode,
-      payType: val,
+      serverId: this.serverId,
+      payType: value,
       accountsReceivable: 0.00,
       sales: this.state.totalPrice,
       data: []
     };
     post(api.SURE_PAY_SUCCESS, payList)
       .then((res) => {
-        console.log(res);
+        this.setState({contentState: 4})
       })
-      .catch((err) => {
-        console.log(err);
-      })
+      .catch((err) => {})
   };
   // 生命周期钩子
   componentDidMount() {
@@ -330,8 +328,11 @@ export default class MarketScreen extends Component {
     AsyncStorage.getItem('merchatCode').then((res) => {
       this.merchatCode = res ;
     });
-    AsyncStorage.getItem('userCode').then((res) => {
-      this.userId = res ;
+    AsyncStorage.getItem('merchatCode').then((res) => {
+      this.merchatCode = res ;
+    });
+    AsyncStorage.getItem('serverId').then((res) => {
+      this.serverId = res ;
     });
   }
   componentWillUnmount() {

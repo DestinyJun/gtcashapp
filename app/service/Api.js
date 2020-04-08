@@ -28,4 +28,7 @@ export default class Api {
   /**  **************超市入库**************   **/
   // 根据商品码查询入库商品
   static STORE_SEARCH_CODE = '/supermarketmanagement/supermarketstorage';
+
+  // 商品提交入库
+  static STORE_GOODS_SUBMIT = '/supermarketmanagement/supermarketstorage/submit';
 }
