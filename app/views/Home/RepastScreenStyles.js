@@ -5,19 +5,25 @@
  */
 import {StyleSheet} from 'react-native';
 const style = {
+    content: {
+      width: '100%', height: '100%'
+    },
+    content_top: {
+       flex: 11,
+       flexDirection: 'row'
+    },
     // 左边tab
     left_tab: {
-        width: '30%',
-        height: '92%',
-        paddingTop: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
-        backgroundColor: '#F5FCFC'
+      flex: 4,
+      backgroundColor: '#F5FCFC',
+      paddingLeft: 12,
+      paddingRight: 12,
+      paddingTop: 10
     },
     // 选项卡的样式
     selectTab: {
-       width: '100%',
-       height: 60,
+       // width: '100%',
+       height: 50,
        // backgroundColor: '#468F80',
        borderRadius: 4,
        alignItems:'center',
@@ -33,66 +39,51 @@ const style = {
     title: {
         color: '#B2B2B2',
         fontSize: 18,
-        marginTop: '1%',
-        marginLeft: '3%',
-        marginBottom: '1%'
+        marginTop: 4,
+        marginLeft: 10,
+        marginBottom: 4
     },
     // 右边的列表内容
     right_content: {
-        width: '70%',
-        right: 0,
-        position: 'absolute',
+        flex: 8,
         backgroundColor: '#F6F6F6',
-        height: '92%',
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: '#F0F1F1'
     },
     modal_contnet: {
         height: '100%',
-        // marginTop: '10%',
-        // paddingTop: '10%',
         position: 'absolute',
         width: '100%',
         // zIndex: 9999
     },
-    model_title: {
-      height: '15%',
-      // backgroundColor:'red',
+    modal_header: {
+      height: 50,
       flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
+      paddingRight: 25,
+      ...c_styles.flex_center,
+      borderColor: '#EFEFEF',
+      borderBottomWidth: 1
     },
-    model_amount: {
-      height: '20%',
-      width: '100%',
-      alignItems: 'center',
-      justifyContent:'center'
+    // 模态框
+    modal_mask: {
+      flex:1,
+      backgroundColor: 'rgba(0,0,0,0.3)',
+      // height: '90%',
+      justifyContent: 'flex-end',
+      bottom: '7%'
     },
-    model_btn: {
-      // height: '10%',
-      // width: '28%',
-      paddingLeft: '10%',
-      paddingRight: '10%',
-      paddingTop: '3%',
-      marginBottom: '3%',
-      paddingBottom: '2%',
-      borderColor: '#56988B',
-      borderStyle: 'solid',
-      color: '#56988B',
-      borderWidth: 1.3,
-      borderRadius: 25,
-      fontSize: 18
-
-      // borderWidth: 1
+    modal_mask_pay: {
+      flex:1,
+      backgroundColor: 'rgba(0,0,0,0.3)',
+      // height: '90%',
+      justifyContent: 'flex-end',
+      // bottom: '7%'
     },
-    //
-    bottom_price: {
-        height: '8%',
-        width: '100%',
-        // position: 'absolute',
-        // bottom: 0,
-        backgroundColor: '#fff'
+    buttom_price:{
+      flex: 1,
+      backgroundColor: '#fff',
+      zIndex: 9999
     }
 };
 export const RepastScreenStyles = StyleSheet.create(style);

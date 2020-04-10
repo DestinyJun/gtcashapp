@@ -6,8 +6,8 @@ import {StyleSheet} from 'react-native';
 const SettlementStyles = StyleSheet.create({
     shop_bottom_content: {
         // width: '100%',
-        height: '100%',
-        // flex: 1,
+        // height: '100%',
+        flex: 1,
         flexDirection: 'row',
         borderTopWidth: 1,
         borderTopColor: '#ECEFEE',
