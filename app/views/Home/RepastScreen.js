@@ -4,22 +4,22 @@
  * date：  2020/3/27 14:52
  */
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StatusBar, ScrollView, ToastAndroid } from 'react-native';
-import Modal from 'react-native-modal';
+import {View, Text, TouchableOpacity, StatusBar, ScrollView, ToastAndroid} from 'react-native';
+// import Modal from 'react-native-modal';
+import Modal from 'react-native-translucent-modal';
 import {RepastScreenStyles} from "./RepastScreenStyles";
 import {Icon} from 'react-native-elements';
 import {Icons} from "../bases/Icons";
 // 自定义组件
 import {GoodsInfoCard} from "../bases/GoodsInfoCard";
-import {CollectionUI} from "../bases/CollectionUI";
-import {PrintTicketUI} from "../bases/PrintTicketUI";
 import {SettlementUI} from '../bases/SettlementUI'
-
+import {PaySuccess} from '../bases/PaySuccess';
 // 自定义工具 请求
 import {post} from "../../service/Interceptor";
 import api from '../../service/Api';
 import AsyncStorage from "@react-native-community/async-storage";
-import {LocalStorage} from "../../util";
+import {Pricing} from "../bases/Pricing";
+import {MarketStoreScreenStyles as styles} from "./MarketStoreScreenStyles";
 
 export default class RepastScreen extends Component {
   constructor(props) {
@@ -42,12 +42,8 @@ export default class RepastScreen extends Component {
       dishesList: [],
       // 已选菜品
       selectedDishesList: [],
-
+      // 支付类型
       payMentType: '',
-      btnData: [
-        {label: '现金支付', tcolor: '#56988B', bgcolor: '#fff', value: '1'},
-        {label: '网上支付', tcolor: '#56988B', bgcolor: '#fff', value: '2'}
-      ]
     };
     this.props.navigation.setOptions({
       title: '餐饮收银',
@@ -57,127 +53,133 @@ export default class RepastScreen extends Component {
   render() {
     return (
       <View>
-        <View style={RepastScreenStyles.left_tab}>
-          <ScrollView alwaysBounceVertical={true}>
-            {
-              this.state.tabMenuData.map((value, index) => {
-                return (
-                  <TouchableOpacity
-                    style={[RepastScreenStyles.selectTab,
-                      {borderColor: value.bdColor, backgroundColor: value.bgColor}]}
-                    onPress={() => this.TabChooseTogClick(index)}
-                    key={index}>
-                    {
-                      value.active === 1 ? <Icon type={'font-awesome'} name={'circle'} size={4} color={'red'}
-                                                 iconStyle={{marginLeft: '65%'}}/> : null
-
-                    }
-                    <Text style={[RepastScreenStyles.selectTabText, {color: value.tColor}]}>{value.label}</Text>
-                  </TouchableOpacity>
-                )
-              })
-
-            }
-          </ScrollView>
-
-        </View>
-        <View style={RepastScreenStyles.right_content}>
-          <Text style={RepastScreenStyles.title}>{this.state.disheName}</Text>
-          <ScrollView
-            style={[{flex: 1, backgroundColor: '#fff'}]}
-            alwaysBounceVertical={true}
-          >
-            {
-              this.state.dishesList.map((item, index) => {
-                return (
-                  <GoodsInfoCard
-                    key={index}
-                    queue={index + 1} title={item.title}
-                    price={item.price} code={item.code}
-                    unit={item.unit} numbers={item.numbers}
-                    change={this.totalPriceOperate}
-                    isClear={false} isqueue={false}
-                    symbol={'original'}
-                  />
-                );
-              })
-            }
-          </ScrollView>
-        </View>
-        {
-          // 判断是否显示商品
-          this.state.showShopModel ?
-            <View style={[RepastScreenStyles.modal_contnet, {bottom: '8%'}]}>
-              <Modal
-                coverScreen={false}
-                deviceHeight={400}
-                isVisible={true}
-                style={[c_styles.justify_end, c_styles.m_clear]}
-              >
-                <View style={{height: '50%', backgroundColor: '#fff'}}>
-                  <View style={RepastScreenStyles.model_title}>
-                    <TouchableOpacity style={{flex: 1}} onPress={this.hiddenShopModel}>
-                      <Icons iconName={'angle-left'} size={30} color={'black'}/>
-                    </TouchableOpacity>
-                    <Text style={{flex: 1.5, fontSize: 18}}>已选菜品</Text>
-                  </View>
-                  <ScrollView>
-                    {
-                      this.state.selectedDishesList.map((item, index) => {
-                        return (
-                          <GoodsInfoCard
-                            key={index}
-                            queue={index + 1} title={item.title}
-                            price={item.price} code={item.code}
-                            unit={item.unit} numbers={item.numbers}
-                            change={this.totalPriceOperate}
-                            isClear={true} symbol={'select'}
-                          />
-                        );
-                      })
-                    }
-                  </ScrollView>
-                </View>
-              </Modal>
+        <View style={RepastScreenStyles.content}>
+          <View style={RepastScreenStyles.content_top} >
+             <View style={RepastScreenStyles.left_tab}>
+                 <ScrollView alwaysBounceVertical={true}>
+                   {
+                     this.state.tabMenuData.map((value, index) => {
+                       return (
+                         <TouchableOpacity
+                           style={[RepastScreenStyles.selectTab,
+                             {borderColor: value.bdColor, backgroundColor: value.bgColor}]}
+                           onPress={() => this.TabChooseTogClick(index)}
+                           key={index}>
+                           {
+                             value.active === 1 ? <Icon type={'font-awesome'} name={'circle'} size={4} color={'red'}
+                                                        iconStyle={{marginLeft: '65%'}}/> : null
+                           }
+                           <Text style={[RepastScreenStyles.selectTabText, {color: value.tColor}]}>{value.label}</Text>
+                         </TouchableOpacity>
+                       )
+                     })
+                   }
+                 </ScrollView>
+             </View>
+             <View style={RepastScreenStyles.right_content}>
+                 <Text style={RepastScreenStyles.title}>{this.state.disheName}</Text>
+                 <ScrollView
+                   style={[{flex: 1, backgroundColor: '#fff'}]}
+                   alwaysBounceVertical={true}
+                 >
+                   {
+                     this.state.dishesList.map((item, index) => {
+                       return (
+                         <GoodsInfoCard
+                           key={index}
+                           queue={index + 1} title={item.title}
+                           price={item.price} code={item.code}
+                           unit={item.unit} numbers={item.numbers}
+                           change={this.totalPriceOperate}
+                           isClear={false} isqueue={false}
+                           symbol={'original'}
+                         />
+                       );
+                     })
+                   }
+                 </ScrollView>
+             </View>
+          </View>
+            <View style={RepastScreenStyles.buttom_price}>
+              <SettlementUI
+                num={this.state.num}
+                amount={this.state.amount}
+                Settlement={this.settlementClick}
+                showListModal={this.showListModal}
+              />
             </View>
-            : null
-        }
-        {
-          //  结算模态框
-          this.state.showPaymentModel ?
-            <View style={RepastScreenStyles.modal_contnet}>
-              <Modal
-                coverScreen={false}
-                // deviceHeight={400}
-                isVisible={true}
-                style={[c_styles.justify_end, c_styles.m_clear]}
-              >
-                {
-                  this.state.showPayModel ?
-                    <CollectionUI
-                      amount={this.state.amount}
-                      pay_type={this.state.btnData}
-                      sure_text={'确认收款成功'}
-                      payTypeClick={this.payTypeClick}
-                      closeModel={this.closeModel}
-                      sureColletion={this.sureColletion}/> :
-                    <PrintTicketUI
-                      closeModel={this.closeModel}
-                      text={'订单支付成功！是否打印小票？'}
-                      printTicket={this.printTicket}/>
-                }
-              </Modal>
-            </View> : null
-        }
-        <View style={RepastScreenStyles.bottom_price}>
-          {/*<Text style={RepastScreenStyles.title}>123</Text>*/}
-          <SettlementUI
-            num={this.state.num}
-            amount={this.state.amount}
-            Settlement={this.settlementClick}
-            showListModal={this.showListModal}
-          />
         </View>
+        <Modal
+          visible={this.state.showShopModel}
+          animationType={'fade'}
+          transparent={true}
+          onRequestClose={() => {
+            this.setState({showShopModel: true});
+          }}
+          style={[c_styles.justify_end, c_styles.m_clear]}
+        >
+          {/*<View style={{flex: 2}} />*/}
+          <View style={RepastScreenStyles.modal_mask}>
+            <View style={{height: '50%',backgroundColor: '#fff'}}>
+              <View style={styles.modal_header}>
+                <TouchableOpacity style={[styles.modal_header_left]} onPress={this.hiddenShopModel}>
+                  <Icon type={'font-awesome'} name={'angle-left'} size={35} color={'#1A1A1A'}/>
+                </TouchableOpacity>
+                <Text style={[c_styles.h4, c_styles.cell, c_styles.text_center]}>
+                  已选菜品
+                </Text>
+              </View>
+              <ScrollView>
+                {
+                  this.state.selectedDishesList.map((item, index) => {
+                    return (
+                      <GoodsInfoCard
+                        key={index}
+                        queue={index + 1} title={item.title}
+                        price={item.price} code={item.code}
+                        unit={item.unit} numbers={item.numbers}
+                        change={this.totalPriceOperate}
+                        isClear={true} symbol={'select'}
+                      />
+                    );
+                  })
+                }
+              </ScrollView>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          visible={this.state.showPaymentModel}
+          animationType={'fade'}
+          transparent={true}
+          onRequestClose={() => {
+            this.setState({showPaymentModel: true});
+          }}
+          style={[c_styles.justify_end, c_styles.m_clear]}
+        >
+          <View style={RepastScreenStyles.modal_mask_pay}>
+            <View style={{height: '50%',backgroundColor: '#fff'}}>
+
+              {/* 结算模态框*/}
+              <View style={styles.modal_header}>
+                <TouchableOpacity style={[styles.modal_header_left]} onPress={this.closeModel}>
+                  <Icon type={'font-awesome'} name={'angle-left'} size={35} color={'#1A1A1A'}/>
+                </TouchableOpacity>
+                <Text style={[c_styles.h4, c_styles.cell, c_styles.text_center]}>
+                  {
+                    this.state.showPayModel? '结算': '收款成功'
+                  }
+                </Text>
+              </View>
+              <View style={{flex: 1}}>
+                {
+                  this.state.showPayModel? <Pricing onPress={this.sureColletion} amount={this.state.amount}/>:
+                    <PaySuccess onPress={this.closeModel}/>
+                }
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -188,17 +190,19 @@ export default class RepastScreen extends Component {
     this.getAllDishData();
     return post(api.GET_MENU_TYPE, {}).then(val => {
       let list = [];
-      val.forEach((res) => {
-        list.push({
-          label: res.goodsTypeName,
-          bgColor: '#FFFFFF',
-          bdColor: '#EDEDED',
-          active: 0,
-          tColor: '#000',
-          code: res.goodsTypeCode
-        })
-        // }
-      });
+      if (val.code === '1000'){
+        val.data.forEach((res) => {
+          list.push({
+            label: res.goodsTypeName,
+            bgColor: '#FFFFFF',
+            bdColor: '#EDEDED',
+            active: 0,
+            tColor: '#000',
+            code: res.goodsTypeCode
+          })
+          // }
+        });
+      }
       this.setState({
         tabMenuData: list
       });
@@ -209,12 +213,12 @@ export default class RepastScreen extends Component {
     AsyncStorage.getItem('merchatCode').then(val => {
       return post(api.GET_DISHES_ALL_LIST, {merchatCode: val, pageNum: 1, pageSize: 100}).then(val => {
         let diesList = [];
-        console.log(val);
-
-        if (val !== null){
-          val.forEach(v => {
-            diesList.push({id: v.id, title: v.goodsName, price: v.unitPrice, numbers: 0, code: null, unit: ''})
-          });
+        if (val.code === '1000'){
+          if (val.data !== null){
+            val.data.forEach(v => {
+              diesList.push({id: v.id, title: v.goodsName, price: v.unitPrice, numbers: 0, code: null, unit: ''})
+            });
+          }
         }
         this.setState({
           dishesList: diesList
@@ -227,11 +231,14 @@ export default class RepastScreen extends Component {
   getDishListForMenuType(typeName){
     AsyncStorage.getItem('merchatCode').then(val => {
       return post(api.GET_DISHES_LIST, {restaurantType: typeName, merchatCode: val, pageNum: 1, pageSize: 100}).then(val => {
+        console.log(val);
         let diesList = [];
-        if (val !== null){
-          val.forEach(v => {
-            diesList.push({id: v.id, title: v.goodsName, price: v.unitPrice, numbers: 0, code: null, unit: ''})
-          });
+        if (val.code === '1000'){
+          if (val.data !== null){
+            val.data.forEach(v => {
+              diesList.push({id: v.id, title: v.goodsName, price: v.unitPrice, numbers: 0, code: null, unit: ''})
+            });
+          }
         }
         this.setState({
           dishesList: diesList
@@ -241,10 +248,21 @@ export default class RepastScreen extends Component {
   }
   // 确认的收款
   sureDateAndSubmit(diesList){
-    console.log(diesList);
-    return post(api.PAY_MONEY, {payType: this.state.payMentType, merchatCode: LocalStorage.get('merchatCode'), date: diesList, userId: LocalStorage.get('userId')}).then(val => {
+    let merchatCode = '';
+    // 获取 数据
+    AsyncStorage.getItem('merchatCode').then(val =>{
+      merchatCode = val;
+      return AsyncStorage.getItem('userId')
+    }).then(res => {
+      console.log(res);
+      // 请求收款
+      return post(api.PAY_MONEY, {
+          payType: this.state.payMentType,
+          merchatCode: merchatCode,
+          date: diesList,
+          userId: res
+      }).then(val => {
         // 重置数据
-       console.log(val);
         let data = this.state.dishesList;
         data.forEach(v => {
           v.numbers = 0;
@@ -256,12 +274,14 @@ export default class RepastScreen extends Component {
           amount: 0, // 置空金额
           dishesList: data // 置空菜品的数量
         });
+      }).catch(err => {
+        console.log(err);
+      })
     });
   }
   // 切换选项卡
   TabChooseTogClick(index) {
     let tabMenuData = this.state.tabMenuData;
-    console.log(tabMenuData);
     tabMenuData.forEach(v => {
       v.bgColor = '#FFFFFF';
       v.bdColor = '#EDEDED';
@@ -312,36 +332,16 @@ export default class RepastScreen extends Component {
     }
 
   };
-  // 支付类型切换
-  payTypeClick = (index) => {
-    let data = this.state.btnData;
-    data.forEach(v => {
-      v.bgcolor = '#fff';
-      v.tColor = '#56988B'
-    });
-    data[index].bgcolor = '#56988B';
-    data[index].tColor = '#fff';
-    this.setState({
-      btnData: data,
-      payMentType: data[index].label
-    });
-  };
   // 关闭窗口重置数据
   closeModel = () => {
-    // 重置选择的数据
-    let data = this.state.btnData;
-    data.forEach(v => {
-      v.bgcolor = '#fff';
-      v.tColor = '#56988B'
-    });
     this.setState({
       showPayModel: true, //重置显示框
       showPaymentModel: false,
-      btnData: data  //重置数据
     })
   };
   //  确认收款
-  sureColletion = () => {
+  sureColletion = (data) => {
+    this.state.payMentType = data;
     if (this.state.payMentType !== '') {
        let diesList = [];
        this.state.selectedDishesList.forEach(value => {
@@ -352,13 +352,8 @@ export default class RepastScreen extends Component {
       ToastAndroid.showWithGravity('请选择支付方式', ToastAndroid.SHORT, ToastAndroid.CENTER);
     }
   };
-
-  printTicket() {
-    ToastAndroid.showWithGravity('您好，您当前在移动端，无法打印单据', ToastAndroid.SHORT, ToastAndroid.CENTER);
-  }
   // 选择需要添加的菜品
   totalPriceOperate = (item) => {
-    console.log(item);
     // 获取菜品个数
     let num = 0;
     let amount = 0;
