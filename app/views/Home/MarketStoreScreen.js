@@ -170,9 +170,10 @@ export class MarketStoreScreen extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.select_down_list}
-                onPress={() => this.setState({
-                  selectDownShow: !this.state.selectDownShow
-                })}
+                onPress={() => {
+                  this.setState({selectDownShow: !this.state.selectDownShow});
+                  this.props.navigation.navigate('AddNoCodeGoodsScreen');
+                }}
               >
                 <Text style={styles.select_down_text}>新增无条码商品</Text>
               </TouchableOpacity>

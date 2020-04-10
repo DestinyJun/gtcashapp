@@ -16,6 +16,7 @@ import {startUpPageAtion} from './app/Redux/actionCreators';
 import ChartScreen from './app/views/Home/ChartScreen';
 import {LocalStorage} from './app/util';
 import {MarketStoreScreen} from './app/views/Home/MarketStoreScreen';
+import {AddNoCodeGoodsScreen} from './app/views/Home/AddNoCodeGoodsScreen';
 // 路由
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
@@ -105,6 +106,11 @@ const RepastScreenOptions = {
 // ChartScreen路由配置
 const ChartScreenOptions = {
   title: '查看报表',
+  ...WhiteThemeScreenOptions
+};
+//
+const AddNoCodeGoodsScreenOptions = {
+  title: '新增无条码商品',
   ...WhiteThemeScreenOptions
 };
 
@@ -203,8 +209,8 @@ export default class App extends Component {
                 // StatusBar.setBarStyle('dark-content',false);
                 break;
             }
-            // return;
-          } else if (name === 'RepastScreen' || name === 'ChartScreen') {
+          }
+          else if (name === 'RepastScreen' || name === 'ChartScreen' || name === 'AddNoCodeGoodsScreen') {
             StatusBar.setBarStyle('dark-content', true);
           }
         }}
@@ -218,6 +224,7 @@ export default class App extends Component {
                 <Stack.Screen name="MarketScreen" component={MarketScreen} options={DefaultScreenOptions}/>
                 <Stack.Screen name="MarketStoreScreen" component={MarketStoreScreen} options={DefaultScreenOptions}/>
                 <Stack.Screen name="ChartScreen" component={ChartScreen} options={ChartScreenOptions}/>
+                <Stack.Screen name="AddNoCodeGoodsScreen" component={AddNoCodeGoodsScreen} options={ChartScreenOptions}/>
               </>
             ) : (
               <>

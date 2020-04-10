@@ -1,5 +1,8 @@
 import {StyleSheet, Dimensions} from 'react-native';
 global.c_styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   text_danger:{
     color: 'red'
   },
