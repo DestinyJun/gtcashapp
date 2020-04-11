@@ -9,7 +9,7 @@ export const AddNoCodeGoodsScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     ...c_styles.pt_3,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   list: {
     ...c_styles.bg_white,

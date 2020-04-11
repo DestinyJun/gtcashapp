@@ -7,12 +7,16 @@ import React, {Component} from 'react';
 import {View, TextInput, TouchableOpacity, Text, ToastAndroid} from 'react-native';
 import {AddNoCodeGoodsScreenStyles as styles} from './AddNoCodeGoodsScreenStyles';
 import AsyncStorage from '@react-native-community/async-storage';
+import {post} from '../../service/Interceptor';
+import Api from '../../service/Api';
+import {SelectInput} from '../bases/SelectInput';
 
 export class AddNoCodeGoodsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: null
+      inputValue: null,
+      goodsTypes : null,
     };
     this.inputList = [
       {name: '商品条码',key: 'goodsCode',placeholder: '请输入商品条码'},
@@ -20,7 +24,7 @@ export class AddNoCodeGoodsScreen extends Component {
       {name: '单位',key: 'company',placeholder: '请输入单位'},
       {name: '单价',key: 'unitPrice',placeholder: '请输入单价'},
       {name: '进价',key: 'purchasePrice',placeholder: '请输入进价'},
-      {name: '商品种类',key: 'goodsType',placeholder: '请选择商品种类'},
+      // {name: '商品种类',key: 'goodsType',placeholder: '请选择商品种类'},
     ];
     this.addGood = {
       id: -1,
@@ -32,7 +36,6 @@ export class AddNoCodeGoodsScreen extends Component {
       purchasePrice: null,
       goodsType: null,
     };
-
   }
 
   render() {
@@ -55,6 +58,15 @@ export class AddNoCodeGoodsScreen extends Component {
               )
             })
           }
+          <View style={styles.list_content}>
+            <Text style={styles.list_content_text}>商品种类</Text>
+            <SelectInput
+              btnTitle={'请选择商品种类'}
+              btnTitleSize={20}
+              btnTitleColor={'#CBCBCB'}
+              containerStyles={{height: 60,width: '100%'}}
+            />
+          </View>
         </View>
         <TouchableOpacity style={styles.bottom} onPress={() => {console.log(this.addGood)}}>
           <Text style={[c_styles.h4,c_styles.text_white]}>确认新增</Text>
@@ -67,6 +79,15 @@ export class AddNoCodeGoodsScreen extends Component {
       .then((res) => {
         this.addGood.merchatCode = res;
       })
-      .catch()
+      .catch();
+    post(Api.STORE_GOODS_TYPE)
+      .then((res) => {
+        this.setState({
+          goodsTypes: res.data
+        })
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 }

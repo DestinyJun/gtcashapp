@@ -7,4 +7,6 @@ import App from './App';
 // import App from './app/App0';
 // import App from './app/views/bases/ConTextExm';
 import {name as appName} from './app.json';
+// 查看调试请求
+GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 AppRegistry.registerComponent(appName, () => App);

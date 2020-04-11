@@ -31,4 +31,7 @@ export default class Api {
 
   // 商品提交入库
   static STORE_GOODS_SUBMIT = '/supermarketmanagement/supermarketstorage/submit';
+
+  // 查询商品分类
+  static STORE_GOODS_TYPE = '/supermarketmanagement/supermrketstorage/goodstype/get';
 }

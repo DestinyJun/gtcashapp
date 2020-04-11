@@ -23,7 +23,7 @@ axios.interceptors.request.use(
     // 判断那些接口需要添加token，那些接口需要添加请求类型，判断APPKEY是否存在
     if (!(str.includes('/user'))) {
       config.headers.post['APPKEY'] = await AsyncStorage.getItem('APPKEY');
-      config.headers.post['userId'] = await AsyncStorage.getItem('userCode');
+      config.headers.post['userId'] = await AsyncStorage.getItem('userId');
     }
     return config;
   },
