@@ -5,16 +5,14 @@
  */
 import {StyleSheet} from 'react-native';
 
-export const AddNoCodeGoodsScreenStyles = StyleSheet.create({
+export const AddCodeGoodsScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     ...c_styles.pt_3,
     justifyContent: 'space-between',
   },
   list: {
-    ...c_styles.bg_white,
-    ...c_styles.pl_3,
-    ...c_styles.pr_3,
+    flex: 20,
   },
   list_content: {
     flexDirection: 'row',
@@ -44,6 +42,7 @@ export const AddNoCodeGoodsScreenStyles = StyleSheet.create({
     width: '100%',
   },
   bottom: {
+    flex: 1,
     ...c_styles.bg_darkinfo,
     ...c_styles.flex_center,
     ...c_styles.pt_5,

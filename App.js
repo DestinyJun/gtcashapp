@@ -17,6 +17,7 @@ import ChartScreen from './app/views/Home/ChartScreen';
 import {LocalStorage} from './app/util';
 import {MarketStoreScreen} from './app/views/Home/MarketStoreScreen';
 import {AddNoCodeGoodsScreen} from './app/views/Home/AddNoCodeGoodsScreen';
+import {AddCodeGoodsScreen} from './app/views/Home/AddCodeGoodsScreen';
 // 路由
 const Stack = createStackNavigator();
 const LoginStack = createStackNavigator();
@@ -108,7 +109,12 @@ const ChartScreenOptions = {
   title: '查看报表',
   ...WhiteThemeScreenOptions
 };
-//
+// AddCodeGoodsScreen配置
+const AddCodeGoodsScreenOptions = {
+  title: '新增有条码商品',
+  ...WhiteThemeScreenOptions
+};
+// AddNoCodeGoodsScreen配置
 const AddNoCodeGoodsScreenOptions = {
   title: '新增无条码商品',
   ...WhiteThemeScreenOptions
@@ -210,7 +216,7 @@ export default class App extends Component {
                 break;
             }
           }
-          else if (name === 'RepastScreen' || name === 'ChartScreen' || name === 'AddNoCodeGoodsScreen') {
+          else if (name === 'RepastScreen' || name === 'ChartScreen' || name === 'AddNoCodeGoodsScreen' || name === 'AddCodeGoodsScreen') {
             StatusBar.setBarStyle('dark-content', true);
           }
         }}
@@ -224,7 +230,8 @@ export default class App extends Component {
                 <Stack.Screen name="MarketScreen" component={MarketScreen} options={DefaultScreenOptions}/>
                 <Stack.Screen name="MarketStoreScreen" component={MarketStoreScreen} options={DefaultScreenOptions}/>
                 <Stack.Screen name="ChartScreen" component={ChartScreen} options={ChartScreenOptions}/>
-                <Stack.Screen name="AddNoCodeGoodsScreen" component={AddNoCodeGoodsScreen} options={ChartScreenOptions}/>
+                <Stack.Screen name="AddCodeGoodsScreen" component={AddCodeGoodsScreen} options={AddCodeGoodsScreenOptions}/>
+                <Stack.Screen name="AddNoCodeGoodsScreen" component={AddNoCodeGoodsScreen} options={AddNoCodeGoodsScreenOptions}/>
               </>
             ) : (
               <>

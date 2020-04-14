@@ -60,7 +60,7 @@ export class MarketStoreScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={[styles.camera]}>
-           {/*<RNCamera
+           <RNCamera
             ref={ref => {this.camera = ref}}
             style={styles.camera_preview}
             type={'back'}
@@ -76,7 +76,7 @@ export class MarketStoreScreen extends Component {
               </View>
               <View style={styles.box_bottom} />
             </View>
-          </RNCamera>*/}
+          </RNCamera>
         </View>
         <View style={styles.goods}>
           {
@@ -162,9 +162,10 @@ export class MarketStoreScreen extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.select_down_list,{borderColor: '#EAEAEA',borderBottomWidth: 1,borderTopWidth: 1}]}
-                onPress={() => this.setState({
-                  selectDownShow: !this.state.selectDownShow
-                })}
+                onPress={() => {
+                  this.setState({selectDownShow: !this.state.selectDownShow});
+                  this.props.navigation.navigate('AddCodeGoodsScreen');
+                }}
               >
                 <Text style={styles.select_down_text}>新增有条码商品</Text>
               </TouchableOpacity>

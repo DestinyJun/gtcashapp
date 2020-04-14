@@ -24,7 +24,6 @@ export class AddNoCodeGoodsScreen extends Component {
       {name: '单位',key: 'company',placeholder: '请输入单位'},
       {name: '单价',key: 'unitPrice',placeholder: '请输入单价'},
       {name: '进价',key: 'purchasePrice',placeholder: '请输入进价'},
-      // {name: '商品种类',key: 'goodsType',placeholder: '请选择商品种类'},
     ];
     this.addGood = {
       id: -1,
@@ -47,28 +46,41 @@ export class AddNoCodeGoodsScreen extends Component {
               return (
                 <View  style={styles.list_content} key={index}>
                   <Text style={styles.list_content_text}>{item.name}</Text>
-                  <TextInput
-                    keyboardType={item.key === 'unitPrice' || item.key === 'purchasePrice'?'numeric':'default'}
-                    style={styles.list_content_input}
-                    onChangeText={(text)=>{this.addGood[item.key] = text}}
-                    placeholderTextColor={'#C5C5C5'}
-                    placeholder={item.placeholder}
-                  />
+                  <View style={[{flex: 1}]}>
+                    <TextInput
+                      keyboardType={item.key === 'unitPrice' || item.key === 'purchasePrice' || item.key === 'goodsCode'?'numeric':'default'}
+                      style={styles.list_content_input}
+                      onChangeText={(text)=>{this.addGood[item.key] = text}}
+                      placeholderTextColor={'#C5C5C5'}
+                      placeholder={item.placeholder}
+                    />
+                  </View>
                 </View>
               )
             })
           }
           <View style={styles.list_content}>
             <Text style={styles.list_content_text}>商品种类</Text>
-            <SelectInput
-              btnTitle={'请选择商品种类'}
-              btnTitleSize={20}
-              btnTitleColor={'#CBCBCB'}
-              containerStyles={{height: 60,width: '100%'}}
-            />
+            <View style={[{flex: 1,marginRight: -10}]}>
+              <SelectInput
+                btnTitle={'请选择商品种类'}
+                btnTitleSize={20}
+                btnTitleColor={'#CBCBCB'}
+                activeOptionBgColor={'#468F80'}
+                selectOptionTextColor={'#001629'}
+                activeSelectOptionTextColor={'white'}
+                selectOptionStyles={styles.selectOptionStyles}
+                containerStyles={styles.selectContainerStyles}
+                selectContainerHeight={150}
+                options={this.state.goodsTypes}
+                selectChange={(res) => {
+                  this.addGood.goodsType = res.value
+                }}
+              />
+            </View>
           </View>
         </View>
-        <TouchableOpacity style={styles.bottom} onPress={() => {console.log(this.addGood)}}>
+        <TouchableOpacity style={styles.bottom} onPress={this.onSubmit}>
           <Text style={[c_styles.h4,c_styles.text_white]}>确认新增</Text>
         </TouchableOpacity>
       </View>
@@ -80,14 +92,30 @@ export class AddNoCodeGoodsScreen extends Component {
         this.addGood.merchatCode = res;
       })
       .catch();
-    post(Api.STORE_GOODS_TYPE)
+    post(Api.STORE_GOODS_TYPE,{})
       .then((res) => {
+        const type = [];
+        if (res.data.length > 0) {
+          res.data.forEach((item) => {
+            type.push(Object.assign({},{value: item.sysCode,name: item.sysName}))
+          });
+        }
         this.setState({
-          goodsTypes: res.data
+          goodsTypes: type
         })
       })
       .catch((err) => {
-        console.log(err);
+        ToastAndroid.show(err.msg,1000);
+      })
+  }
+  onSubmit = () => {
+    post(Api.STORE_ADD_NO_CODE,this.addGood)
+      .then((res) => {
+        ToastAndroid.show(res.msg,1000);
+        this.props.navigation.goBack();
+      })
+      .catch((err) => {
+        ToastAndroid.show(err.msg,1000);
       })
   }
 }

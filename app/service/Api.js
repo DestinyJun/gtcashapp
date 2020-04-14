@@ -34,4 +34,7 @@ export default class Api {
 
   // 查询商品分类
   static STORE_GOODS_TYPE = '/supermarketmanagement/supermrketstorage/goodstype/get';
+
+  // 新增无条码商品
+  static STORE_ADD_NO_CODE = '/supermarketmanagement/supermarketstorage/private/update';
 }
