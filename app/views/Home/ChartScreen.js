@@ -7,7 +7,7 @@ import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {ChartScreenStyles as styles} from './ChartScreenStyles';
 import {Icon} from 'react-native-elements';
-import { VictoryArea, VictoryChart, VictoryAxis} from "victory-native";
+import { VictoryArea, VictoryChart, VictoryAxis,VictoryContainer, VictoryTheme} from "victory-native";
 const data = [
   { x: 1, y: 2, y0: 0 },
   { x: 2, y: 3, y0: 1 },
@@ -42,7 +42,7 @@ export default class ChartScreen extends Component {
             </View>
           </View>
           <View style={styles.chart_content}>
-            <VictoryChart height={180}>
+            <VictoryChart style={{ parent: { maxWidth: "50%",maxHeight: "50%"}}}>
               <VictoryAxis tickFormat={(y) => {return y}}/>
               <VictoryAxis dependentAxis={true} tickFormat={(x) => {return (`${x}k`)}}/>
               <VictoryArea data={data}/>

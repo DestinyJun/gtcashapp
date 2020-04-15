@@ -23,7 +23,7 @@ export const ChartScreenStyles = StyleSheet.create({
     ...c_styles.pr_3,
   },
   chart: {
-    flex: 4,
+    flex: 5,
     borderColor: '#F5F5F5',
     borderTopWidth: 2,
     borderBottomWidth: 2,
@@ -46,9 +46,11 @@ export const ChartScreenStyles = StyleSheet.create({
     ...c_styles.bg_danger,
   },
   count: {
-    flex: 1,
+    height: 70,
     ...c_styles.bg_white,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    ...c_styles.pt_2,
+    ...c_styles.pb_2,
   },
   count_order: {
     flex: 1,
@@ -57,6 +59,8 @@ export const ChartScreenStyles = StyleSheet.create({
   count_sale: {
     flex: 1,
     ...c_styles.flex_center,
+    borderColor: '#EFEFEF',
+    borderLeftWidth: 1
   },
   rank: {
     flex: 5,
