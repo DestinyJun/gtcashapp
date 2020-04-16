@@ -47,6 +47,8 @@ export const ChartScreenStyles = StyleSheet.create({
   },
   count: {
     height: 70,
+    borderColor: '#EFEFEF',
+    borderTopWidth: 1,
     ...c_styles.bg_white,
     flexDirection: 'row',
     ...c_styles.pt_2,
