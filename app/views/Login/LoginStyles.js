@@ -42,20 +42,17 @@ export const LoginStyles = StyleSheet.create({
     flex: 1,
     position: 'relative'
   },
-  input_select_dropdown: {
-    borderWidth: 1,
-    borderRadius: 3,
-    borderColor: '#F5F5F5',
+  selectOptionStyles: {
+    backgroundColor: 'white',
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 5,
+    borderColor: '#F3F3F3',
+    borderTopWidth: 1
   },
-  input_select_text: {
-    color: 'red',
-    textAlign: 'center'
-  },
-  input_select_dropdown_list: {
-    width: '91.5%',
-    borderColor: 'rgba(201,201,201,0.8)',
-    borderWidth: 1,
-    borderRadius: 3,
+  selectContainerStyles: {
+    height: 60,
+    alignItems: 'center',
   },
   input_select_dropdown_text: {
     paddingTop: 10,
@@ -65,7 +62,6 @@ export const LoginStyles = StyleSheet.create({
   input_select_icon:{
     position: 'absolute',
     right: 10,
-    fontSize: 20,
     top: '50%',
     marginTop: -10,
   },

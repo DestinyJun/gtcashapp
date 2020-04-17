@@ -190,7 +190,6 @@ export default class App extends Component {
         userToken: store.getState().userToken,
       });
     });
-    // LocalStorage.clear();
   }
 
   render() {

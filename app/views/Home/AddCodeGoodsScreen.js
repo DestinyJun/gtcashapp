@@ -86,6 +86,7 @@ export class AddCodeGoodsScreen extends Component {
                   selectOptionTextColor={'#001629'}
                   activeSelectOptionTextColor={'white'}
                   selectOptionStyles={styles.selectOptionStyles}
+                  selectContainerBgColor={'#F0F0F0'}
                   containerStyles={styles.selectContainerStyles}
                   selectContainerHeight={150}
                   options={this.state.goodsTypes}

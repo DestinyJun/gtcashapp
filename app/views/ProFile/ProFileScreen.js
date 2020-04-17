@@ -4,10 +4,13 @@
  * date：  2020/3/16 20:25
  */
 import React, {Component} from 'react';
-import {Text, View,Image} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ToastAndroid} from 'react-native';
 import {ProFileScreenStyles as styles} from './ProFileScreenStyles'
 import {HEADER_IMAGE} from '../../util/Constant';
 import { Icon } from 'react-native-elements'
+import {LocalStorage} from '../../util/LocalStorage';
+import {startUpPageAtion} from '../../Redux/actionCreators';
+import store from '../../Redux/store';
 export default class ProFileScreen extends Component {
   constructor(props) {
     super(props);
@@ -35,14 +38,27 @@ export default class ProFileScreen extends Component {
         <View style={[styles.list]}>
           <View style={styles.list_box}>
             <View style={styles.list_item}>
-              <View style={styles.list_password}>
+              <TouchableOpacity style={styles.list_common} onPress={() => {ToastAndroid.show('待开发中...',2000)}}>
                 <Text style={c_styles.h5}>修改密码</Text>
                 <Icon name='angle-right' type='font-awesome' color='#B5B5B5'/>
-              </View>
-              <View style={styles.list_update}>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  LocalStorage.clear();
+                  const action = startUpPageAtion({
+                    isLoading: true,
+                    userToken: false,
+                  });
+                  store.dispatch(action);
+                }}
+                style={styles.list_common}>
+                <Text style={c_styles.h5}>退出登陆</Text>
+                <Icon name='angle-right' type='font-awesome' color='#B5B5B5'/>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.list_common}>
                 <Text style={c_styles.h5}>版本更新</Text>
                 <Icon name='angle-right' type='font-awesome' color='#B5B5B5'/>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

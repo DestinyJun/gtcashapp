@@ -4,7 +4,6 @@
  * date：  2020/3/23 22:07
  */
 import {StyleSheet} from 'react-native';
-
 export const ProFileScreenStyles = StyleSheet.create({
   header: {
     flex: 4,
@@ -29,21 +28,18 @@ export const ProFileScreenStyles = StyleSheet.create({
   },
   list_item: {
     borderColor: '#ECF4F2',
-    borderWidth: 1,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
     borderRadius: 8,
     ...c_styles.pl_3,
     ...c_styles.pr_3,
   },
-  list_password: {
+  list_common: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     ...c_styles.p_5,
     borderColor: '#ECF4F2',
     borderBottomWidth: 1,
   },
-  list_update: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    ...c_styles.p_5
-  }
 });

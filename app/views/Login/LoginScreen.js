@@ -5,23 +5,21 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  StatusBar,
-  ToastAndroid,
-  DeviceEventEmitter,
+  StatusBar, ToastAndroid,
 } from 'react-native';
-import {Card} from 'react-native-shadow-cards';
-// 样式文件
-import {LoginStyles} from './LoginStyles';
+import {LoginStyles as styles} from './LoginStyles';
 // 第三方库
-import ModalDropdown from 'react-native-modal-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {Card} from 'react-native-shadow-cards';
+import {SelectInput} from '../bases/SelectInput';
+import {Icon} from 'react-native-elements';
 // 自定义工具
 import {post} from '../../service/Interceptor';
 import api from '../../service/Api';
 import {LocalStorage} from '../../util';
 import {startUpPageAtion} from '../../Redux/actionCreators';
 import store from '../../Redux/store';
+
 
 // 自定义常量
 export default class LoginScreen extends Component {
@@ -34,30 +32,27 @@ export default class LoginScreen extends Component {
     };
     this.state = {
       input_select_data: null,
-      input_select_defaultValue: '请选择店铺...',
-      input_select_value: null,
       select_icon_transform: false,
-      gender: null,
     };
   }
 
   render() {
     return (
-      <View style={[LoginStyles.login, c_styles.w_100, c_styles.dim_height]}>
+      <View style={[styles.login, c_styles.w_100, c_styles.dim_height]}>
         <StatusBar animated={true} backgroundColor={'white'} barStyle={'dark-content'}/>
-        <View style={LoginStyles.logo}>
-          <Card cornerRadius={5} opacity={1} elevation={20} style={[LoginStyles.logo_img]}>
-            <Image source={require('../../assets/images/收银台.png')} style={[LoginStyles.logo_img_Image]}/>
+        <View style={styles.logo}>
+          <Card cornerRadius={5} opacity={1} elevation={20} style={[styles.logo_img]}>
+            <Image source={require('../../assets/images/收银台.png')} style={[styles.logo_img_Image]}/>
           </Card>
           <View style={[c_styles.pt_5]}>
             <Text style={[c_styles.text_darkinfo, c_styles.h5]}>服务区收银系统</Text>
           </View>
         </View>
-        <View style={[LoginStyles.input, c_styles.pl_3, c_styles.pr_3]}>
-          <View elevation={10} style={[LoginStyles.input_user, c_styles.mb_2]}>
-            <View style={[c_styles.cell, c_styles.w_100, LoginStyles.input_user_user]}>
+        <View style={[styles.input, c_styles.pl_3, c_styles.pr_3]}>
+          <View elevation={10} style={[styles.input_user, c_styles.mb_2]}>
+            <View style={[c_styles.cell, c_styles.w_100, styles.input_user_user]}>
               <TextInput
-                style={[c_styles.pl_5, LoginStyles.input_user_text, c_styles.cell, c_styles.h5]}
+                style={[c_styles.pl_5, styles.input_user_text, c_styles.cell, c_styles.h5]}
                 placeholder={'请输入用户名...'}
                 keyboardType={'email-address'}
                 placeholderTextColor={'#90DACB'}
@@ -66,7 +61,7 @@ export default class LoginScreen extends Component {
                 }}
               />
             </View>
-            <View style={[c_styles.cell, c_styles.w_100, LoginStyles.input_user_password]}>
+            <View style={[c_styles.cell, c_styles.w_100, styles.input_user_password]}>
               <TextInput
                 style={[c_styles.pl_5, c_styles.cell, c_styles.h5]}
                 placeholder={'请输入密码...'}
@@ -78,30 +73,36 @@ export default class LoginScreen extends Component {
               />
             </View>
           </View>
-          <View style={[LoginStyles.input_select, c_styles.pt_5, c_styles.mb_2]}>
+          <View style={[styles.input_select, c_styles.pt_5, c_styles.mb_2]}>
             <View>
-              <ModalDropdown
-                ref={ref => {
-                  this.modelDown = ref;
-                }}
-                style={[LoginStyles.input_select_dropdown, c_styles.mt_2]}
-                textStyle={[LoginStyles.input_select_text, c_styles.pt_3, c_styles.pb_3, c_styles.h6, c_styles.text_darkinfo]}
-                dropdownStyle={[LoginStyles.input_select_dropdown_list]}
+              <SelectInput
+                btnTitle={'请选择店铺...'}
+                btnTitleSize={18}
+                btnTitleColor={'#97DCCE'}
+                containerStyles={styles.selectContainerStyles}
+                activeOptionBgColor={'#468F80'}
+                activeSelectOptionTextColor={'white'}
+                selectOptionTextColor={'#468F80'}
+                selectOptionStyles={styles.selectOptionStyles}
+                selectContainerHeight={120}
+                selectContainerBgColor={'#F0F0F0'}
                 options={this.state.input_select_data}
-                defaultValue={this.state.input_select_defaultValue}
-                renderButtonText={(rowData) => this.selectRenderButtonText(rowData)}
-                onDropdownWillShow={this.selectWillShow}
-                onDropdownWillHide={this.selectWillHide}
-                renderRow={this.selectRenderRow}
-                onSelect={(idx, value) => this.selectOnSelect(idx, value)}
+                selectWillShow={this.selectWillShow}
+                selectWillHide={this.selectWillHide}
+                selectChange={this.selectOnSelect}
               />
-              <Icon name={'angle-down'} style={[
-                LoginStyles.input_select_icon, c_styles.text_darkinfo,
-                this.state.select_icon_transform && c_styles.transform_90,
+              <Icon
+                type={'font-awesome'}
+                name={'angle-down'}
+                color={'#97DCCE'}
+                size={20}
+                containerStyle={[
+                  styles.input_select_icon,
+                  this.state.select_icon_transform && c_styles.transform_90
               ]}/>
             </View>
           </View>
-          <View style={[LoginStyles.input_switch, c_styles.pt_5]}>
+          <View style={[styles.input_switch, c_styles.pt_5]}>
             <SwitchSelector
               style={[{width: 60}]}
               initial={0}
@@ -122,16 +123,16 @@ export default class LoginScreen extends Component {
             />
             <Text style={[c_styles.h5, c_styles.text_darkinfo, c_styles.ml_3]}>记住我</Text>
             <Text
-              style={[c_styles.h5, c_styles.text_darkinfo, c_styles.ml_3, LoginStyles.input_switch_text]}>忘记密码？</Text>
+              style={[c_styles.h5, c_styles.text_darkinfo, c_styles.ml_3, styles.input_switch_text]}>忘记密码？</Text>
           </View>
         </View>
-        <View style={[LoginStyles.button, c_styles.pl_3, c_styles.pr_3, c_styles.pt_4]}>
+        <View style={[styles.button, c_styles.pl_3, c_styles.pr_3, c_styles.pt_4]}>
           <TouchableOpacity
-            style={[c_styles.w_100, LoginStyles.button_touch, c_styles.pr_3]}
+            style={[c_styles.w_100, styles.button_touch, c_styles.pr_3]}
             onPress={this.loginClick}
             title="登陆"
           >
-            <View style={[c_styles.row, LoginStyles.button_touch_view]}>
+            <View style={[c_styles.row, styles.button_touch_view]}>
               <Text style={[c_styles.text_light, c_styles.h5, c_styles.mr_1]}>登</Text>
               <Text style={[c_styles.text_light, c_styles.h5, c_styles.ml_1]}>陆</Text>
             </View>
@@ -140,52 +141,31 @@ export default class LoginScreen extends Component {
       </View>
     );
   }
-
   selectWillShow = () => {
     this.setState({
       select_icon_transform: true,
     });
     post(api.SHOP_LIST_URL, {user: this.login.user})
       .then((res) => {
+        const arr = [];
+        res.data.forEach((item) => {
+          arr.push(Object.assign({},{name: item.merchatName,value: item.merchatCode}));
+        });
         this.setState({
-          input_select_data: res.data,
-          input_select_defaultValue: '请选择店铺...',
+          input_select_data: arr
         });
       })
       .catch(err => {
-        this.setState({
-          select_input_data: null,
-          input_select_defaultValue: '暂无店铺信息...',
-          select_icon_transform: false,
-        });
-        this.modelDown.hide();
+        ToastAndroid.show(err.msg,1000)
       });
   };
   selectWillHide = () => {
     this.setState({
-      select_input_data: null,
-      input_select_defaultValue: '请选择店铺...',
       select_icon_transform: false,
     });
   };
-  selectOnSelect = (idx, value) => {
-    this.setState({
-      input_select_value: value,
-    });
-    this.login.merchatCode = value.merchatCode;
-  };
-  selectRenderButtonText = (rowData) => {
-    const {merchatName, merchatCode} = rowData;
-    return `${merchatName}`;
-  };
-  selectRenderRow = (rowData, rowID, highlighted) => {
-    return (
-      <TouchableOpacity style={LoginStyles.input_select_dropdown_text}>
-        <Text style={[highlighted ? c_styles.text_darkinfo : {color: '#2A2A2A'}]}>
-          {`${rowData.merchatName}`}
-        </Text>
-      </TouchableOpacity>
-    );
+  selectOnSelect = (res) => {
+    this.login.merchatCode = res.value;
   };
   loginClick = () => {
     post(api.LOGIN_URL, this.login)
@@ -200,7 +180,9 @@ export default class LoginScreen extends Component {
         });
         store.dispatch(action);
       })
-      .catch(e => {});
+      .catch(err => {
+        ToastAndroid.show(err.msg,1000)
+      });
   };
 };
 
