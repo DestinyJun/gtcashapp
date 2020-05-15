@@ -78,15 +78,25 @@ export const LoginStyles = StyleSheet.create({
   },
   button: {
     flex:2,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
   },
   button_touch: {
-    height: 60,
-    backgroundColor: '#468F80',
-    borderRadius: 50
+    height: 50,
+    borderRadius: 5
   },
   button_touch_view: {
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  modal_broken: {
+    justifyContent: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  modal_broken_content: {
+    flexDirection: 'row'
   },
 });
 

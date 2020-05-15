@@ -5,6 +5,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  ScrollView,
   StatusBar, ToastAndroid,
 } from 'react-native';
 import {LoginStyles as styles} from './LoginStyles';
@@ -13,6 +14,7 @@ import SwitchSelector from 'react-native-switch-selector';
 import {Card} from 'react-native-shadow-cards';
 import {SelectInput} from '../bases/SelectInput';
 import {Icon} from 'react-native-elements';
+import Modal from 'react-native-translucent-modal';
 // 自定义工具
 import {post} from '../../service/Interceptor';
 import api from '../../service/Api';
@@ -33,13 +35,16 @@ export default class LoginScreen extends Component {
     this.state = {
       input_select_data: null,
       select_icon_transform: false,
+      modalBroken: true,
+      modalShift: false,
     };
   }
 
   render() {
     return (
       <View style={[styles.login, c_styles.w_100, c_styles.dim_height]}>
-        <StatusBar animated={true} backgroundColor={'white'} barStyle={'dark-content'}/>
+        {/*<StatusBar animated={true} backgroundColor={'white'} barStyle={'dark-content'}/>*/}
+        {/*顶部LOGO*/}
         <View style={styles.logo}>
           <Card cornerRadius={5} opacity={1} elevation={20} style={[styles.logo_img]}>
             <Image source={require('../../assets/images/收银台.png')} style={[styles.logo_img_Image]}/>
@@ -48,7 +53,9 @@ export default class LoginScreen extends Component {
             <Text style={[c_styles.text_darkinfo, c_styles.h5]}>服务区收银系统</Text>
           </View>
         </View>
+        {/*输入表单组*/}
         <View style={[styles.input, c_styles.pl_3, c_styles.pr_3]}>
+          {/*用户名及密码*/}
           <View elevation={10} style={[styles.input_user, c_styles.mb_2]}>
             <View style={[c_styles.cell, c_styles.w_100, styles.input_user_user]}>
               <TextInput
@@ -73,6 +80,7 @@ export default class LoginScreen extends Component {
               />
             </View>
           </View>
+          {/*选择店铺*/}
           <View style={[styles.input_select, c_styles.pt_5, c_styles.mb_2]}>
             <View>
               <SelectInput
@@ -102,6 +110,7 @@ export default class LoginScreen extends Component {
               ]}/>
             </View>
           </View>
+          {/*记住我*/}
           <View style={[styles.input_switch, c_styles.pt_5]}>
             <SwitchSelector
               style={[{width: 60}]}
@@ -126,18 +135,56 @@ export default class LoginScreen extends Component {
               style={[c_styles.h5, c_styles.text_darkinfo, c_styles.ml_3, styles.input_switch_text]}>忘记密码？</Text>
           </View>
         </View>
-        <View style={[styles.button, c_styles.pl_3, c_styles.pr_3, c_styles.pt_4]}>
+        {/*登陆按钮*/}
+        <View style={[styles.button, c_styles.pl_3, c_styles.pr_3, c_styles.pt_4,c_styles.w_100]}>
           <TouchableOpacity
-            style={[c_styles.w_100, styles.button_touch, c_styles.pr_3]}
+            style={[styles.button_touch, c_styles.pr_3,c_styles.pl_3,c_styles.bg_darkinfo]}
             onPress={this.loginClick}
             title="登陆"
           >
             <View style={[c_styles.row, styles.button_touch_view]}>
-              <Text style={[c_styles.text_light, c_styles.h5, c_styles.mr_1]}>登</Text>
-              <Text style={[c_styles.text_light, c_styles.h5, c_styles.ml_1]}>陆</Text>
+              <Text style={[c_styles.text_light, c_styles.h5]}>断线重连</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button_touch, c_styles.pr_3,c_styles.pl_3,c_styles.bg_danger]}
+            onPress={this.loginClick}
+            title="登陆"
+          >
+            <View style={[c_styles.row, styles.button_touch_view]}>
+              <Text style={[c_styles.text_light, c_styles.h5]}>交班登陆</Text>
             </View>
           </TouchableOpacity>
         </View>
+        {/* 短线重连弹窗 */}
+        <Modal
+          transparent={true}
+          animationType={'fade'}
+          onRequestClose={() => {
+            console.log('关闭了');
+          }}
+          visible={this.state.modalBroken}>
+          <View style={[styles.modal_broken,c_styles.w_100,c_styles.h_100]}>
+            <View style={[c_styles.bg_white,c_styles.pl_3,c_styles.pr_3,c_styles.pb_3,{borderRadius: 5}]}>
+              <View>
+                <Text style={[c_styles.h4,c_styles.text_darkinfo,c_styles.text_center,c_styles.pt_2,c_styles.pb_2]}>交班登陆</Text>
+              </View>
+              <View style={[styles.modal_broken_content]}>
+                <View style={[{flex: 1,justifyContent: 'center'}]}>
+                  <Text style={[c_styles.h5,{color: '#515457'}]}>选择班别：</Text>
+                </View>
+                <View style={[{flex: 3, position:'relative'}]}>
+                  <TouchableOpacity style={[c_styles.p_2,{borderColor: '#CED4DA',borderWidth: 1,borderRadius: 5}]}>
+                    <View style={[{flexDirection: 'row',alignItems: 'center',justifyContent: 'space-between'}]}>
+                      <Text style={[c_styles.h5,{color: '#93979B'}]} >请选择班别...</Text>
+                      <Icon type={'font-awesome'} name={'unsorted'} color={'#343A40'} size={18} />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
