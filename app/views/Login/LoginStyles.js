@@ -51,6 +51,7 @@ export const LoginStyles = StyleSheet.create({
     borderTopWidth: 1
   },
   selectContainerStyles: {
+    backgroundColor: '#EFFAF0',
     height: 60,
     alignItems: 'center',
   },
@@ -97,6 +98,17 @@ export const LoginStyles = StyleSheet.create({
   },
   modal_broken_content: {
     flexDirection: 'row'
+  },
+  modalSelectContainerStyles: {
+    height: 60,
+    alignItems: 'center',
+    borderColor: '#CED4DA',
+    borderWidth: 1,
+    borderRadius: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+    paddingRight: 15
   },
 });
 

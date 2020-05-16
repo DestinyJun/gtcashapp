@@ -16,7 +16,7 @@ import {SelectInput} from '../bases/SelectInput';
 import {Icon} from 'react-native-elements';
 import Modal from 'react-native-translucent-modal';
 // 自定义工具
-import {post} from '../../service/Interceptor';
+import {post,get} from '../../service/Interceptor';
 import api from '../../service/Api';
 import {LocalStorage} from '../../util';
 import {startUpPageAtion} from '../../Redux/actionCreators';
@@ -31,15 +31,21 @@ export default class LoginScreen extends Component {
       user: String,
       password: String,
       merchatCode: '',
+      thisUserId: '-1', // 本次交班的code
+      thisShiftCode: null, // 上次交班的code
+      nextShiftCode: null // 本次交班的code
     };
     this.state = {
-      input_select_data: null,
+      input_select_data: [],
       select_icon_transform: false,
-      modalBroken: true,
+      modalBroken: false,
       modalShift: false,
+      modalShiftOptions: [
+        { value: 0, name: '请选择班别...' }
+      ]
     };
+    this.timer = null;
   }
-
   render() {
     return (
       <View style={[styles.login, c_styles.w_100, c_styles.dim_height]}>
@@ -139,8 +145,11 @@ export default class LoginScreen extends Component {
         <View style={[styles.button, c_styles.pl_3, c_styles.pr_3, c_styles.pt_4,c_styles.w_100]}>
           <TouchableOpacity
             style={[styles.button_touch, c_styles.pr_3,c_styles.pl_3,c_styles.bg_darkinfo]}
-            onPress={this.loginClick}
-            title="登陆"
+            onPress={() => {
+              this.setState({
+                modalBroken: true
+              });
+            }}
           >
             <View style={[c_styles.row, styles.button_touch_view]}>
               <Text style={[c_styles.text_light, c_styles.h5]}>断线重连</Text>
@@ -149,7 +158,6 @@ export default class LoginScreen extends Component {
           <TouchableOpacity
             style={[styles.button_touch, c_styles.pr_3,c_styles.pl_3,c_styles.bg_danger]}
             onPress={this.loginClick}
-            title="登陆"
           >
             <View style={[c_styles.row, styles.button_touch_view]}>
               <Text style={[c_styles.text_light, c_styles.h5]}>交班登陆</Text>
@@ -174,13 +182,47 @@ export default class LoginScreen extends Component {
                   <Text style={[c_styles.h5,{color: '#515457'}]}>选择班别：</Text>
                 </View>
                 <View style={[{flex: 3, position:'relative'}]}>
-                  <TouchableOpacity style={[c_styles.p_2,{borderColor: '#CED4DA',borderWidth: 1,borderRadius: 5}]}>
-                    <View style={[{flexDirection: 'row',alignItems: 'center',justifyContent: 'space-between'}]}>
-                      <Text style={[c_styles.h5,{color: '#93979B'}]} >请选择班别...</Text>
-                      <Icon type={'font-awesome'} name={'unsorted'} color={'#343A40'} size={18} />
-                    </View>
-                  </TouchableOpacity>
+                  <SelectInput
+                    btnTitle={'请选择班别...'}
+                    btnTitleSize={18}
+                    btnTitleColor={'#7E8388'}
+                    btnIcon={() => (<Icon type={'font-awesome'} name={'unsorted'} color={'#343A40'} size={18} />)}
+                    containerStyles={styles.modalSelectContainerStyles}
+                    activeOptionBgColor={'#468F80'}
+                    activeSelectOptionTextColor={'white'}
+                    selectOptionTextColor={'#468F80'}
+                    selectOptionStyles={styles.selectOptionStyles}
+                    selectContainerHeight={120}
+                    selectContainerBgColor={'#F0F0F0'}
+                    options={this.state.modalShiftOptions}
+                    selectChange={this.modalSelectChange.bind(this,'broken')}
+                  />
                 </View>
+              </View>
+              <View style={[{flexDirection: 'row',justifyContent: 'space-around'},c_styles.pt_3]}>
+                <TouchableOpacity
+                  style={[styles.button_touch, c_styles.pr_3,c_styles.pl_3,c_styles.bg_danger]}
+                  onPress={() => {
+                    this.setState({
+                      modalBroken: false
+                    });
+                  }}>
+                  <View style={[c_styles.row, styles.button_touch_view]}>
+                    <Text style={[c_styles.text_light, c_styles.h5]}>关闭</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button_touch, c_styles.pr_3,c_styles.pl_3,c_styles.bg_darkinfo]}
+                  onPress={() => {
+                    this.setState({
+                      modalBroken: false
+                    });
+                    this.loginClick('broken');
+                  }}>
+                  <View style={[c_styles.row, styles.button_touch_view]}>
+                    <Text style={[c_styles.text_light, c_styles.h5]}>登陆</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -188,7 +230,10 @@ export default class LoginScreen extends Component {
       </View>
     );
   }
-  selectWillShow = () => {
+  componentDidMount(): void {}
+  componentWillUnmount(): void {}
+
+  selectWillShow = async () => {
     this.setState({
       select_icon_transform: true,
     });
@@ -211,26 +256,87 @@ export default class LoginScreen extends Component {
       select_icon_transform: false,
     });
   };
-  selectOnSelect = (res) => {
-    this.login.merchatCode = res.value;
+  selectOnSelect = (item) => {
+    if (item !== null) {
+      this.login.merchatCode = item.value;
+      get(`/user/getShiftName`, { merchatCode: item.value })
+        .then((res) => {
+          const arr = [
+            { value: null, name: '请选择班别...' }
+          ];
+          res.data.map((item) => {
+            arr.push(Object.assign({}, { value: item.shiftCode, name: item.shiftName }))
+          });
+          this.setState({
+            modalShiftOptions: arr
+          })
+        })
+    }
   };
-  loginClick = () => {
-    post(api.LOGIN_URL, this.login)
-      .then((res) => {
-        LocalStorage.set('merchatCode', res.data.merchatCode);
-        LocalStorage.set('userId', res.data.userId);
-        LocalStorage.set('APPKEY', res.data.APPKEY);
-        LocalStorage.set('serverId', res.data.serverId);
-        const action = startUpPageAtion({
-          isLoading: false,
-          userToken: true,
-        });
-        store.dispatch(action);
-      })
-      .catch(err => {
-        ToastAndroid.show(err.msg,1000)
+  modalSelectChange (flag,item) {
+    if (flag === 'broken') {
+      this.login.thisShiftCode = item.value;
+      return;
+    }
+    if (flag === 'select') {
+      this.d_shiftMemberOptions = [
+        { text: '无交班登陆', value: '-1' }
+      ];
+      this.login.thisShiftCode = item;
+      this.post(`/user/getSuccessor`, { merchatCode: this.login.merchatCode, shiftCode: item.value })
+        .then((res) => {
+          console.log(res);
+          res.data.map((item) => {
+            // this.d_shiftMemberOptions.push(Object.assign({}, { value: item.thisUserId, text: item.thisUserName }))
+          })
+        })
+    }
+    else {
+      this.login.nextShiftCode = item
+    }
+  };
+  loginClick = (flag) => {
+    if (flag === 'broken') {
+      const login = Object.assign({}, {
+        user: this.login.user,
+        password: this.login.password,
+        shiftCode: this.login.thisShiftCode,
+        merchatCode: this.login.merchatCode
       });
+      post(`/user/shift/brokenLineLogin`, login)
+        .then((res) => {
+          LocalStorage.set('merchatCode', res.data.merchatCode);
+          LocalStorage.set('userId', res.data.userId);
+          LocalStorage.set('APPKEY', res.data.APPKEY);
+          LocalStorage.set('serverId', res.data.serverId);
+          const action = startUpPageAtion({
+            isLoading: false,
+            userToken: true,
+          });
+          store.dispatch(action);
+        })
+        .catch(err => {
+          ToastAndroid.show(err.msg,1000)
+        });
+    }
+    else {
+      post(`/user/shift/login`, this.login)
+        .then((res) => {
+          LocalStorage.set('merchatCode', res.data.merchatCode);
+          LocalStorage.set('userId', res.data.userId);
+          LocalStorage.set('APPKEY', res.data.APPKEY);
+          LocalStorage.set('serverId', res.data.serverId);
+          const action = startUpPageAtion({
+            isLoading: false,
+            userToken: true,
+          });
+          store.dispatch(action);
+        })
+        .catch(err => {
+          ToastAndroid.show(err.msg,1000)
+        });
+    }
   };
-};
+}
 
 

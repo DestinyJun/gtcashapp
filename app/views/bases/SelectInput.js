@@ -6,6 +6,7 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ScrollView,TouchableWithoutFeedback} from 'react-native';
 import Modal from 'react-native-translucent-modal';
+import {Icon} from 'react-native-elements';
 
 export class SelectInput extends Component {
   static defaultProps = {
@@ -15,6 +16,7 @@ export class SelectInput extends Component {
     btnTitle: '按钮实例', // 按钮文字内容
     btnTitleSize: 16, // 按钮文字尺寸
     btnTitleColor: 'yellow',// 按钮文字颜色
+    btnIcon: () => null, // 图标，其类型是一个返回react元素的函数
     selectOptionStyles: {}, // 下拉选框选项的样式
     activeOptionBgColor: null, // 激活选项的背景色
     activeSelectOptionTextColor: null, // 激活选项的文字颜色
@@ -55,6 +57,7 @@ export class SelectInput extends Component {
       <View style={[styles.container]}>
         <TouchableOpacity style={[styles.button,this.props.containerStyles]} ref={(ref) => this.touch = ref} onPress={this.btnPress}>
           <Text style={[{fontSize: this.props.btnTitleSize, color: this.props.btnTitleColor}]}>{this.state.btnTitle}</Text>
+          {this.props.btnIcon?this.props.btnIcon():null}
         </TouchableOpacity>
         <Modal
           transparent={true}
@@ -77,7 +80,7 @@ export class SelectInput extends Component {
                 height: this.props.selectContainerHeight,
                 backgroundColor: this.props.selectContainerBgColor
               }]}>
-                <ScrollView style={[{flex: 1, zIndex: 3}]}>
+                <ScrollView keyboardShouldPersistTaps={'always'} style={[{flex: 1, zIndex: 3}]}>
                   {
                     this.props.options?this.props.options.map((val,index) => {
                       return (
