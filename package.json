@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "react": "16.8.0",
-    "react-native": "0.61.2",
+    "react-native": "0.62.3",
     "axios": "^0.19.2",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
